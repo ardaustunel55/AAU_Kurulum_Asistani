@@ -1,0 +1,30 @@
+﻿# Logs
+logs/
+*.log
+
+# Temporary and test files
+scratch/
+*.tmp
+*.bak
+*.lock
+
+# Backups and reports
+data/backups/
+reports/
+
+# Secrets and environment files
+.env
+.env.*
+secrets.json
+credentials.json
+
+# Windows shortcuts
+*.lnk
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Temporary system files
+Thumbs.db
+Desktop.ini

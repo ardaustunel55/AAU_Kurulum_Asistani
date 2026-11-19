@@ -1,0 +1,32 @@
+﻿{
+  "version": "1.0.0",
+  "last_updated": "2026-11-14",
+  "ui": {
+    "language": "tr-TR",
+    "color_theme": "default",
+    "compact_header": true,
+    "show_admin_warning": true
+  },
+  "installation": {
+    "default_install_scope": "user",
+    "default_architecture": "x64",
+    "silent_install": true,
+    "verify_after_install": true,
+    "retry_on_failure": true,
+    "retry_count": 3,
+    "winget_path": ""
+  },
+  "logging": {
+    "log_level": "INFO",
+    "max_log_files": 20,
+    "log_retention_days": 14
+  },
+  "backup": {
+    "backup_dir": "",
+    "auto_restore_point": false
+  },
+  "updates": {
+    "check_on_startup": false,
+    "auto_update": false
+  }
+}

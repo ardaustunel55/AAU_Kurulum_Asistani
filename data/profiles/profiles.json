@@ -1,0 +1,214 @@
+﻿{
+    "version": "1.1.0",
+    "last_updated": "2026-11-15",
+    "profiles": [
+        {
+            "id": "basic",
+            "name": "Temel Kurulum",
+            "description": "Günlük kullanım için gerekli web tarayıcı, arşiv, medya ve sistem kütüphaneleri.",
+            "applications": [
+                "Google.Chrome",
+                "VideoLAN.VLC",
+                "7zip.7zip",
+                "voidtools.Everything",
+                "Microsoft.VCRedist.2015+.x64",
+                "Microsoft.DirectX",
+                "Microsoft.DotNet.DesktopRuntime.8"
+            ],
+            "created": "2026-11-14",
+            "enabled": true
+        },
+        {
+            "id": "full",
+            "name": "Tam Kurulum (Önerilen)",
+            "description": "Yeni formatlanmış bir bilgisayar için en popüler araçlar, ofis, medya ve iletişim paketi.",
+            "applications": [
+                "Google.Chrome",
+                "Mozilla.Firefox",
+                "7zip.7zip",
+                "Microsoft.PowerToys",
+                "voidtools.Everything",
+                "VideoLAN.VLC",
+                "Spotify.Spotify",
+                "Adobe.Acrobat.Reader.64-bit",
+                "geeksoftwareGmbH.PDF24Creator",
+                "9NKSQGP7F2NH",
+                "Telegram.TelegramDesktop",
+                "Discord.Discord",
+                "LocalSend.LocalSend",
+                "Bitwarden.Bitwarden",
+                "ShareX.ShareX",
+                "Microsoft.VCRedist.2015+.x64",
+                "Microsoft.DirectX",
+                "Microsoft.DotNet.DesktopRuntime.8",
+                "Henry++.MemReduct"
+            ],
+            "created": "2026-11-14",
+            "enabled": true
+        },
+        {
+            "id": "developer",
+            "name": "Geliştirici & Kodlama",
+            "description": "Yazılım geliştiriciler için IDE, Git, diller, API test araçları ve terminal ortamı.",
+            "applications": [
+                "Microsoft.VisualStudioCode",
+                "Git.Git",
+                "GitHub.GitHubDesktop",
+                "Python.Python.3.12",
+                "OpenJS.NodeJS.LTS",
+                "Docker.DockerDesktop",
+                "Postman.Postman",
+                "DBeaver.DBeaver.Community",
+                "DBBrowserForSQLite.DBBrowserForSQLite",
+                "WinSCP.WinSCP",
+                "PuTTY.PuTTY",
+                "Microsoft.WindowsTerminal",
+                "7zip.7zip",
+                "Microsoft.VCRedist.2015+.x64",
+                "Microsoft.DotNet.DesktopRuntime.8"
+            ],
+            "created": "2026-11-14",
+            "enabled": true
+        },
+        {
+            "id": "office_work",
+            "name": "Ofis & Verimlilik",
+            "description": "Belge düzenleme, PDF araçları, bulut depolama, not alma ve toplantı yazılımları.",
+            "applications": [
+                "Kingsoft.WPSOffice",
+                "TheDocumentFoundation.LibreOffice",
+                "Adobe.Acrobat.Reader.64-bit",
+                "geeksoftwareGmbH.PDF24Creator",
+                "SumatraPDF.SumatraPDF",
+                "Notion.Notion",
+                "Obsidian.Obsidian",
+                "9NBLGGH5R558",
+                "Mozilla.Thunderbird",
+                "Zoom.Zoom",
+                "Google.GoogleDrive",
+                "Microsoft.OneDrive",
+                "7zip.7zip"
+            ],
+            "created": "2026-11-15",
+            "enabled": true
+        },
+        {
+            "id": "gaming",
+            "name": "Oyuncu (Gamer)",
+            "description": "Oyun başlatıcıları, sesli sohbet, ekran yakalama ve donanım izleme araçları.",
+            "applications": [
+                "Valve.Steam",
+                "EpicGames.EpicGamesLauncher",
+                "ElectronicArts.EADesktop",
+                "Ubisoft.Connect",
+                "Discord.Discord",
+                "CPUID.CPU-Z",
+                "CPUID.HWMonitor",
+                "REALiX.HWiNFO",
+                "Rem0o.FanControl",
+                "OBSProject.OBSStudio",
+                "ShareX.ShareX",
+                "Microsoft.DirectX",
+                "Microsoft.VCRedist.2015+.x64"
+            ],
+            "created": "2026-11-15",
+            "enabled": true
+        },
+        {
+            "id": "content_creator",
+            "name": "Tasarım & Medya Üretimi",
+            "description": "Görsel düzenleme, vektörel çizim, ses düzenleme ve yayın/kayıt programları.",
+            "applications": [
+                "dotPDN.PaintDotNet",
+                "KDE.Krita",
+                "Inkscape.Inkscape",
+                "GIMP.GIMP",
+                "ShareX.ShareX",
+                "IrfanSkiljan.IrfanView",
+                "XnSoft.XnViewMP",
+                "9NBLGGH4TWWG",
+                "OBSProject.OBSStudio",
+                "Audacity.Audacity",
+                "VideoLAN.VLC",
+                "calibre.calibre",
+                "darktable.darktable"
+            ],
+            "created": "2026-11-15",
+            "enabled": true
+        },
+        {
+            "id": "system_admin",
+            "name": "Sistem Uzmanı & Teknik Bakım",
+            "description": "Donanım testi, derin disk analizi, önyüklenebilir USB ve gelişmiş kaldırıcılar.",
+            "applications": [
+                "CPUID.CPU-Z",
+                "CPUID.HWMonitor",
+                "REALiX.HWiNFO",
+                "CrystalDewWorld.CrystalDiskInfo",
+                "CrystalDewWorld.CrystalDiskMark",
+                "AntibodySoftware.WizTree",
+                "JAMSoftware.TreeSize.Free",
+                "Rufus.Rufus",
+                "Ventoy.Ventoy",
+                "RevoUninstaller.RevoUninstaller",
+                "Klocman.BulkCrapUninstaller",
+                "Microsoft.WindowsTerminal",
+                "Henry++.MemReduct"
+            ],
+            "created": "2026-11-15",
+            "enabled": true
+        },
+        {
+            "id": "privacy_security",
+            "name": "Güvenlik & Gizlilik",
+            "description": "Gizlilik odaklı tarayıcılar, açık kaynaklı şifre yöneticileri, VPN ve zararlı yazılım temizleme.",
+            "applications": [
+                "Brave.Brave",
+                "LibreWolf.LibreWolf",
+                "TorProject.TorBrowser",
+                "MullvadVPN.MullvadBrowser",
+                "Bitwarden.Bitwarden",
+                "KeePassXCTeam.KeePassXC",
+                "IDRIX.VeraCrypt",
+                "Proton.ProtonVPN",
+                "Windscribe.Windscribe",
+                "Malwarebytes.Malwarebytes",
+                "Malwarebytes.AdwCleaner",
+                "GlassWire.GlassWire",
+                "OpenWhisperSystems.Signal"
+            ],
+            "created": "2026-11-15",
+            "enabled": true
+        },
+        {
+            "id": "media_entertainment",
+            "name": "Medya & Eğlence",
+            "description": "Kristal netliğinde ses çalar, çok formatlı video oynatıcılar, ev sineması ve müzik yönetimi.",
+            "applications": [
+                "VideoLAN.VLC",
+                "CodecGuide.K-LiteCodecPack.Standard",
+                "Spotify.Spotify",
+                "PeterPawlowski.foobar2000",
+                "AIMP.AIMP",
+                "9P4CLT2RJ1RS",
+                "mpv.net",
+                "Daum.PotPlayer",
+                "XBMCFoundation.Kodi",
+                "Plex.Plex",
+                "Jellyfin.JellyfinMediaPlayer",
+                "VentisMedia.MediaMonkey.2024",
+                "qBittorrent.qBittorrent"
+            ],
+            "created": "2026-11-15",
+            "enabled": true
+        },
+        {
+            "id": "custom",
+            "name": "Özel Kurulum",
+            "description": "Kullanıcı veya yönetici tarafından serbestçe özelleştirilmiş uygulama sepeti.",
+            "applications": [],
+            "created": "2026-11-14",
+            "enabled": true
+        }
+    ]
+}
