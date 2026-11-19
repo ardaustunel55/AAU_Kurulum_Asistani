@@ -12,6 +12,9 @@ scratch/
 data/backups/
 reports/
 
+# Corrupt profile files
+data/profiles/*.corrupt_*
+
 # Secrets and environment files
 .env
 .env.*
@@ -21,9 +24,15 @@ credentials.json
 # Windows shortcuts
 *.lnk
 
+# Google Drive temp
+.tmp.driveupload/
+
 # Python cache
 __pycache__/
 *.pyc
+
+# Admin CMD (repo'ya dahil edilmez)
+AAU_Admin.cmd
 
 # Temporary system files
 Thumbs.db
