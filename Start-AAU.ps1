@@ -1,4 +1,4 @@
-﻿& {
+& {
     $ErrorActionPreference = "Stop"
 
     $repoUrl = "https://github.com/ardaustunel55/AAU_Kurulum_Asistani/archive/refs/heads/master.zip"
