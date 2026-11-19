@@ -6,9 +6,6 @@
 
 Uygulama, Windows Package Manager (WinGet) ve Microsoft Store kaynaklarından yararlanarak uygulama kurulum sürecini daha düzenli ve erişilebilir hâle getirmeyi hedefler.
 
-<p align="center">
-  <strong>Kurulum artık çok daha kolay!</strong>
-</p>
 
 <p align="center">
   <a href="https://github.com/ardaustunel55/AAU_Kurulum_Asistani">
@@ -19,6 +16,7 @@ Uygulama, Windows Package Manager (WinGet) ve Microsoft Store kaynaklarından ya
   <img src="https://img.shields.io/badge/Package_Manager-WinGet-00A4EF?style=for-the-badge" alt="WinGet">
   <img src="https://img.shields.io/badge/Language-T%C3%BCrk%C3%A7e-red?style=for-the-badge" alt="Türkçe">
 </p>
+
 
 ---
 
