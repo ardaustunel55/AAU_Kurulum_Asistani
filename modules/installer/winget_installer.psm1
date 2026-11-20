@@ -401,7 +401,10 @@ function Test-AppInstalled {
             $output = & winget.exe @listArgs 2>$null
             if ($LASTEXITCODE -eq 0 -and $output) {
                 $outputStr = ($output | Out-String)
-                if ($outputStr -match [regex]::Escape($PackageId)) {
+                # WinGet "No installed package found" / "Kurulu paket bulunamadi" mesajini yakala
+                if ($outputStr -match 'No installed package|Kurulu paket bulunamadi') {
+                    # WinGet cikis kodu 0 ama paket yok — exact olmadan tekrar dene
+                } elseif ($outputStr -match [regex]::Escape($PackageId)) {
                     $result.IsInstalled = $true
                     foreach ($line in $output) {
                         $trimmed = $line.Trim()
@@ -418,6 +421,29 @@ function Test-AppInstalled {
                     }
                     Write-LogInfo "Paket kurulu tespit edildi (WinGet): $PackageId (Surum: $($result.InstalledVersion))"
                     return $result
+                }
+            }
+            # Exact flag olmadan bulamazsa, kismi eslesme ile tekrar dene
+            if (-not $result.IsInstalled -and $PackageId -match '\.') {
+                $partialId = ($PackageId -split '\.')[-1]
+                $listArgs2 = @('list', '--name', $partialId, '--accept-source-agreements')
+                $output2 = & winget.exe @listArgs2 2>$null
+                if ($LASTEXITCODE -eq 0 -and $output2) {
+                    $outputStr2 = ($output2 | Out-String)
+                    if ($outputStr2 -match [regex]::Escape($PackageId) -or $outputStr2 -match [regex]::Escape($partialId)) {
+                        $result.IsInstalled = $true
+                        foreach ($line in $output2) {
+                            $trimmed = $line.Trim()
+                            if ($trimmed -match [regex]::Escape($partialId) -and $trimmed -notmatch '^-+$|^Name|^Ad') {
+                                $parts = $trimmed -split '\s{2,}'
+                                if ($parts.Count -ge 3) { $result.InstalledVersion = $parts[2].Trim() }
+                                if ($parts.Count -ge 4) { $result.AvailableVersion = $parts[3].Trim() }
+                                break
+                            }
+                        }
+                        Write-LogInfo "Paket kurulu tespit edildi (WinGet partial): $PackageId"
+                        return $result
+                    }
                 }
             }
         } catch {
@@ -1430,9 +1456,15 @@ function Invoke-WinGetInstall {
     if ($installResult.Success) {
         Update-InstallProgress -StatusText "Kurulum dogrulaniyor..." -SpinnerFrame 0 `
             -MessageText "$dispName kurulumu dogrulaniyor..."
-        Start-Sleep -Milliseconds 500
+        # WinGet veritabaninin guncellenmesi icin yeterli bekleme
+        Start-Sleep -Seconds 3
 
         $verify = Test-AppInstalled -Package $App
+        # Ilk denemede bulunamazsa tekrar dene (WinGet index gecikmesi)
+        if (-not $verify.IsInstalled) {
+            Start-Sleep -Seconds 2
+            $verify = Test-AppInstalled -Package $App
+        }
         if ($verify.IsInstalled) {
             $installResult.Verified = $true
             $installResult.VerifiedVersion = $verify.InstalledVersion
@@ -1441,9 +1473,11 @@ function Invoke-WinGetInstall {
                 -MessageText "$dispName basariyla kuruldu ve dogrulandi!$vMsg"
             Write-LogSuccess "$dispName basariyla kuruldu ve dogrulandi.$vMsg"
         } else {
+            # ExitCode 0 ise kurulum basarili sayilir — WinGet index gecikmesi olabilir
+            $installResult.Verified = $false
             Update-InstallProgress -StatusText "BASARILI (Dogrulama Bekleniyor)" -SpinnerFrame 0 `
-                -MessageText "$dispName WinGet tarafindan basariyla kuruldu."
-            Write-LogSuccess "$dispName kuruldu (ExitCode: 0)."
+                -MessageText "$dispName WinGet tarafindan basariyla kuruldu. (Dogrulama gecikmeli olabilir)"
+            Write-LogSuccess "$dispName kuruldu (ExitCode: 0). Dogrulama WinGet index gecikmesi nedeniyle bekliyor."
         }
 
         # Baslat Menusu Kisayol ve Calistirilabilir Dosya Denetimi

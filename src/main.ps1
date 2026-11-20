@@ -2072,23 +2072,416 @@ function Invoke-Category11 {
     }
 }
 function Invoke-Category12 {
-    Show-SubMenu -CategoryNumber "12" -CategoryTitle "Performans Optimizasyonu" -TitleColor Cyan -MenuItems @(
+    $cat12Items = @(
         "Baslangic Programlarini Yonetme","Gorsel Efektleri Optimize Etme",
-        "Sayfalama Dosyasi (Pagefile) Ayari","Hizlandirilmis Baslangic (Fast Startup)",
-        "Uyku ve Hazirda Bekletme Ayarlari","CPU Guc Plani Optimizasyonu",
-        "RAM Kullanim Raporu","Disk Birlestiricisi","SSD TRIM Komutu",
-        "Gereksiz Hizmetleri Devre Disi Birakma","Windows Arama Hizmetini Yonetme",
-        "Superfetch (SysMain) Yonetimi","Oyun Modu Ayarlari","Ag Performansi Optimizasyonu"
+        "Hizlandirilmis Baslangic (Fast Startup)","Uyku ve Hazirda Bekletme Ayarlari",
+        "Oyun Modu Ayarlari","Disk Birlestiricisi","SSD TRIM Komutu",
+        "Sayfalama Dosyasi (Pagefile) Ayari","CPU Guc Plani Optimizasyonu",
+        "RAM Kullanim Raporu","Gereksiz Hizmetleri Devre Disi Birakma",
+        "Windows Arama Hizmetini Yonetme","Superfetch (SysMain) Yonetimi","Ag Performansi Optimizasyonu"
     )
+    $exitCat12 = $false
+    while (-not $exitCat12) {
+        Show-ScreenTransition
+        Show-AppHeader; Write-Host ""
+        Write-Host "  [12] | Performans Optimizasyonu" -ForegroundColor Cyan
+        Draw-HorizontalLine -Width 86 -Color DarkCyan -Char "-"; Write-Host ""
+        $i = 1
+        foreach ($item in $cat12Items) {
+            $numTag = if ($i -lt 10) { "[ $i] |" } else { "[$i] |" }
+            Write-Host "  $numTag" -ForegroundColor Cyan -NoNewline
+            Write-Host " $item" -ForegroundColor Cyan
+            $i++
+        }
+        Write-Host ""; Write-Host "  [ 0] | " -ForegroundColor Red -NoNewline
+        Write-Host "Ana Menuye Don" -ForegroundColor Red
+        Write-Host ""; Draw-HorizontalLine -Width 86 -Color DarkCyan -Char "-"; Write-Host ""
+        Write-Host "  Seciminiz: " -ForegroundColor Yellow -NoNewline
+        $inp = Read-Host
+        $ch = if ($null -ne $inp) { $inp.Trim() } else { "" }
+        if ($ch -eq "0" -or $ch -eq "00") {
+            $exitCat12 = $true
+        } elseif ($ch -match "^\d+$") {
+            $idx = [int]$ch
+            if ($idx -ge 1 -and $idx -le $cat12Items.Count) {
+                $sel = $cat12Items[$idx - 1]
+                Write-LogInfo "Kategori 12 secimi: [12.$ch] $sel"
+                Show-ScreenTransition -Scrollable
+                Show-AppHeader -Scrollable; Write-Host ""
+                Write-Host "  [12] | Performans Optimizasyonu  >  [$ch] $sel" -ForegroundColor Cyan
+                Draw-HorizontalLine -Width 86 -Color DarkCyan -Char "-"
+                switch ($idx) {
+                    1  { # Baslangic Programlarini Yonetme
+                        Write-Host ""; Write-Host "  [BASLANGIC PROGRAMLARI]" -ForegroundColor Cyan
+                        Write-Host ""
+                        try {
+                            Write-Host "  Baslangic programlari listeleniyor..." -ForegroundColor DarkCyan
+                            $startups = Get-CimInstance Win32_StartupCommand -ErrorAction Stop | Select-Object Name, Command, Location, User
+                            if ($startups.Count -eq 0) {
+                                Write-Host "  Kayitli baslangic programi bulunamadi." -ForegroundColor Yellow
+                            } else {
+                                Write-Host "  Toplam: $($startups.Count) baslangic programi bulundu." -ForegroundColor Green
+                                Write-Host ""
+                                $num = 1
+                                foreach ($s in $startups) {
+                                    Write-Host "  [$num] " -ForegroundColor Cyan -NoNewline
+                                    Write-Host "$($s.Name)" -ForegroundColor White -NoNewline
+                                    Write-Host " | $($s.Location)" -ForegroundColor DarkGray
+                                    $num++
+                                }
+                            }
+                        } catch {
+                            Write-Host "  [HATA] Baslangic programlari alinamadi: $($_.Exception.Message)" -ForegroundColor Red
+                        }
+                        Write-Host ""
+                        Write-Host "  [BILGI] Detayli yonetim icin Ayarlar aciliyor..." -ForegroundColor DarkCyan
+                        Start-Sleep -Seconds 1
+                        try { Start-Process "ms-settings:startupapps" -ErrorAction Stop } catch {}
+                    }
+                    2  { # Gorsel Efektleri Optimize Etme
+                        Write-Host ""; Write-Host "  [GORSEL EFEKTLER]" -ForegroundColor Cyan
+                        Write-Host "  Sistem Performans Ozellikleri penceresi aciliyor..." -ForegroundColor DarkCyan
+                        try { Start-Process "SystemPropertiesPerformance.exe" -ErrorAction Stop
+                            Write-Host "  [BASARILI] Pencere acildi." -ForegroundColor Green
+                        } catch { Write-Host "  [HATA] $($_.Exception.Message)" -ForegroundColor Red }
+                    }
+                    3  { # Hizlandirilmis Baslangic (Fast Startup)
+                        Write-Host ""; Write-Host "  [HIZLI BASLANGIC]" -ForegroundColor Cyan
+                        try {
+                            $regPath = "HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\Power"
+                            $val = Get-ItemProperty -Path $regPath -Name "HiberbootEnabled" -ErrorAction Stop
+                            $status = if ($val.HiberbootEnabled -eq 1) { "ACIK" } else { "KAPALI" }
+                            $statusColor = if ($val.HiberbootEnabled -eq 1) { "Green" } else { "Yellow" }
+                            Write-Host "  Hizli Baslangic durumu: " -ForegroundColor DarkCyan -NoNewline
+                            Write-Host "[$status]" -ForegroundColor $statusColor
+                        } catch {
+                            Write-Host "  [BILGI] Hizli Baslangic durumu okunamadi." -ForegroundColor Yellow
+                        }
+                        Write-Host "  Guc secenekleri aciliyor..." -ForegroundColor DarkCyan
+                        try { Start-Process "control" -ArgumentList "powercfg.cpl" -ErrorAction Stop } catch {}
+                    }
+                    4  { # Uyku ve Hazirda Bekletme
+                        Write-Host ""; Write-Host "  [UYKU VE HAZIRDA BEKLETME]" -ForegroundColor Cyan
+                        try {
+                            $hibStatus = & powercfg /a 2>$null | Out-String
+                            Write-Host "  Mevcut guc durumlari:" -ForegroundColor DarkCyan
+                            Write-Host $hibStatus -ForegroundColor White
+                        } catch {}
+                        Write-Host "  Guc ve Uyku ayarlari aciliyor..." -ForegroundColor DarkCyan
+                        try { Start-Process "ms-settings:powersleep" -ErrorAction Stop } catch {}
+                    }
+                    5  { # Oyun Modu
+                        Write-Host ""; Write-Host "  [OYUN MODU]" -ForegroundColor Cyan
+                        Write-Host "  Oyun Modu ayarlari aciliyor..." -ForegroundColor DarkCyan
+                        try { Start-Process "ms-settings:gaming-gamemode" -ErrorAction Stop
+                            Write-Host "  [BASARILI] Ayarlar acildi." -ForegroundColor Green
+                        } catch { Write-Host "  [HATA] $($_.Exception.Message)" -ForegroundColor Red }
+                    }
+                    6  { # Disk Birlestiricisi
+                        Write-Host ""; Write-Host "  [DISK BIRLESTIRICISI]" -ForegroundColor Cyan
+                        Write-Host "  Disk Birlestiricisi aciliyor..." -ForegroundColor DarkCyan
+                        try { Start-Process "dfrgui.exe" -ErrorAction Stop
+                            Write-Host "  [BASARILI] Disk Birlestiricisi acildi." -ForegroundColor Green
+                        } catch { Write-Host "  [HATA] $($_.Exception.Message)" -ForegroundColor Red }
+                    }
+                    7  { # SSD TRIM
+                        Write-Host ""; Write-Host "  [SSD TRIM]" -ForegroundColor Cyan
+                        if ($script:IsAdmin) {
+                            Write-Host "  C: surucusu icin TRIM komutu calistiriliyor..." -ForegroundColor DarkCyan
+                            try {
+                                Optimize-Volume -DriveLetter C -ReTrim -ErrorAction Stop
+                                Write-Host "  [BASARILI] SSD TRIM komutu basariyla calistirildi." -ForegroundColor Green
+                            } catch {
+                                Write-Host "  [HATA] TRIM calistirilamadi: $($_.Exception.Message)" -ForegroundColor Red
+                            }
+                        } else {
+                            Write-Host "  [UYARI] SSD TRIM icin yonetici yetkisi gereklidir." -ForegroundColor Yellow
+                            Write-Host "  Disk Birlestiricisi aciliyor (manuel TRIM icin)..." -ForegroundColor DarkCyan
+                            try { Start-Process "dfrgui.exe" -ErrorAction Stop } catch {}
+                        }
+                    }
+                    8  { # Sayfalama Dosyasi
+                        Write-Host ""; Write-Host "  [SAYFALAMA DOSYASI (PAGEFILE)]" -ForegroundColor Cyan
+                        try {
+                            $pf = Get-CimInstance Win32_PageFileUsage -ErrorAction Stop
+                            foreach ($p in $pf) {
+                                Write-Host "  Dosya: " -ForegroundColor DarkCyan -NoNewline
+                                Write-Host "$($p.Name)" -ForegroundColor White
+                                Write-Host "  Kullanilan: " -ForegroundColor DarkCyan -NoNewline
+                                Write-Host "$($p.CurrentUsage) MB / $($p.AllocatedBaseSize) MB" -ForegroundColor White
+                            }
+                        } catch { Write-Host "  [BILGI] Pagefile bilgisi alinamadi." -ForegroundColor Yellow }
+                        Write-Host ""; Write-Host "  Sistem Ozellikleri aciliyor..." -ForegroundColor DarkCyan
+                        try { Start-Process "SystemPropertiesAdvanced.exe" -ErrorAction Stop } catch {}
+                    }
+                    9  { # CPU Guc Plani
+                        Write-Host ""; Write-Host "  [CPU GUC PLANI]" -ForegroundColor Cyan
+                        try {
+                            $plans = & powercfg /list 2>$null
+                            Write-Host "  Mevcut guc planlari:" -ForegroundColor DarkCyan; Write-Host ""
+                            foreach ($line in $plans) {
+                                if ($line -match '\*$') {
+                                    Write-Host "  $line" -ForegroundColor Green
+                                } elseif ($line.Trim()) {
+                                    Write-Host "  $line" -ForegroundColor White
+                                }
+                            }
+                        } catch { Write-Host "  [HATA] Guc planlari alinamadi." -ForegroundColor Red }
+                        Write-Host ""; Write-Host "  Guc Secenekleri aciliyor..." -ForegroundColor DarkCyan
+                        try { Start-Process "control" -ArgumentList "powercfg.cpl" -ErrorAction Stop } catch {}
+                    }
+                    10 { # RAM Kullanim Raporu
+                        Write-Host ""; Write-Host "  [RAM KULLANIM RAPORU]" -ForegroundColor Cyan
+                        try {
+                            $os = Get-CimInstance Win32_OperatingSystem -ErrorAction Stop
+                            $totalGB = [math]::Round($os.TotalVisibleMemorySize / 1MB, 2)
+                            $freeGB = [math]::Round($os.FreePhysicalMemory / 1MB, 2)
+                            $usedGB = [math]::Round($totalGB - $freeGB, 2)
+                            $usedPct = [math]::Round(($usedGB / $totalGB) * 100, 1)
+                            Write-Host ""
+                            Write-Host "  Toplam RAM  : $totalGB GB" -ForegroundColor White
+                            Write-Host "  Kullanilan  : $usedGB GB (%$usedPct)" -ForegroundColor $(if ($usedPct -gt 85) { "Red" } elseif ($usedPct -gt 60) { "Yellow" } else { "Green" })
+                            Write-Host "  Bos         : $freeGB GB" -ForegroundColor Green
+                            Write-Host ""
+                            Write-Host "  En cok RAM kullanan 10 islem:" -ForegroundColor DarkCyan
+                            Get-Process | Sort-Object WorkingSet64 -Descending | Select-Object -First 10 | ForEach-Object {
+                                $mb = [math]::Round($_.WorkingSet64 / 1MB, 1)
+                                Write-Host "    $($_.ProcessName.PadRight(30)) $mb MB" -ForegroundColor White
+                            }
+                        } catch { Write-Host "  [HATA] RAM bilgisi alinamadi." -ForegroundColor Red }
+                    }
+                    11 { # Gereksiz Hizmetler
+                        Write-Host ""; Write-Host "  [HIZMET YONETIMI]" -ForegroundColor Cyan
+                        Write-Host "  Windows Hizmetleri penceresi aciliyor..." -ForegroundColor DarkCyan
+                        try { Start-Process "services.msc" -ErrorAction Stop
+                            Write-Host "  [BASARILI] Hizmetler penceresi acildi." -ForegroundColor Green
+                        } catch { Write-Host "  [HATA] $($_.Exception.Message)" -ForegroundColor Red }
+                    }
+                    12 { # Windows Arama Hizmeti
+                        Write-Host ""; Write-Host "  [WINDOWS ARAMA HIZMETI]" -ForegroundColor Cyan
+                        try {
+                            $svc = Get-Service -Name "WSearch" -ErrorAction Stop
+                            $statusColor = if ($svc.Status -eq 'Running') { "Green" } else { "Yellow" }
+                            Write-Host "  Durum: " -ForegroundColor DarkCyan -NoNewline
+                            Write-Host "[$($svc.Status)] ($($svc.StartType))" -ForegroundColor $statusColor
+                        } catch { Write-Host "  [BILGI] WSearch hizmeti bulunamadi." -ForegroundColor Yellow }
+                        Write-Host "  Hizmetler penceresi aciliyor..." -ForegroundColor DarkCyan
+                        try { Start-Process "services.msc" -ErrorAction Stop } catch {}
+                    }
+                    13 { # Superfetch / SysMain
+                        Write-Host ""; Write-Host "  [SUPERFETCH / SYSMAIN]" -ForegroundColor Cyan
+                        try {
+                            $svc = Get-Service -Name "SysMain" -ErrorAction Stop
+                            $statusColor = if ($svc.Status -eq 'Running') { "Green" } else { "Yellow" }
+                            Write-Host "  Durum: " -ForegroundColor DarkCyan -NoNewline
+                            Write-Host "[$($svc.Status)] ($($svc.StartType))" -ForegroundColor $statusColor
+                        } catch { Write-Host "  [BILGI] SysMain hizmeti bulunamadi." -ForegroundColor Yellow }
+                        Write-Host "  Hizmetler penceresi aciliyor..." -ForegroundColor DarkCyan
+                        try { Start-Process "services.msc" -ErrorAction Stop } catch {}
+                    }
+                    14 { # Ag Performansi
+                        Write-Host ""; Write-Host "  [AG PERFORMANSI]" -ForegroundColor Cyan
+                        try {
+                            $tcp = & netsh int tcp show global 2>$null | Out-String
+                            Write-Host "  TCP Global Parametreleri:" -ForegroundColor DarkCyan
+                            Write-Host $tcp -ForegroundColor White
+                        } catch { Write-Host "  [HATA] TCP bilgisi alinamadi." -ForegroundColor Red }
+                    }
+                }
+                Write-Host ""; Draw-HorizontalLine -Width 86 -Color DarkCyan -Char "-"
+                Wait-UserKeyPress -PromptMessage "Alt menuye donmek icin bir tusa basin..."
+            } else {
+                Write-Host "  [HATA] Gecersiz secim." -ForegroundColor Red; Start-Sleep -Seconds 1
+            }
+        } else {
+            Write-Host "  [HATA] Gecersiz giris." -ForegroundColor Red; Start-Sleep -Seconds 1
+        }
+    }
 }
 function Invoke-Category13 {
-    Show-SubMenu -CategoryNumber "13" -CategoryTitle "Kullanici Yonetimi" -TitleColor Cyan -MenuItems @(
-        "Yerel Kullanicilari Listeleme","Yeni Kullanici Olusturma",
-        "Kullanici Sifresi Degistirme","Kullanici Silme",
-        "Kullanici Gruplarina Atama","Yonetici Yetkisi Verme/Alma",
-        "Hesap Aktif/Pasif Yapma","Oturum Bilgilerini Goruntuleme",
-        "Son Oturum Acma Suresi","Microsoft Hesabi Yonetimi","Windows Hello PIN Yonetimi"
+    $cat13Items = @(
+        "Yerel Kullanicilari Listeleme","Oturum Bilgilerini Goruntuleme",
+        "Hesap Aktif/Pasif Yapma","Son Oturum Acma Suresi",
+        "Microsoft Hesabi Yonetimi","Windows Hello PIN Yonetimi",
+        "Yeni Kullanici Olusturma","Kullanici Sifresi Degistirme",
+        "Kullanici Silme","Kullanici Gruplarina Atama","Yonetici Yetkisi Verme/Alma"
     )
+    $exitCat13 = $false
+    while (-not $exitCat13) {
+        Show-ScreenTransition
+        Show-AppHeader; Write-Host ""
+        Write-Host "  [13] | Kullanici Yonetimi" -ForegroundColor Magenta
+        Draw-HorizontalLine -Width 86 -Color DarkCyan -Char "-"; Write-Host ""
+        $i = 1
+        foreach ($item in $cat13Items) {
+            $numTag = if ($i -lt 10) { "[ $i] |" } else { "[$i] |" }
+            Write-Host "  $numTag" -ForegroundColor Magenta -NoNewline
+            Write-Host " $item" -ForegroundColor Magenta
+            $i++
+        }
+        Write-Host ""; Write-Host "  [ 0] | " -ForegroundColor Red -NoNewline
+        Write-Host "Ana Menuye Don" -ForegroundColor Red
+        Write-Host ""; Draw-HorizontalLine -Width 86 -Color DarkCyan -Char "-"; Write-Host ""
+        Write-Host "  Seciminiz: " -ForegroundColor Yellow -NoNewline
+        $inp = Read-Host
+        $ch = if ($null -ne $inp) { $inp.Trim() } else { "" }
+        if ($ch -eq "0" -or $ch -eq "00") {
+            $exitCat13 = $true
+        } elseif ($ch -match "^\d+$") {
+            $idx = [int]$ch
+            if ($idx -ge 1 -and $idx -le $cat13Items.Count) {
+                $sel = $cat13Items[$idx - 1]
+                Write-LogInfo "Kategori 13 secimi: [13.$ch] $sel"
+                Show-ScreenTransition -Scrollable
+                Show-AppHeader -Scrollable; Write-Host ""
+                Write-Host "  [13] | Kullanici Yonetimi  >  [$ch] $sel" -ForegroundColor Magenta
+                Draw-HorizontalLine -Width 86 -Color DarkCyan -Char "-"
+                switch ($idx) {
+                    1  { # Yerel Kullanicilari Listeleme
+                        Write-Host ""; Write-Host "  [YEREL KULLANICILAR]" -ForegroundColor Magenta
+                        Write-Host ""
+                        try {
+                            $users = Get-LocalUser -ErrorAction Stop
+                            Write-Host "  Toplam: $($users.Count) kullanici hesabi" -ForegroundColor Green; Write-Host ""
+                            Write-Host ("  " + "Ad".PadRight(25) + "Durum".PadRight(12) + "Son Oturum") -ForegroundColor DarkCyan
+                            Write-Host ("  " + ("-"*25) + " " + ("-"*11) + " " + ("-"*20)) -ForegroundColor DarkGray
+                            foreach ($u in $users) {
+                                $status = if ($u.Enabled) { "Aktif" } else { "Pasif" }
+                                $statusColor = if ($u.Enabled) { "Green" } else { "DarkGray" }
+                                $lastLogon = if ($u.LastLogon) { $u.LastLogon.ToString("yyyy-MM-dd HH:mm") } else { "-" }
+                                Write-Host "  " -NoNewline
+                                Write-Host $u.Name.PadRight(25) -ForegroundColor White -NoNewline
+                                Write-Host $status.PadRight(12) -ForegroundColor $statusColor -NoNewline
+                                Write-Host $lastLogon -ForegroundColor DarkCyan
+                            }
+                        } catch {
+                            Write-Host "  [HATA] Kullanici listesi alinamadi: $($_.Exception.Message)" -ForegroundColor Red
+                        }
+                    }
+                    2  { # Oturum Bilgileri
+                        Write-Host ""; Write-Host "  [OTURUM BILGILERI]" -ForegroundColor Magenta; Write-Host ""
+                        try {
+                            $quser = & query user 2>$null
+                            if ($quser) {
+                                foreach ($line in $quser) { Write-Host "  $line" -ForegroundColor White }
+                            } else { Write-Host "  [BILGI] Aktif oturum bilgisi alinamadi." -ForegroundColor Yellow }
+                        } catch { Write-Host "  [BILGI] query user komutu calistirilamadi." -ForegroundColor Yellow }
+                    }
+                    3  { # Hesap Aktif/Pasif
+                        Write-Host ""; Write-Host "  [HESAP DURUMU DEGISTIRME]" -ForegroundColor Magenta
+                        if (-not $script:IsAdmin) {
+                            Write-Host "  [UYARI] Bu islem icin yonetici yetkisi gereklidir." -ForegroundColor Yellow
+                        } else {
+                            try {
+                                $users = Get-LocalUser -ErrorAction Stop | Where-Object { $_.Name -ne $env:USERNAME }
+                                Write-Host ""
+                                $num = 1
+                                foreach ($u in $users) {
+                                    $st = if ($u.Enabled) { "[Aktif]" } else { "[Pasif]" }
+                                    $stC = if ($u.Enabled) { "Green" } else { "DarkGray" }
+                                    Write-Host "  [$num] $($u.Name) " -ForegroundColor White -NoNewline
+                                    Write-Host $st -ForegroundColor $stC
+                                    $num++
+                                }
+                                Write-Host ""; Write-Host "  Degistirilecek kullanici numarasi (0=Iptal): " -ForegroundColor Yellow -NoNewline
+                                $sel2 = Read-Host
+                                if ($sel2 -match "^\d+$" -and [int]$sel2 -ge 1 -and [int]$sel2 -le $users.Count) {
+                                    $target = $users[[int]$sel2 - 1]
+                                    if ($target.Enabled) {
+                                        Disable-LocalUser -Name $target.Name -ErrorAction Stop
+                                        Write-Host "  [BASARILI] $($target.Name) pasif yapildi." -ForegroundColor Green
+                                    } else {
+                                        Enable-LocalUser -Name $target.Name -ErrorAction Stop
+                                        Write-Host "  [BASARILI] $($target.Name) aktif yapildi." -ForegroundColor Green
+                                    }
+                                }
+                            } catch { Write-Host "  [HATA] $($_.Exception.Message)" -ForegroundColor Red }
+                        }
+                    }
+                    4  { # Son Oturum Acma
+                        Write-Host ""; Write-Host "  [SON OTURUM ACMA BILGILERI]" -ForegroundColor Magenta; Write-Host ""
+                        try {
+                            $users = Get-LocalUser -ErrorAction Stop
+                            foreach ($u in $users) {
+                                $lastLogon = if ($u.LastLogon) { $u.LastLogon.ToString("yyyy-MM-dd HH:mm:ss") } else { "Hic oturum acilmadi" }
+                                Write-Host "  $($u.Name.PadRight(25))" -ForegroundColor White -NoNewline
+                                Write-Host $lastLogon -ForegroundColor DarkCyan
+                            }
+                        } catch { Write-Host "  [HATA] $($_.Exception.Message)" -ForegroundColor Red }
+                    }
+                    5  { # Microsoft Hesabi
+                        Write-Host ""; Write-Host "  [MICROSOFT HESABI]" -ForegroundColor Magenta
+                        Write-Host "  Microsoft Hesap ayarlari aciliyor..." -ForegroundColor DarkCyan
+                        try { Start-Process "ms-settings:yourinfo" -ErrorAction Stop
+                            Write-Host "  [BASARILI] Ayarlar acildi." -ForegroundColor Green
+                        } catch { Write-Host "  [HATA] $($_.Exception.Message)" -ForegroundColor Red }
+                    }
+                    6  { # Windows Hello PIN
+                        Write-Host ""; Write-Host "  [WINDOWS HELLO / PIN]" -ForegroundColor Magenta
+                        Write-Host "  Oturum acma secenekleri aciliyor..." -ForegroundColor DarkCyan
+                        try { Start-Process "ms-settings:signinoptions" -ErrorAction Stop
+                            Write-Host "  [BASARILI] Ayarlar acildi." -ForegroundColor Green
+                        } catch { Write-Host "  [HATA] $($_.Exception.Message)" -ForegroundColor Red }
+                    }
+                    7  { # Yeni Kullanici Olusturma
+                        Write-Host ""; Write-Host "  [YENI KULLANICI]" -ForegroundColor Magenta
+                        if (-not $script:IsAdmin) {
+                            Write-Host "  [UYARI] Bu islem icin yonetici yetkisi gereklidir." -ForegroundColor Yellow
+                        } else {
+                            Write-Host "  Hesap yonetimi aciliyor..." -ForegroundColor DarkCyan
+                            try { Start-Process "ms-settings:otherusers" -ErrorAction Stop
+                                Write-Host "  [BASARILI] Hesap ayarlari acildi." -ForegroundColor Green
+                            } catch { Write-Host "  [HATA] $($_.Exception.Message)" -ForegroundColor Red }
+                        }
+                    }
+                    8  { # Sifre Degistirme
+                        Write-Host ""; Write-Host "  [SIFRE DEGISTIRME]" -ForegroundColor Magenta
+                        if (-not $script:IsAdmin) {
+                            Write-Host "  [UYARI] Bu islem icin yonetici yetkisi gereklidir." -ForegroundColor Yellow
+                        } else {
+                            Write-Host "  Hesap yonetimi aciliyor..." -ForegroundColor DarkCyan
+                            try { Start-Process "lusrmgr.msc" -ErrorAction Stop
+                                Write-Host "  [BASARILI] Kullanici yonetimi acildi." -ForegroundColor Green
+                            } catch { Write-Host "  [HATA] $($_.Exception.Message)" -ForegroundColor Red }
+                        }
+                    }
+                    9  { # Kullanici Silme
+                        Write-Host ""; Write-Host "  [KULLANICI SILME]" -ForegroundColor Magenta
+                        if (-not $script:IsAdmin) {
+                            Write-Host "  [UYARI] Bu islem icin yonetici yetkisi gereklidir." -ForegroundColor Yellow
+                        } else {
+                            Write-Host "  Hesap yonetimi aciliyor..." -ForegroundColor DarkCyan
+                            try { Start-Process "ms-settings:otherusers" -ErrorAction Stop } catch {}
+                        }
+                    }
+                    10 { # Grup Atama
+                        Write-Host ""; Write-Host "  [GRUP ATAMA]" -ForegroundColor Magenta
+                        if (-not $script:IsAdmin) {
+                            Write-Host "  [UYARI] Bu islem icin yonetici yetkisi gereklidir." -ForegroundColor Yellow
+                        } else {
+                            Write-Host "  Yerel Kullanicilar ve Gruplar aciliyor..." -ForegroundColor DarkCyan
+                            try { Start-Process "lusrmgr.msc" -ErrorAction Stop } catch {}
+                        }
+                    }
+                    11 { # Yonetici Yetkisi
+                        Write-Host ""; Write-Host "  [YONETICI YETKISI]" -ForegroundColor Magenta
+                        if (-not $script:IsAdmin) {
+                            Write-Host "  [UYARI] Bu islem icin yonetici yetkisi gereklidir." -ForegroundColor Yellow
+                        } else {
+                            Write-Host "  Yerel Kullanicilar ve Gruplar aciliyor..." -ForegroundColor DarkCyan
+                            try { Start-Process "lusrmgr.msc" -ErrorAction Stop } catch {}
+                        }
+                    }
+                }
+                Write-Host ""; Draw-HorizontalLine -Width 86 -Color DarkCyan -Char "-"
+                Wait-UserKeyPress -PromptMessage "Alt menuye donmek icin bir tusa basin..."
+            } else {
+                Write-Host "  [HATA] Gecersiz secim." -ForegroundColor Red; Start-Sleep -Seconds 1
+            }
+        } else {
+            Write-Host "  [HATA] Gecersiz giris." -ForegroundColor Red; Start-Sleep -Seconds 1
+        }
+    }
 }
 function Invoke-Category14 {
     $cat14Items = @(
@@ -2146,13 +2539,194 @@ function Invoke-Category14 {
     }
 }
 function Invoke-Category15 {
-    Show-SubMenu -CategoryNumber "15" -CategoryTitle "Depolama Yonetimi" -TitleColor Magenta -MenuItems @(
+    $cat15Items = @(
         "Disk Kullanim Analizi","En Buyuk Dosyalari Bulma","Buyuk Klasorleri Listeleme",
-        "Disk Bolumu Olusturma","Disk Bolumu Silme","Disk Bolumu Boyutlandirma",
-        "Disk Bicmlendirme","Surucuyu Acma","Ag Surucu Baglama",
-        "BitLocker ile Sifreleme","Depolama Alanlari (Storage Spaces)",
-        "Dosya Sistemi Kontrolu","Veri Kurtarma Ipuclari"
+        "Surucuyu Acma","Dosya Sistemi Kontrolu (chkdsk)","Disk Birlestiricisi",
+        "Ag Surucu Baglama","BitLocker Durumu","Disk Yonetimi",
+        "Depolama Alani Ayarlari","Veri Kurtarma Ipuclari"
     )
+    $exitCat15 = $false
+    while (-not $exitCat15) {
+        Show-ScreenTransition
+        Show-AppHeader; Write-Host ""
+        Write-Host "  [15] | Depolama Yonetimi" -ForegroundColor Magenta
+        Draw-HorizontalLine -Width 86 -Color DarkCyan -Char "-"; Write-Host ""
+        $i = 1
+        foreach ($item in $cat15Items) {
+            $numTag = if ($i -lt 10) { "[ $i] |" } else { "[$i] |" }
+            Write-Host "  $numTag" -ForegroundColor Magenta -NoNewline
+            Write-Host " $item" -ForegroundColor Magenta
+            $i++
+        }
+        Write-Host ""; Write-Host "  [ 0] | " -ForegroundColor Red -NoNewline
+        Write-Host "Ana Menuye Don" -ForegroundColor Red
+        Write-Host ""; Draw-HorizontalLine -Width 86 -Color DarkCyan -Char "-"; Write-Host ""
+        Write-Host "  Seciminiz: " -ForegroundColor Yellow -NoNewline
+        $inp = Read-Host
+        $ch = if ($null -ne $inp) { $inp.Trim() } else { "" }
+        if ($ch -eq "0" -or $ch -eq "00") {
+            $exitCat15 = $true
+        } elseif ($ch -match "^\d+$") {
+            $idx = [int]$ch
+            if ($idx -ge 1 -and $idx -le $cat15Items.Count) {
+                $sel = $cat15Items[$idx - 1]
+                Write-LogInfo "Kategori 15 secimi: [15.$ch] $sel"
+                Show-ScreenTransition -Scrollable
+                Show-AppHeader -Scrollable; Write-Host ""
+                Write-Host "  [15] | Depolama Yonetimi  >  [$ch] $sel" -ForegroundColor Magenta
+                Draw-HorizontalLine -Width 86 -Color DarkCyan -Char "-"
+                switch ($idx) {
+                    1  { # Disk Kullanim Analizi
+                        Write-Host ""; Write-Host "  [DISK KULLANIM ANALIZI]" -ForegroundColor Magenta; Write-Host ""
+                        try {
+                            $disks = Get-CimInstance Win32_LogicalDisk -Filter "DriveType=3" -ErrorAction Stop
+                            foreach ($d in $disks) {
+                                $totalGB = [math]::Round($d.Size / 1GB, 2)
+                                $freeGB = [math]::Round($d.FreeSpace / 1GB, 2)
+                                $usedGB = [math]::Round($totalGB - $freeGB, 2)
+                                $usedPct = if ($totalGB -gt 0) { [math]::Round(($usedGB / $totalGB) * 100, 1) } else { 0 }
+                                $barLen = 40
+                                $filled = [int]($barLen * $usedPct / 100)
+                                $empty = $barLen - $filled
+                                $bar = ("█" * $filled) + ("░" * $empty)
+                                $pctColor = if ($usedPct -gt 90) { "Red" } elseif ($usedPct -gt 70) { "Yellow" } else { "Green" }
+                                Write-Host "  Surucu $($d.DeviceID) [$($d.VolumeName)]" -ForegroundColor White
+                                Write-Host "  [$bar] %$usedPct" -ForegroundColor $pctColor
+                                Write-Host "  Toplam: $totalGB GB | Kullanilan: $usedGB GB | Bos: $freeGB GB" -ForegroundColor DarkCyan
+                                Write-Host ""
+                            }
+                        } catch { Write-Host "  [HATA] Disk bilgisi alinamadi: $($_.Exception.Message)" -ForegroundColor Red }
+                    }
+                    2  { # En Buyuk Dosyalar
+                        Write-Host ""; Write-Host "  [EN BUYUK DOSYALAR]" -ForegroundColor Magenta
+                        Write-Host "  C: surucusunde en buyuk 15 dosya aranıyor..." -ForegroundColor DarkCyan
+                        Write-Host "  (Bu islem birkac dakika surebilir)" -ForegroundColor DarkGray; Write-Host ""
+                        try {
+                            $bigFiles = Get-ChildItem -Path "C:\" -Recurse -File -ErrorAction SilentlyContinue |
+                                Sort-Object Length -Descending | Select-Object -First 15
+                            $num = 1
+                            foreach ($f in $bigFiles) {
+                                $sizeMB = [math]::Round($f.Length / 1MB, 1)
+                                $sizeStr = if ($sizeMB -gt 1024) { "$([math]::Round($sizeMB/1024,1)) GB" } else { "$sizeMB MB" }
+                                Write-Host "  [$($num.ToString().PadLeft(2))] $sizeStr".PadRight(18) -ForegroundColor White -NoNewline
+                                Write-Host " $($f.FullName)" -ForegroundColor DarkCyan
+                                $num++
+                            }
+                        } catch { Write-Host "  [HATA] $($_.Exception.Message)" -ForegroundColor Red }
+                    }
+                    3  { # Buyuk Klasorler
+                        Write-Host ""; Write-Host "  [BUYUK KLASORLER]" -ForegroundColor Magenta
+                        Write-Host "  C:\ altindaki ana klasor boyutlari hesaplaniyor..." -ForegroundColor DarkCyan; Write-Host ""
+                        try {
+                            $folders = Get-ChildItem -Path "C:\" -Directory -ErrorAction SilentlyContinue | ForEach-Object {
+                                $size = (Get-ChildItem $_.FullName -Recurse -File -ErrorAction SilentlyContinue | Measure-Object -Property Length -Sum).Sum
+                                [PSCustomObject]@{ Name = $_.Name; SizeGB = [math]::Round($size / 1GB, 2) }
+                            } | Sort-Object SizeGB -Descending | Select-Object -First 10
+                            foreach ($f in $folders) {
+                                $bar = "█" * [math]::Min(30, [int]($f.SizeGB * 2))
+                                Write-Host "  $($f.Name.PadRight(25))" -ForegroundColor White -NoNewline
+                                Write-Host "$($f.SizeGB) GB " -ForegroundColor Cyan -NoNewline
+                                Write-Host $bar -ForegroundColor DarkCyan
+                            }
+                        } catch { Write-Host "  [HATA] $($_.Exception.Message)" -ForegroundColor Red }
+                    }
+                    4  { # Surucuyu Acma
+                        Write-Host ""; Write-Host "  [SURUCU ACMA]" -ForegroundColor Magenta; Write-Host ""
+                        try {
+                            $disks = Get-CimInstance Win32_LogicalDisk -Filter "DriveType=3" -ErrorAction Stop
+                            $num = 1
+                            foreach ($d in $disks) {
+                                Write-Host "  [$num] $($d.DeviceID) - $($d.VolumeName)" -ForegroundColor White
+                                $num++
+                            }
+                            Write-Host ""; Write-Host "  Acilacak surucu numarasi (0=Iptal): " -ForegroundColor Yellow -NoNewline
+                            $sel2 = Read-Host
+                            if ($sel2 -match "^\d+$" -and [int]$sel2 -ge 1 -and [int]$sel2 -le $disks.Count) {
+                                $target = $disks[[int]$sel2 - 1]
+                                Start-Process "explorer.exe" -ArgumentList "$($target.DeviceID)\" -ErrorAction Stop
+                                Write-Host "  [BASARILI] $($target.DeviceID) acildi." -ForegroundColor Green
+                            }
+                        } catch { Write-Host "  [HATA] $($_.Exception.Message)" -ForegroundColor Red }
+                    }
+                    5  { # Dosya Sistemi Kontrolu
+                        Write-Host ""; Write-Host "  [DOSYA SISTEMI KONTROLU]" -ForegroundColor Magenta
+                        if (-not $script:IsAdmin) {
+                            Write-Host "  [UYARI] chkdsk icin yonetici yetkisi gereklidir." -ForegroundColor Yellow
+                        } else {
+                            Write-Host "  C: surucusu icin chkdsk /scan calistiriliyor..." -ForegroundColor DarkCyan
+                            try {
+                                $result = & chkdsk C: /scan 2>&1 | Out-String
+                                Write-Host $result -ForegroundColor White
+                            } catch { Write-Host "  [HATA] $($_.Exception.Message)" -ForegroundColor Red }
+                        }
+                    }
+                    6  { # Disk Birlestiricisi
+                        Write-Host ""; Write-Host "  [DISK BIRLESTIRICISI]" -ForegroundColor Magenta
+                        Write-Host "  Disk Birlestiricisi aciliyor..." -ForegroundColor DarkCyan
+                        try { Start-Process "dfrgui.exe" -ErrorAction Stop
+                            Write-Host "  [BASARILI] Acildi." -ForegroundColor Green
+                        } catch { Write-Host "  [HATA] $($_.Exception.Message)" -ForegroundColor Red }
+                    }
+                    7  { # Ag Surucu Baglama
+                        Write-Host ""; Write-Host "  [AG SURUCU BAGLAMA]" -ForegroundColor Magenta
+                        Write-Host "  Mevcut ag surucileri:" -ForegroundColor DarkCyan; Write-Host ""
+                        try {
+                            $netDrives = Get-PSDrive -PSProvider FileSystem | Where-Object { $_.DisplayRoot -match '\\\\' }
+                            if ($netDrives) {
+                                foreach ($nd in $netDrives) {
+                                    Write-Host "  $($nd.Name): -> $($nd.DisplayRoot)" -ForegroundColor White
+                                }
+                            } else { Write-Host "  Bagli ag surucusu bulunamadi." -ForegroundColor DarkGray }
+                        } catch {}
+                        Write-Host ""; Write-Host "  Ag Surucu Baglama penceresi aciliyor..." -ForegroundColor DarkCyan
+                        try { Start-Process "rundll32.exe" -ArgumentList "shell32.dll,SHHelpShortcuts_RunDLL Connect" -ErrorAction Stop } catch {}
+                    }
+                    8  { # BitLocker Durumu
+                        Write-Host ""; Write-Host "  [BITLOCKER DURUMU]" -ForegroundColor Magenta; Write-Host ""
+                        try {
+                            $bl = & manage-bde -status 2>$null | Out-String
+                            if ($bl) { Write-Host $bl -ForegroundColor White }
+                            else { Write-Host "  [BILGI] BitLocker bilgisi alinamadi." -ForegroundColor Yellow }
+                        } catch { Write-Host "  [BILGI] BitLocker bu sistemde desteklenmiyor olabilir." -ForegroundColor Yellow }
+                    }
+                    9  { # Disk Yonetimi
+                        Write-Host ""; Write-Host "  [DISK YONETIMI]" -ForegroundColor Magenta
+                        Write-Host "  Disk Yonetimi aciliyor..." -ForegroundColor DarkCyan
+                        try { Start-Process "diskmgmt.msc" -ErrorAction Stop
+                            Write-Host "  [BASARILI] Acildi." -ForegroundColor Green
+                        } catch { Write-Host "  [HATA] $($_.Exception.Message)" -ForegroundColor Red }
+                    }
+                    10 { # Depolama Alani Ayarlari
+                        Write-Host ""; Write-Host "  [DEPOLAMA ALANI AYARLARI]" -ForegroundColor Magenta
+                        Write-Host "  Depolama ayarlari aciliyor..." -ForegroundColor DarkCyan
+                        try { Start-Process "ms-settings:storagesense" -ErrorAction Stop
+                            Write-Host "  [BASARILI] Acildi." -ForegroundColor Green
+                        } catch { Write-Host "  [HATA] $($_.Exception.Message)" -ForegroundColor Red }
+                    }
+                    11 { # Veri Kurtarma Ipuclari
+                        Write-Host ""; Write-Host "  [VERI KURTARMA IPUCLARI]" -ForegroundColor Magenta
+                        Write-Host ""
+                        Write-Host "  Windows yerlesik veri kurtarma yontemleri:" -ForegroundColor DarkCyan
+                        Write-Host ""
+                        Write-Host "  1. Geri Donusum Kutusu  : Silinen dosyalar once buraya gider." -ForegroundColor White
+                        Write-Host "  2. Dosya Gecmisi        : Ayarlar > Guncellestirme > Yedekleme" -ForegroundColor White
+                        Write-Host "  3. Onceki Surumler      : Dosya/klasor > Sag tik > Ozellikler > Onceki Surumler" -ForegroundColor White
+                        Write-Host "  4. Sistem Geri Yukleme  : rstrui.exe (Geri Yukleme Noktasi)" -ForegroundColor White
+                        Write-Host "  5. Windows File Recovery : Microsoft Store'dan indirilebilir (winfr komutu)" -ForegroundColor White
+                        Write-Host ""
+                        Write-Host "  [ONEMLI] Veri kaybinda diskte yazma islemi yapmayin!" -ForegroundColor Yellow
+                        Write-Host "  [ONEMLI] Profesyonel kurtarma icin diske mudahale etmeyin." -ForegroundColor Yellow
+                    }
+                }
+                Write-Host ""; Draw-HorizontalLine -Width 86 -Color DarkCyan -Char "-"
+                Wait-UserKeyPress -PromptMessage "Alt menuye donmek icin bir tusa basin..."
+            } else {
+                Write-Host "  [HATA] Gecersiz secim." -ForegroundColor Red; Start-Sleep -Seconds 1
+            }
+        } else {
+            Write-Host "  [HATA] Gecersiz giris." -ForegroundColor Red; Start-Sleep -Seconds 1
+        }
+    }
 }
 function Invoke-Category16 {
     $cat16Items = @(
@@ -2235,11 +2809,13 @@ function Invoke-Category17 {
         } elseif ($ch -eq "1" -or $ch -eq "01") {
             Show-LogInConsole -LogPath $script:LogFilePath
         } elseif ($ch -eq "2" -or $ch -eq "02") {
-            if (Get-Command "Show-InstallHistory" -ErrorAction SilentlyContinue) {
+            Write-LogInfo "Kategori 17 secimi: [17.2] Kurulum Gecmisi (Detayli)"
+            try {
                 Show-InstallHistory
-            } else {
-                Write-Host "  [BILGI] Kurulum gecmisi modulu henuz hazir degil." -ForegroundColor Yellow
-                Start-Sleep -Seconds 1
+            } catch {
+                Write-Host "  [BILGI] Kurulum gecmisi modulu yuklenemedi." -ForegroundColor Yellow
+                Write-Host "  Hata: $($_.Exception.Message)" -ForegroundColor DarkGray
+                Start-Sleep -Seconds 2
             }
         } elseif ($ch -eq "3" -or $ch -eq "03" -or $ch -eq "9") {
             Show-LogCleanupMenu
