@@ -212,11 +212,10 @@ function Show-LogCleanupMenu {
         Write-Host ""
         Draw-HorizontalLine -Width 86 -Color DarkCyan -Char "-"
         Write-Host ""
-        Write-Host "  Seciminiz [1-5 | 0=Geri]: " -ForegroundColor Yellow -NoNewline
-        $inp = Read-Host
+        $inp = Read-MenuInput -Prompt "  Seciminiz [1-5 | 0=Geri]: "
         $ch = if ($null -ne $inp) { $inp.Trim() } else { "" }
 
-        if ($ch -eq "0" -or $ch -eq "00") {
+        if ($ch -eq "ESC" -or $ch -eq "0" -or $ch -eq "00") {
             $exitLogMenu = $true
         } elseif ($ch -in "1","2","3","4","5") {
             $targets = @()
@@ -617,6 +616,47 @@ function Wait-UserKeyPress {
         try { $null = Read-Host } catch { Start-Sleep -Seconds 1 }
     }
 }
+
+function Read-MenuInput {
+<#
+.SYNOPSIS
+    ESC destekli menu girisi okur. ESC basilirsa "ESC" dondurur.
+    Karakter karakter okuyarak sayi girisini alir, Enter ile onaylar.
+#>
+    param([string]$Prompt = "  Seciminiz: ", [ConsoleColor]$PromptColor = [ConsoleColor]::Yellow)
+    Write-Host $Prompt -ForegroundColor $PromptColor -NoNewline
+    $buffer = ""
+    while ($true) {
+        try {
+            $key = [Console]::ReadKey($true)
+        } catch {
+            # ReadKey kullanilamazsa Read-Host'a geri don
+            $fallback = Read-Host
+            if ($null -eq $fallback) { return "ESC" }
+            return $fallback.Trim()
+        }
+        if ($key.Key -eq [ConsoleKey]::Escape) {
+            Write-Host "ESC" -ForegroundColor DarkGray
+            return "ESC"
+        }
+        if ($key.Key -eq [ConsoleKey]::Enter) {
+            Write-Host ""
+            return $buffer.Trim()
+        }
+        if ($key.Key -eq [ConsoleKey]::Backspace) {
+            if ($buffer.Length -gt 0) {
+                $buffer = $buffer.Substring(0, $buffer.Length - 1)
+                Write-Host "`b `b" -NoNewline
+            }
+            continue
+        }
+        $c = $key.KeyChar
+        if ($c -and [char]::IsLetterOrDigit($c) -or $c -eq '.' -or $c -eq '-' -or $c -eq '_' -or $c -eq ' ') {
+            $buffer += $c
+            Write-Host $c -NoNewline
+        }
+    }
+}
 function Show-OpeningAnimation {
     param([switch]$IsAdmin)
 
@@ -949,7 +989,7 @@ function Show-MainMenu {
 
     Write-Host "  " -NoNewline
     Write-Host ("[20] | Hakkinda".PadRight(56)) -ForegroundColor Yellow -NoNewline
-    Write-Host "[ 0] | Cikis" -ForegroundColor Red
+    Write-Host "[ 0] | Cikis  [ESC]" -ForegroundColor Red
     Draw-HorizontalLine -Width 86 -Color DarkCyan -Char "-"
 }
 
@@ -1004,12 +1044,11 @@ function Show-SubMenu {
             $i++
         }
         Write-Host ""; Write-Host "  [ 0] | " -ForegroundColor Red -NoNewline
-        Write-Host "Ana Menuye Don" -ForegroundColor Red
+        Write-Host "Ana Menuye Don  [ESC]" -ForegroundColor Red
         Write-Host ""; Draw-HorizontalLine -Width 86 -Color DarkCyan -Char "-"; Write-Host ""
-        Write-Host "  Seciminiz: " -ForegroundColor Yellow -NoNewline
-        $inp = Read-Host
+        $inp = Read-MenuInput
         $ch = if ($null -ne $inp) { $inp.Trim() } else { "" }
-        if ($ch -eq "00" -or $ch -eq "0") {
+        if ($ch -eq "ESC" -or $ch -eq "00" -or $ch -eq "0") {
             $exitSub = $true
         } elseif ($ch -match "^\d+$") {
             $idx = [int]$ch
@@ -1072,12 +1111,11 @@ function Invoke-Category03 {
             $i++
         }
         Write-Host ""; Write-Host "  [ 0] | " -ForegroundColor Red -NoNewline
-        Write-Host "Ana Menuye Don" -ForegroundColor Red
+        Write-Host "Ana Menuye Don  [ESC]" -ForegroundColor Red
         Write-Host ""; Draw-HorizontalLine -Width 86 -Color DarkCyan -Char "-"; Write-Host ""
-        Write-Host "  Seciminiz: " -ForegroundColor Yellow -NoNewline
-        $inp = Read-Host
+        $inp = Read-MenuInput
         $ch = if ($null -ne $inp) { $inp.Trim() } else { "" }
-        if ($ch -eq "0" -or $ch -eq "00") {
+        if ($ch -eq "ESC" -or $ch -eq "0" -or $ch -eq "00") {
             $exitCat03 = $true
         } elseif ($ch -match "^\d+$") {
             $idx = [int]$ch
@@ -1134,12 +1172,11 @@ function Invoke-Category04 {
             $i++
         }
         Write-Host ""; Write-Host "  [ 0] | " -ForegroundColor Red -NoNewline
-        Write-Host "Ana Menuye Don" -ForegroundColor Red
+        Write-Host "Ana Menuye Don  [ESC]" -ForegroundColor Red
         Write-Host ""; Draw-HorizontalLine -Width 86 -Color DarkCyan -Char "-"; Write-Host ""
-        Write-Host "  Seciminiz: " -ForegroundColor Yellow -NoNewline
-        $inp = Read-Host
+        $inp = Read-MenuInput
         $ch = if ($null -ne $inp) { $inp.Trim() } else { "" }
-        if ($ch -eq "0" -or $ch -eq "00") {
+        if ($ch -eq "ESC" -or $ch -eq "0" -or $ch -eq "00") {
             $exitCat04 = $true
         } elseif ($ch -match "^\d+$") {
             $idx = [int]$ch
@@ -1192,12 +1229,11 @@ function Invoke-Category05 {
             $i++
         }
         Write-Host ""; Write-Host "  [ 0] | " -ForegroundColor Red -NoNewline
-        Write-Host "Ana Menuye Don" -ForegroundColor Red
+        Write-Host "Ana Menuye Don  [ESC]" -ForegroundColor Red
         Write-Host ""; Draw-HorizontalLine -Width 86 -Color DarkCyan -Char "-"; Write-Host ""
-        Write-Host "  Seciminiz: " -ForegroundColor Yellow -NoNewline
-        $inp = Read-Host
+        $inp = Read-MenuInput
         $ch = if ($null -ne $inp) { $inp.Trim() } else { "" }
-        if ($ch -eq "0" -or $ch -eq "00") {
+        if ($ch -eq "ESC" -or $ch -eq "0" -or $ch -eq "00") {
             $exitCat05 = $true
         } elseif ($ch -match "^\d+$") {
             $idx = [int]$ch
@@ -1255,12 +1291,11 @@ function Invoke-Category06 {
             $i++
         }
         Write-Host ""; Write-Host "  [ 0] | " -ForegroundColor Red -NoNewline
-        Write-Host "Ana Menuye Don" -ForegroundColor Red
+        Write-Host "Ana Menuye Don  [ESC]" -ForegroundColor Red
         Write-Host ""; Draw-HorizontalLine -Width 86 -Color DarkCyan -Char "-"; Write-Host ""
-        Write-Host "  Seciminiz: " -ForegroundColor Yellow -NoNewline
-        $inp = Read-Host
+        $inp = Read-MenuInput
         $ch = if ($null -ne $inp) { $inp.Trim() } else { "" }
-        if ($ch -eq "0" -or $ch -eq "00") {
+        if ($ch -eq "ESC" -or $ch -eq "0" -or $ch -eq "00") {
             $exitCat06 = $true
         } elseif ($ch -match "^\d+$") {
             $idx = [int]$ch
@@ -1338,12 +1373,11 @@ function Invoke-Category07 {
             $i++
         }
         Write-Host ""; Write-Host "  [ 0] | " -ForegroundColor Red -NoNewline
-        Write-Host "Ana Menuye Don" -ForegroundColor Red
+        Write-Host "Ana Menuye Don  [ESC]" -ForegroundColor Red
         Write-Host ""; Draw-HorizontalLine -Width 86 -Color DarkCyan -Char "-"; Write-Host ""
-        Write-Host "  Seciminiz: " -ForegroundColor Yellow -NoNewline
-        $inp = Read-Host
+        $inp = Read-MenuInput
         $ch = if ($null -ne $inp) { $inp.Trim() } else { "" }
-        if ($ch -eq "0" -or $ch -eq "00") {
+        if ($ch -eq "ESC" -or $ch -eq "0" -or $ch -eq "00") {
             $exitCat07 = $true
         } elseif ($ch -match "^\d+$") {
             $idx = [int]$ch
@@ -1402,12 +1436,11 @@ function Invoke-Category08 {
             $i++
         }
         Write-Host ""; Write-Host "  [ 0] | " -ForegroundColor Red -NoNewline
-        Write-Host "Ana Menuye Don" -ForegroundColor Red
+        Write-Host "Ana Menuye Don  [ESC]" -ForegroundColor Red
         Write-Host ""; Draw-HorizontalLine -Width 86 -Color DarkCyan -Char "-"; Write-Host ""
-        Write-Host "  Seciminiz: " -ForegroundColor Yellow -NoNewline
-        $inp = Read-Host
+        $inp = Read-MenuInput
         $ch = if ($null -ne $inp) { $inp.Trim() } else { "" }
-        if ($ch -eq "0" -or $ch -eq "00") {
+        if ($ch -eq "ESC" -or $ch -eq "0" -or $ch -eq "00") {
             $exitCat08 = $true
         } elseif ($ch -match "^\d+$") {
             $idx = [int]$ch
@@ -1578,12 +1611,11 @@ function Invoke-Category09 {
             $i++
         }
         Write-Host ""; Write-Host "  [ 0] | " -ForegroundColor Red -NoNewline
-        Write-Host "Ana Menuye Don" -ForegroundColor Red
+        Write-Host "Ana Menuye Don  [ESC]" -ForegroundColor Red
         Write-Host ""; Draw-HorizontalLine -Width 86 -Color DarkCyan -Char "-"; Write-Host ""
-        Write-Host "  Seciminiz: " -ForegroundColor Yellow -NoNewline
-        $inp = Read-Host
+        $inp = Read-MenuInput
         $ch = if ($null -ne $inp) { $inp.Trim() } else { "" }
-        if ($ch -eq "0" -or $ch -eq "00") {
+        if ($ch -eq "ESC" -or $ch -eq "0" -or $ch -eq "00") {
             $exitCat09 = $true
         } elseif ($ch -match "^\d+$") {
             $idx = [int]$ch
@@ -1661,12 +1693,11 @@ function Invoke-Category10 {
             $i++
         }
         Write-Host ""; Write-Host "  [ 0] | " -ForegroundColor Red -NoNewline
-        Write-Host "Ana Menuye Don" -ForegroundColor Red
+        Write-Host "Ana Menuye Don  [ESC]" -ForegroundColor Red
         Write-Host ""; Draw-HorizontalLine -Width 86 -Color DarkCyan -Char "-"; Write-Host ""
-        Write-Host "  Seciminiz: " -ForegroundColor Yellow -NoNewline
-        $inp = Read-Host
+        $inp = Read-MenuInput
         $ch = if ($null -ne $inp) { $inp.Trim() } else { "" }
-        if ($ch -eq "0" -or $ch -eq "00") {
+        if ($ch -eq "ESC" -or $ch -eq "0" -or $ch -eq "00") {
             $exitCat10 = $true
         } elseif ($ch -match "^\d+$") {
             $idx = [int]$ch
@@ -2038,12 +2069,11 @@ function Invoke-Category11 {
             $i++
         }
         Write-Host ""; Write-Host "  [ 0] | " -ForegroundColor Red -NoNewline
-        Write-Host "Ana Menuye Don" -ForegroundColor Red
+        Write-Host "Ana Menuye Don  [ESC]" -ForegroundColor Red
         Write-Host ""; Draw-HorizontalLine -Width 86 -Color DarkCyan -Char "-"; Write-Host ""
-        Write-Host "  Seciminiz: " -ForegroundColor Yellow -NoNewline
-        $inp = Read-Host
+        $inp = Read-MenuInput
         $ch = if ($null -ne $inp) { $inp.Trim() } else { "" }
-        if ($ch -eq "0" -or $ch -eq "00") {
+        if ($ch -eq "ESC" -or $ch -eq "0" -or $ch -eq "00") {
             $exitCat11 = $true
         } elseif ($ch -match "^\d+$") {
             $idx = [int]$ch
@@ -2094,12 +2124,11 @@ function Invoke-Category12 {
             $i++
         }
         Write-Host ""; Write-Host "  [ 0] | " -ForegroundColor Red -NoNewline
-        Write-Host "Ana Menuye Don" -ForegroundColor Red
+        Write-Host "Ana Menuye Don  [ESC]" -ForegroundColor Red
         Write-Host ""; Draw-HorizontalLine -Width 86 -Color DarkCyan -Char "-"; Write-Host ""
-        Write-Host "  Seciminiz: " -ForegroundColor Yellow -NoNewline
-        $inp = Read-Host
+        $inp = Read-MenuInput
         $ch = if ($null -ne $inp) { $inp.Trim() } else { "" }
-        if ($ch -eq "0" -or $ch -eq "00") {
+        if ($ch -eq "ESC" -or $ch -eq "0" -or $ch -eq "00") {
             $exitCat12 = $true
         } elseif ($ch -match "^\d+$") {
             $idx = [int]$ch
@@ -2320,12 +2349,11 @@ function Invoke-Category13 {
             $i++
         }
         Write-Host ""; Write-Host "  [ 0] | " -ForegroundColor Red -NoNewline
-        Write-Host "Ana Menuye Don" -ForegroundColor Red
+        Write-Host "Ana Menuye Don  [ESC]" -ForegroundColor Red
         Write-Host ""; Draw-HorizontalLine -Width 86 -Color DarkCyan -Char "-"; Write-Host ""
-        Write-Host "  Seciminiz: " -ForegroundColor Yellow -NoNewline
-        $inp = Read-Host
+        $inp = Read-MenuInput
         $ch = if ($null -ne $inp) { $inp.Trim() } else { "" }
-        if ($ch -eq "0" -or $ch -eq "00") {
+        if ($ch -eq "ESC" -or $ch -eq "0" -or $ch -eq "00") {
             $exitCat13 = $true
         } elseif ($ch -match "^\d+$") {
             $idx = [int]$ch
@@ -2505,12 +2533,11 @@ function Invoke-Category14 {
             $i++
         }
         Write-Host ""; Write-Host "  [ 0] | " -ForegroundColor Red -NoNewline
-        Write-Host "Ana Menuye Don" -ForegroundColor Red
+        Write-Host "Ana Menuye Don  [ESC]" -ForegroundColor Red
         Write-Host ""; Draw-HorizontalLine -Width 86 -Color DarkCyan -Char "-"; Write-Host ""
-        Write-Host "  Seciminiz: " -ForegroundColor Yellow -NoNewline
-        $inp = Read-Host
+        $inp = Read-MenuInput
         $ch = if ($null -ne $inp) { $inp.Trim() } else { "" }
-        if ($ch -eq "0" -or $ch -eq "00") {
+        if ($ch -eq "ESC" -or $ch -eq "0" -or $ch -eq "00") {
             $exitCat14 = $true
         } elseif ($ch -match "^\d+$") {
             $idx = [int]$ch
@@ -2559,12 +2586,11 @@ function Invoke-Category15 {
             $i++
         }
         Write-Host ""; Write-Host "  [ 0] | " -ForegroundColor Red -NoNewline
-        Write-Host "Ana Menuye Don" -ForegroundColor Red
+        Write-Host "Ana Menuye Don  [ESC]" -ForegroundColor Red
         Write-Host ""; Draw-HorizontalLine -Width 86 -Color DarkCyan -Char "-"; Write-Host ""
-        Write-Host "  Seciminiz: " -ForegroundColor Yellow -NoNewline
-        $inp = Read-Host
+        $inp = Read-MenuInput
         $ch = if ($null -ne $inp) { $inp.Trim() } else { "" }
-        if ($ch -eq "0" -or $ch -eq "00") {
+        if ($ch -eq "ESC" -or $ch -eq "0" -or $ch -eq "00") {
             $exitCat15 = $true
         } elseif ($ch -match "^\d+$") {
             $idx = [int]$ch
@@ -2748,12 +2774,11 @@ function Invoke-Category16 {
             $i++
         }
         Write-Host ""; Write-Host "  [ 0] | " -ForegroundColor Red -NoNewline
-        Write-Host "Ana Menuye Don" -ForegroundColor Red
+        Write-Host "Ana Menuye Don  [ESC]" -ForegroundColor Red
         Write-Host ""; Draw-HorizontalLine -Width 86 -Color DarkCyan -Char "-"; Write-Host ""
-        Write-Host "  Seciminiz: " -ForegroundColor Yellow -NoNewline
-        $inp = Read-Host
+        $inp = Read-MenuInput
         $ch = if ($null -ne $inp) { $inp.Trim() } else { "" }
-        if ($ch -eq "0" -or $ch -eq "00") {
+        if ($ch -eq "ESC" -or $ch -eq "0" -or $ch -eq "00") {
             $exitCat16 = $true
         } elseif ($ch -match "^\d+$") {
             $idx = [int]$ch
@@ -2799,12 +2824,11 @@ function Invoke-Category17 {
             $i++
         }
         Write-Host ""; Write-Host "  [ 0] | " -ForegroundColor Red -NoNewline
-        Write-Host "Ana Menuye Don" -ForegroundColor Red
+        Write-Host "Ana Menuye Don  [ESC]" -ForegroundColor Red
         Write-Host ""; Draw-HorizontalLine -Width 86 -Color DarkCyan -Char "-"; Write-Host ""
-        Write-Host "  Seciminiz: " -ForegroundColor Yellow -NoNewline
-        $inp = Read-Host
+        $inp = Read-MenuInput
         $ch = if ($null -ne $inp) { $inp.Trim() } else { "" }
-        if ($ch -eq "0" -or $ch -eq "00") {
+        if ($ch -eq "ESC" -or $ch -eq "0" -or $ch -eq "00") {
             $exitCat17 = $true
         } elseif ($ch -eq "1" -or $ch -eq "01") {
             Show-LogInConsole -LogPath $script:LogFilePath
@@ -2919,7 +2943,7 @@ function Show-AdminMenu {
     Write-Host "  " -NoNewline
     Write-Host ("[20] | Hakkinda".PadRight(38)) -ForegroundColor Yellow -NoNewline
     Write-Host "    " -NoNewline
-    Write-Host "[ 0] | Cikis" -ForegroundColor Red
+    Write-Host "[ 0] | Cikis  [ESC]" -ForegroundColor Red
     Draw-HorizontalLine -Width 86 -Color DarkCyan -Char "-"
 }
 
@@ -2975,11 +2999,10 @@ function Show-AdminCategoryAppsView {
         Write-Host "  [G] Kategorilere Don" -ForegroundColor Magenta
         Write-Host "  [0] Yonetici Paneline Don" -ForegroundColor Red
         Write-Host ""
-        Write-Host "  Seciminiz: " -ForegroundColor Yellow -NoNewline
-        $pChoice = Read-Host
+        $pChoice = Read-MenuInput
         $pVal = if ($null -ne $pChoice) { $pChoice.Trim().ToUpper() } else { "" }
 
-        if ($pVal -eq "0" -or $pVal -eq "00") {
+        if ($pVal -eq "ESC" -or $pVal -eq "0" -or $pVal -eq "00") {
             return
         } elseif ($pVal -eq "G" -or $pVal -eq "B") {
             return
@@ -3049,7 +3072,7 @@ function Invoke-AdminOption01 {
         $inp = Read-Host
         $choice = if ($null -ne $inp) { $inp.Trim().ToUpper() } else { "" }
 
-        if ($choice -eq "0" -or $choice -eq "00") {
+        if ($choice -eq "ESC" -or $choice -eq "0" -or $choice -eq "00") {
             $exitCatalogSub = $true
         } elseif ($choice -match '^\d+$') {
             $idx = [int]$choice
@@ -3192,11 +3215,11 @@ function Show-LogInConsole {
         }
 
         Draw-HorizontalLine -Width 86 -Color DarkCyan -Char "-"
-        Write-Host "  [Sonraki: ENTER / N]  [Onceki: P]  [Basa: T]  [Sona: E]  [0: Cikis]: " -ForegroundColor Yellow -NoNewline
+        Write-Host "  [Sonraki: ENTER / N]  [Onceki: P]  [Basa: T]  [Sona: E]  [ESC/0: Cikis]: " -ForegroundColor Yellow -NoNewline
         $nav = Read-Host
         $nav = if ($null -ne $nav) { $nav.Trim().ToUpper() } else { "" }
 
-        if ($nav -eq "0" -or $nav -eq "Q") { break }
+        if ($nav -eq "ESC" -or $nav -eq "0" -or $nav -eq "Q") { break }
         elseif ($nav -eq "P" -or $nav -eq "B") {
             if ($currentPage -gt 1) { $currentPage-- }
         }
@@ -3289,8 +3312,7 @@ function Invoke-AdminOption07 {
         Write-Host "  [0] Geri Don" -ForegroundColor Red
         Write-Host ""
         Draw-HorizontalLine -Width 86 -Color DarkCyan -Char "-"
-        Write-Host "  Seciminiz [A/S/F/0]: " -ForegroundColor Yellow -NoNewline
-        $inp = Read-Host
+        $inp = Read-MenuInput -Prompt "  Seciminiz [A/S/F/0]: "
         $opt = if ($null -ne $inp) { $inp.Trim().ToUpper() } else { "" }
 
         switch ($opt) {
@@ -3383,12 +3405,11 @@ function Invoke-AdminOption11 {
             $i++
         }
         Write-Host ""; Write-Host "  [ 0] | " -ForegroundColor Red -NoNewline
-        Write-Host "Yonetici Paneline Don" -ForegroundColor Red
+        Write-Host "Yonetici Paneline Don  [ESC]" -ForegroundColor Red
         Write-Host ""; Draw-HorizontalLine -Width 86 -Color DarkCyan -Char "-"; Write-Host ""
-        Write-Host "  Seciminiz: " -ForegroundColor Yellow -NoNewline
-        $inp = Read-Host
+        $inp = Read-MenuInput
         $ch = if ($null -ne $inp) { $inp.Trim() } else { "" }
-        if ($ch -eq "0" -or $ch -eq "00") {
+        if ($ch -eq "ESC" -or $ch -eq "0" -or $ch -eq "00") {
             $exitModSub = $true
         } elseif ($ch -eq "1") {
             Show-ScreenTransition -IsAdmin -Scrollable
@@ -3511,12 +3532,11 @@ function Invoke-AdminOption12 {
             $i++
         }
         Write-Host ""; Write-Host "  [ 0] | " -ForegroundColor Red -NoNewline
-        Write-Host "Yonetici Paneline Don" -ForegroundColor Red
+        Write-Host "Yonetici Paneline Don  [ESC]" -ForegroundColor Red
         Write-Host ""; Draw-HorizontalLine -Width 86 -Color DarkCyan -Char "-"; Write-Host ""
-        Write-Host "  Seciminiz: " -ForegroundColor Yellow -NoNewline
-        $inp = Read-Host
+        $inp = Read-MenuInput
         $ch = if ($null -ne $inp) { $inp.Trim() } else { "" }
-        if ($ch -eq "0" -or $ch -eq "00") {
+        if ($ch -eq "ESC" -or $ch -eq "0" -or $ch -eq "00") {
             $exitDirSub = $true
         } elseif ($ch -match "^[1-6]$") {
             $targetPath = switch ($ch) {
@@ -3556,8 +3576,7 @@ function Start-AdminPanelLoop {
     $exitAdmin = $false
     while (-not $exitAdmin) {
         Show-AdminMenu
-        Write-Host "  Seciminiz [1-12 | 20=Hakkinda | 0=Cikis]: " -ForegroundColor Yellow -NoNewline
-        $inp = Read-Host
+        $inp = Read-MenuInput -Prompt "  Seciminiz [1-12 | 20=Hakkinda | 0=Cikis]: "
         $ch  = if ($null -ne $inp) { $inp.Trim() } else { "" }
 
         switch ($ch) {
@@ -3574,7 +3593,7 @@ function Start-AdminPanelLoop {
             "11" { Invoke-AdminOption11 }
             "12" { Invoke-AdminOption12 }
             "20" { Show-AboutScreen }
-            { $_ -eq "0" -or $_ -eq "00" } {
+            { $_ -eq "ESC" -or $_ -eq "0" -or $_ -eq "00" } {
                 $exitAdmin = $true
                 Write-LogInfo "Yonetici Paneli kapatildi."
                 Show-ClosingAnimation -IsAdmin:$true
@@ -3653,8 +3672,7 @@ function Start-StandardUserLoop {
     while (-not $exitRequested) {
         Show-MainMenu
 
-        Write-Host "  Seciminiz [1-18 | 20=Hakkinda | 0=Cikis]: " -ForegroundColor Yellow -NoNewline
-        $inputChoice = Read-Host
+        $inputChoice = Read-MenuInput -Prompt "  Seciminiz [1-18 | 20=Hakkinda | 0=Cikis]: "
         $choice = if ($null -ne $inputChoice) { $inputChoice.Trim() } else { "" }
 
         switch ($choice) {
@@ -3678,7 +3696,7 @@ function Start-StandardUserLoop {
             "18"  { Invoke-Category18 }
             { $_ -eq "19" -or $_ -eq "019" } { Invoke-Category19 }
             "20"  { Show-AboutScreen }
-            { $_ -eq "0" -or $_ -eq "00" } {
+            { $_ -eq "ESC" -or $_ -eq "0" -or $_ -eq "00" } {
                 $exitRequested = $true
                 Write-LogInfo "Kullanici cikis yapti."
                 Show-ClosingAnimation -IsAdmin:$false
