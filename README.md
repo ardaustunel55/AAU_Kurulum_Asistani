@@ -123,15 +123,29 @@
 
 ## 📸 Ekran Görüntüleri
 
-> *Proje geliştirilmeye devam etmektedir. Ekran görüntüleri yakında eklenecektir.*
+### Kullanıcı Paneli
 
-<!--
-Ekran görüntüleri eklendiğinde:
 <p align="center">
-  <img src="docs/screenshots/main-menu.png" alt="Ana Menü" width="700"/>
-  <br/><em>Ana Menü — Kategori bazlı uygulama tarayıcısı</em>
+  <img src="assets/screenshots/acilis.jpg" alt="Açılış Ekranı" width="700"/>
+  <br/><em>Açılış Ekranı — Defender Protokolü yükleme animasyonu</em>
 </p>
--->
+
+<p align="center">
+  <img src="assets/screenshots/ana_menu.jpg" alt="Ana Menü" width="700"/>
+  <br/><em>Ana Menü — 18 kategori ile uygulama ve sistem araçları seçimi</em>
+</p>
+
+### Yönetici Paneli
+
+<p align="center">
+  <img src="assets/screenshots/yonetici_acilis.jpg" alt="Yönetici Paneli Açılış" width="700"/>
+  <br/><em>Yönetici Paneli — Açılış ve sistem hazırlığı</em>
+</p>
+
+<p align="center">
+  <img src="assets/screenshots/yonetici_menu.jpg" alt="Yönetici Paneli Menü" width="700"/>
+  <br/><em>Yönetici Paneli — Katalog, profil ve sistem yönetim araçları</em>
+</p>
 
 ---
 
@@ -229,7 +243,6 @@ AAU_Kurulum_Asistani/
 ├── 📁 tests/                     # Test dosyaları
 │
 ├── AAU.cmd                       # ▶️ Kullanıcı başlatıcısı
-├── AAU_Admin.cmd                 # 🔑 Yönetici başlatıcısı
 ├── Start-AAU.ps1                 # 📥 İlk kurulum betiği
 └── README.md                     # 📄 Bu dosya
 ```
