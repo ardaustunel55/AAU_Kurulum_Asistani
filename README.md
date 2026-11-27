@@ -21,19 +21,20 @@
 </p>
 
 <p align="center">
-  <a href="#-genel-bakış">Genel Bakış</a> •
-  <a href="#-öne-çıkan-özellikler">Özellikler</a> •
-  <a href="#-hızlı-başlangıç">Kurulum</a> •
-  <a href="#-ekran-görüntüleri">Ekran Görüntüleri</a> •
-  <a href="#-mimari">Mimari</a> •
-  <a href="#-katalog-istatistikleri">Katalog</a> •
-  <a href="#-güvenlik">Güvenlik</a> •
-  <a href="#-yol-haritası">Yol Haritası</a> •
-  <a href="#-kaynakça">Kaynakça</a>
+  <a href="#genel-bakis">Genel Bakış</a> •
+  <a href="#ozellikler">Özellikler</a> •
+  <a href="#kurulum">Kurulum</a> •
+  <a href="#ekran-goruntuleri">Ekran Görüntüleri</a> •
+  <a href="#mimari">Mimari</a> •
+  <a href="#katalog">Katalog</a> •
+  <a href="#guvenlik">Güvenlik</a> •
+  <a href="#yol-haritasi">Yol Haritası</a> •
+  <a href="#kaynakca">Kaynakça</a>
 </p>
 
 ---
 
+<a id="genel-bakis"></a>
 ## 📖 Genel Bakış
 
 **AAU Kurulum Asistanı**, Windows 10/11 bilgisayarlarda format sonrası kurulum, sistem bakımı, gizlilik/debloat ve yazılım yönetimi süreçlerini baştan sona otomatikleştiren, PowerShell tabanlı modüler bir masaüstü uygulamasıdır. JSON tabanlı merkezi katalog sistemi sayesinde **74 doğrulanmış uygulama** ve **9 hazır kurulum profili** sunarak [Windows Package Manager (WinGet)](https://learn.microsoft.com/windows/package-manager/winget/), Microsoft Store ve Direct URL kaynakları üzerinden kurulum yapabilir.
@@ -54,6 +55,7 @@
 
 ---
 
+<a id="ozellikler"></a>
 ## ✨ Öne Çıkan Özellikler
 
 <table>
@@ -121,6 +123,7 @@
 
 ---
 
+<a id="kurulum"></a>
 ## 🚀 Hızlı Başlangıç
 
 ### Yöntem 1: Tek Komutla Kurulum ⚡
@@ -168,6 +171,7 @@ winget --version
 
 ---
 
+<a id="ekran-goruntuleri"></a>
 ## 📸 Ekran Görüntüleri
 
 ### Kullanıcı Paneli
@@ -196,6 +200,7 @@ winget --version
 
 ---
 
+<a id="mimari"></a>
 ## 🏗️ Mimari
 
 ### Klasör Yapısı
@@ -270,6 +275,7 @@ flowchart TD
 
 ---
 
+<a id="katalog"></a>
 ## 📊 Katalog İstatistikleri
 
 <table>
@@ -362,6 +368,7 @@ flowchart TD
 
 ---
 
+<a id="guvenlik"></a>
 ## 🛡️ Güvenlik
 
 > **AAU, güvenliği tasarım prensibi olarak benimser.**
@@ -375,6 +382,7 @@ flowchart TD
 
 ---
 
+<a id="yol-haritasi"></a>
 ## 🛣️ Yol Haritası
 
 - [x] ✅ JSON tabanlı merkezi uygulama kataloğu (74 doğrulanmış uygulama)
@@ -488,6 +496,7 @@ Projeye katkı sağlamak isteyenler için bazı fikirler:
 
 ---
 
+<a id="kaynakca"></a>
 ## 📚 Kaynakça
 
 ### 📘 Resmi Belgeler
