@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/logo.png" alt="AAU Kurulum Asistanı Logo" width="160"/>
+  <img src="assets/logo.png?v=3" alt="AAU Kurulum Asistanı Logo" width="160"/>
 </p>
 
 <h1 align="center">🚀 AAU Kurulum Asistanı</h1>
