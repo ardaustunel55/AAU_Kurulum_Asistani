@@ -78,7 +78,6 @@
 
         if ($isInstalled) {
             Write-Host "[INFO] Mevcut kurulum guncelleniyor (log ve yedekler korunuyor)..." -ForegroundColor Yellow
-            $preserveDirs = @("logs", "reports", "data\backups")
             Get-ChildItem -Path $projectFolder.FullName -Force | ForEach-Object {
                 $dest = Join-Path $installRoot $_.Name
                 if ($_.PSIsContainer) {
@@ -87,11 +86,14 @@
                         New-Item -ItemType Directory -Path $dest -Force | Out-Null
                         Get-ChildItem -Path $_.FullName -Force | ForEach-Object {
                             if ($_.Name -ne "backups") {
-                                Copy-Item -LiteralPath $_.FullName -Destination (Join-Path $dest $_.Name) -Recurse -Force
+                                $subDest = Join-Path $dest $_.Name
+                                if (Test-Path $subDest) { Remove-Item -LiteralPath $subDest -Recurse -Force }
+                                Copy-Item -LiteralPath $_.FullName -Destination $subDest -Recurse -Force
                             }
                         }
                         return
                     }
+                    if (Test-Path $dest) { Remove-Item -LiteralPath $dest -Recurse -Force }
                     Copy-Item -LiteralPath $_.FullName -Destination $dest -Recurse -Force
                 } else {
                     Copy-Item -LiteralPath $_.FullName -Destination $dest -Force
