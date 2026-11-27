@@ -13,6 +13,9 @@
   <a href="https://github.com/ardaustunel55/AAU_Kurulum_Asistani">
     <img src="https://img.shields.io/badge/GitHub-Proje_Deposu-181717?style=for-the-badge&logo=github&logoColor=white" alt="GitHub"/>
   </a>
+  <a href="https://www.instagram.com/aaukurulumasistani">
+    <img src="https://img.shields.io/badge/Instagram-@aaukurulumasistani-E4405F?style=for-the-badge&logo=instagram&logoColor=white" alt="Instagram"/>
+  </a>
   <img src="https://img.shields.io/badge/Sürüm-2.0.0-blue?style=for-the-badge" alt="Sürüm"/>
   <img src="https://img.shields.io/badge/Windows-10%20%7C%2011-0078D4?style=for-the-badge&logo=windows11&logoColor=white" alt="Windows"/>
   <img src="https://img.shields.io/badge/PowerShell-5.1+-5391FE?style=for-the-badge&logo=powershell&logoColor=white" alt="PowerShell"/>
@@ -536,9 +539,20 @@ Projeye katkı sağlamak isteyenler için bazı fikirler:
       <a href="https://github.com/ardaustunel55" title="GitHub">
         <img src="https://img.shields.io/badge/GitHub-ardaustunel55-181717?style=flat-square&logo=github" alt="GitHub"/>
       </a>
+      <a href="https://www.instagram.com/aaukurulumasistani" title="Instagram">
+        <img src="https://img.shields.io/badge/Instagram-@aaukurulumasistani-E4405F?style=flat-square&logo=instagram&logoColor=white" alt="Instagram"/>
+      </a>
     </td>
   </tr>
 </table>
+
+---
+
+## ⭐ Bizi Destekleyin
+
+Projeyi faydalı bulduysanız destek olmak için:
+- ⭐ GitHub üzerinden depoya **Star (Yıldız)** verebilirsiniz.
+- 📸 Yeni sürümler, ipuçları ve duyurular için resmi Instagram hesabımız **[@aaukurulumasistani](https://www.instagram.com/aaukurulumasistani)** üzerinden bizi takip edebilirsiniz!
 
 ---
 
