@@ -23,8 +23,8 @@
 <p align="center">
   <a href="#-genel-bakış">Genel Bakış</a> •
   <a href="#-öne-çıkan-özellikler">Özellikler</a> •
-  <a href="#-ekran-görüntüleri">Ekran Görüntüleri</a> •
   <a href="#-hızlı-başlangıç">Kurulum</a> •
+  <a href="#-ekran-görüntüleri">Ekran Görüntüleri</a> •
   <a href="#-mimari">Mimari</a> •
   <a href="#-katalog-istatistikleri">Katalog</a> •
   <a href="#-güvenlik">Güvenlik</a> •
@@ -121,34 +121,6 @@
 
 ---
 
-## 📸 Ekran Görüntüleri
-
-### Kullanıcı Paneli
-
-<p align="center">
-  <img src="assets/screenshots/acilis.jpg" alt="Açılış Ekranı" width="700"/>
-  <br/><em>Açılış Ekranı — Defender Protokolü yükleme animasyonu</em>
-</p>
-
-<p align="center">
-  <img src="assets/screenshots/ana_menu.jpg" alt="Ana Menü" width="700"/>
-  <br/><em>Ana Menü — 22 seçenekli uygulama kurulumu, sistem bakımı, debloat ve format sonrası sihirbazı</em>
-</p>
-
-### Yönetici Paneli
-
-<p align="center">
-  <img src="assets/screenshots/yonetici_acilis.jpg" alt="Yönetici Paneli Açılış" width="700"/>
-  <br/><em>Yönetici Paneli — Açılış ve sistem hazırlığı</em>
-</p>
-
-<p align="center">
-  <img src="assets/screenshots/yonetici_menu.jpg" alt="Yönetici Paneli Menü" width="700"/>
-  <br/><em>Yönetici Paneli — Katalog, profil ve sistem yönetim araçları</em>
-</p>
-
----
-
 ## 🚀 Hızlı Başlangıç
 
 ### Yöntem 1: Tek Komutla Kurulum ⚡
@@ -193,6 +165,34 @@ winget --version
 | 🌐 **İnternet** | İlk indirme ve çevrimiçi kurulumlar için |
 | 💾 **Disk Alanı** | Kurulacak uygulamalara bağlı |
 | 🔑 **Yetki** | Bazı uygulamalar için yönetici izni |
+
+---
+
+## 📸 Ekran Görüntüleri
+
+### Kullanıcı Paneli
+
+<p align="center">
+  <img src="assets/screenshots/acilis.jpg" alt="Açılış Ekranı" width="700"/>
+  <br/><em>Açılış Ekranı — Defender Protokolü yükleme animasyonu</em>
+</p>
+
+<p align="center">
+  <img src="assets/screenshots/ana_menu.jpg" alt="Ana Menü" width="700"/>
+  <br/><em>Ana Menü — 22 seçenekli uygulama kurulumu, sistem bakımı, debloat ve format sonrası sihirbazı</em>
+</p>
+
+### Yönetici Paneli
+
+<p align="center">
+  <img src="assets/screenshots/yonetici_acilis.jpg" alt="Yönetici Paneli Açılış" width="700"/>
+  <br/><em>Yönetici Paneli — Açılış ve sistem hazırlığı</em>
+</p>
+
+<p align="center">
+  <img src="assets/screenshots/yonetici_menu.jpg" alt="Yönetici Paneli Menü" width="700"/>
+  <br/><em>Yönetici Paneli — Katalog, profil ve sistem yönetim araçları</em>
+</p>
 
 ---
 
