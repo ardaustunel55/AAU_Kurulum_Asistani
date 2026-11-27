@@ -468,7 +468,7 @@ function Invoke-AddApplication {
                 Write-Host ("=" * 60) -ForegroundColor Magenta
                 Write-Host "  [B]=Onceki Adim | [0]=Iptal" -ForegroundColor DarkCyan
                 Write-Host ""
-                $types = @("standard", "portable", "other")
+                $types = @("standard", "portable", "direct_url", "other")
                 $i = 1
                 foreach ($t in $types) {
                     $marker = if ($t -eq $wizard.InstallType) { " <-- mevcut" } else { "" }
@@ -476,17 +476,25 @@ function Invoke-AddApplication {
                     $i++
                 }
                 Write-Host ""
-                Write-Host "  Secim [1-3]: " -ForegroundColor Yellow -NoNewline
+                Write-Host "  Secim [1-4]: " -ForegroundColor Yellow -NoNewline
                 $val = Read-Host
                 if ($val -eq "0") { Write-Host "  Ekleme iptal edildi." -ForegroundColor Red; return }
                 if ($val -eq "B" -or $val -eq "b") { $step--; continue }
                 if ($val -eq "") { $step++; continue }
                 $num = 0
-                if ([int]::TryParse($val, [ref]$num) -and $num -ge 1 -and $num -le 3) {
+                if ([int]::TryParse($val, [ref]$num) -and $num -ge 1 -and $num -le 4) {
                     $wizard.InstallType = $types[$num - 1]
+                    if ($wizard.InstallType -eq "direct_url") {
+                        Write-Host "  Indirme URL'si (https://...): " -ForegroundColor Yellow -NoNewline
+                        $dlUrl = Read-Host
+                        if ($dlUrl -and $dlUrl.Trim() -match '^https?://') {
+                            $wizard['DownloadUrl'] = $dlUrl.Trim()
+                            $wizard['Source'] = 'direct_url'
+                        }
+                    }
                     $step++
                 } else {
-                    Write-Host "  [!] Gecersiz secim. 1, 2 veya 3 girin." -ForegroundColor Red
+                    Write-Host "  [!] Gecersiz secim. 1, 2, 3 veya 4 girin." -ForegroundColor Red
                 }
             }
 

@@ -36,7 +36,7 @@
 
 ## 📖 Genel Bakış
 
-**AAU Kurulum Asistanı**, Windows 10/11 bilgisayarlarda yazılım kurulum sürecini baştan sona otomatikleştiren, PowerShell tabanlı modüler bir masaüstü uygulamasıdır. JSON tabanlı merkezi katalog sistemi sayesinde **128 uygulama** kayıtlı olup, [Windows Package Manager (WinGet)](https://learn.microsoft.com/windows/package-manager/winget/) ve Microsoft Store kaynakları üzerinden kurulum yapabilir.
+**AAU Kurulum Asistanı**, Windows 10/11 bilgisayarlarda format sonrası kurulum, sistem bakımı, gizlilik/debloat ve yazılım yönetimi süreçlerini baştan sona otomatikleştiren, PowerShell tabanlı modüler bir masaüstü uygulamasıdır. JSON tabanlı merkezi katalog sistemi sayesinde **74 doğrulanmış uygulama** ve **9 hazır kurulum profili** sunarak [Windows Package Manager (WinGet)](https://learn.microsoft.com/windows/package-manager/winget/), Microsoft Store ve Direct URL kaynakları üzerinden kurulum yapabilir.
 
 > **💡 Neden AAU?**  
 > Yeni bir Windows kurulumu sonrası saatler süren "indir → kur → tekrarla" döngüsünü ortadan kaldırır. Kategori bazlı uygulama seçimi, profil desteği ve toplu kurulum ile dakikalar içinde iş istasyonunuzu hazır hale getirir.
@@ -61,10 +61,10 @@
     <td width="50%">
 
 ### 📦 Uygulama Kataloğu
-- **128 uygulama** kaydı (8 kategori)
-- WinGet ve Microsoft Store kaynak desteği
+- **74 uygulama** kaydı (8 kategori) ve **9 profil**
+- WinGet, Microsoft Store ve Direct URL kaynak desteği
 - JSON tabanlı, kolayca genişletilebilir yapı
-- Kategori bazlı filtreleme ve arama
+- Kategori bazlı filtreleme, arama ve kayıt defteri temizliği
 
 </td>
     <td width="50%">
@@ -132,7 +132,7 @@
 
 <p align="center">
   <img src="assets/screenshots/ana_menu.jpg" alt="Ana Menü" width="700"/>
-  <br/><em>Ana Menü — 18 kategori ile uygulama ve sistem araçları seçimi</em>
+  <br/><em>Ana Menü — 22 seçenekli uygulama kurulumu, sistem bakımı, debloat ve format sonrası sihirbazı</em>
 </p>
 
 ### Yönetici Paneli
@@ -213,37 +213,39 @@ AAU_Kurulum_Asistani/
 │
 ├── 📁 data/                      # Veri katmanı
 │   ├── apps/
-│   │   ├── apps.json             #   📦 Ana uygulama kataloğu (128 kayıt)
-│   │   └── catalog.json          #   Katalog meta verisi
+│   │   └── apps.json             #   📦 Ana uygulama kataloğu (74 kayıt)
 │   ├── backups/                  #   Otomatik yedekler
 │   └── profiles/
-│       └── profiles.json         #   👤 Kurulum profilleri
+│       └── profiles.json         #   👤 Kurulum profilleri (9 profil)
 │
-├── 📁 modules/                   # PowerShell modülleri
+├── 📁 modules/                   # PowerShell modülleri (11 modül)
 │   ├── admin/                    #   🔧 Yönetici paneli modülleri
 │   │   ├── admin_core.psm1       #     Çekirdek yönetim işlevleri
 │   │   ├── admin_catalog.psm1    #     Katalog CRUD işlemleri
 │   │   └── admin_profiles.psm1   #     Profil yönetimi
 │   ├── installer/                #   📥 Kurulum motoru modülleri
-│   │   ├── winget_installer.psm1 #     WinGet kurulum işlemleri
+│   │   ├── winget_installer.psm1 #     WinGet & Direct URL kurulum işlemleri
 │   │   ├── winget_check.psm1     #     WinGet doğrulama
 │   │   ├── catalog_manager.psm1  #     Katalog işlemleri
-│   │   ├── program_manager.psm1  #     Program yönetimi
+│   │   ├── program_manager.psm1  #     Program yönetimi ve kayıt defteri temizliği
 │   │   └── shortcut_manager.psm1 #     Kısayol işlemleri
 │   └── system/                   #   💻 Sistem araçları modülleri
 │       ├── hardware_info.psm1    #     Donanım bilgisi
-│       └── system_tools.psm1     #     Sistem araçları
+│       ├── system_tools.psm1     #     Sistem araçları
+│       └── post_format_tools.psm1#     Format sonrası sihirbazı, debloat & optimizasyon
 │
 ├── 📁 src/                       # Kaynak kodu
 │   └── main.ps1                  #   🎯 Ana giriş noktası (v2.0.0)
 │
-├── 📁 docs/                      # Dokümantasyon
+├── 📁 .github/                   # Issue ve PR şablonları
 ├── 📁 logs/                      # Çalışma günlükleri
 ├── 📁 reports/                   # Sistem raporları
-├── 📁 tests/                     # Test dosyaları
 │
 ├── AAU.cmd                       # ▶️ Kullanıcı başlatıcısı
 ├── Start-AAU.ps1                 # 📥 İlk kurulum betiği
+├── test_runner.ps1               # 🧪 Otomatik test paketi (62 senaryo)
+├── CHANGELOG.md                  # 📝 Sürüm değişiklik günlüğü
+├── LICENSE                       # 📄 MIT Lisansı
 └── README.md                     # 📄 Bu dosya
 ```
 
@@ -272,10 +274,10 @@ flowchart TD
 
 <table>
   <tr>
-    <td align="center"><h3>128</h3><sub>Toplam Uygulama</sub></td>
+    <td align="center"><h3>74</h3><sub>Toplam Uygulama</sub></td>
     <td align="center"><h3>8</h3><sub>Kategori</sub></td>
-    <td align="center"><h3>123</h3><sub>WinGet Kaynağı</sub></td>
-    <td align="center"><h3>5</h3><sub>Microsoft Store</sub></td>
+    <td align="center"><h3>72</h3><sub>WinGet Kaynağı</sub></td>
+    <td align="center"><h3>2</h3><sub>MS Store & Direct URL</sub></td>
   </tr>
 </table>
 
@@ -283,19 +285,19 @@ flowchart TD
 
 | Emoji | Kategori | Uygulama Sayısı | Oran |
 |:-----:|:---------|:---------------:|:----:|
-| 🛠️ | Temel Sistem Araçları ve Sıkıştırma | 39 | %30 |
-| 🎬 | Medya, Görsel ve Ses | 26 | %20 |
-| 💻 | Geliştirici ve Kodlama Araçları | 15 | %12 |
-| 🌐 | Tarayıcılar | 14 | %11 |
-| 💬 | İletişim | 13 | %10 |
-| 📄 | Ofis ve Doküman | 13 | %10 |
-| 🎮 | Oyun Platformları | 4 | %3 |
-| ⚙️ | Runtime Bileşenleri | 4 | %3 |
+| 🛠️ | Temel Sistem Araçları ve Sıkıştırma | 19 | %26 |
+| 🎬 | Medya, Görsel ve Ses | 13 | %18 |
+| 💻 | Geliştirici ve Kodlama Araçları | 11 | %15 |
+| 💬 | İletişim | 9 | %12 |
+| 🌐 | Tarayıcılar | 8 | %11 |
+| 📄 | Ofis ve Doküman | 6 | %8 |
+| 🎮 | Oyun Platformları | 4 | %5 |
+| ⚙️ | Runtime Bileşenleri | 4 | %5 |
 
 ### 🏷️ Örnek Uygulamalar
 
 <details>
-<summary><b>🌐 Tarayıcılar</b> — 14 uygulama</summary>
+<summary><b>🌐 Tarayıcılar</b> — 8 uygulama</summary>
 
 | Uygulama | Kaynak |
 |:---------|:-------|
@@ -309,7 +311,7 @@ flowchart TD
 </details>
 
 <details>
-<summary><b>💻 Geliştirici Araçları</b> — 15 uygulama</summary>
+<summary><b>💻 Geliştirici Araçları</b> — 11 uygulama</summary>
 
 | Uygulama | Kaynak |
 |:---------|:-------|
@@ -322,7 +324,7 @@ flowchart TD
 </details>
 
 <details>
-<summary><b>🛠️ Sistem Araçları</b> — 39 uygulama</summary>
+<summary><b>🛠️ Sistem Araçları</b> — 19 uygulama</summary>
 
 | Uygulama | Kaynak |
 |:---------|:-------|
@@ -375,17 +377,18 @@ flowchart TD
 
 ## 🛣️ Yol Haritası
 
-- [x] ✅ JSON tabanlı merkezi uygulama kataloğu (128 uygulama)
-- [x] ✅ WinGet ve Microsoft Store kaynak desteği
+- [x] ✅ JSON tabanlı merkezi uygulama kataloğu (74 doğrulanmış uygulama)
+- [x] ✅ WinGet, Microsoft Store ve Direct URL kaynak desteği
 - [x] ✅ 8 kategori ile uygulama sınıflandırması
-- [x] ✅ Modüler PowerShell mimari (12 modül)
-- [x] ✅ Profil tabanlı toplu kurulum sistemi
+- [x] ✅ Modüler PowerShell mimari (11 modül)
+- [x] ✅ Profil tabanlı toplu kurulum sistemi (9 profil)
+- [x] ✅ Format Sonrası Sihirbazı ve Debloat & Gizlilik Merkezi
 - [x] ✅ Yönetici paneli ve katalog yönetim araçları
-- [x] ✅ Donanım bilgisi ve sistem raporlama
+- [x] ✅ Donanım bilgisi, sürücü, ağ ve sistem raporlama
+- [x] ✅ Sürüm geçmişi ve detaylı değişiklik günlüğü ([CHANGELOG.md](CHANGELOG.md))
+- [x] ✅ 62 senaryolu otomatik test paketi (`test_runner.ps1`)
 - [x] ✅ GitHub üzerinden tek komutla kurulum betiği
 - [ ] 🔄 Bütünlük doğrulamalı otomatik güncelleme mekanizması
-- [ ] 📝 Sürüm geçmişi ve detaylı değişiklik günlüğü (CHANGELOG)
-- [ ] 🧪 Kapsamlı otomatik test altyapısı (Pester)
 - [ ] 📊 Gelişmiş kurulum geçmişi ve istatistikleri
 - [ ] 🔏 İmzalı dağıtım paketi
 - [ ] 🌍 Çoklu dil desteği (i18n)

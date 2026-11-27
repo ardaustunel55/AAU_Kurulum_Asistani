@@ -552,25 +552,11 @@ function Draw-HorizontalLine {
 function Play-ConfirmationSound {
 <#
 .SYNOPSIS
-    Secim onaylama sesi.
-.DESCRIPTION
-    Kullanici bir secim yaptiginda yukselen iki tonlu onaylama sesi calar.
-    Standart panel ve Admin paneli icin optimize edilmis frekanslar kullanir.
+    Secim onaylama sesi (kullanici tercihiyle sessize alinmistir).
 #>
     param([switch]$IsAdmin)
-    try {
-        if ($IsAdmin) {
-            # Yonetici Paneli: Yuksek tonda modern onay sesi
-            [Console]::Beep(1200, 30)
-            [Console]::Beep(1700, 45)
-        } else {
-            # Standart Panel: Yumusak yukselen onay sesi
-            [Console]::Beep(1000, 30)
-            [Console]::Beep(1450, 45)
-        }
-    } catch {
-        try { [System.Media.SystemSounds]::Asterisk.Play() } catch {}
-    }
+    # Rahatsiz edici sistem bip sesleri devre disi birakildi
+    return
 }
 
 function Show-ScreenTransition {
@@ -665,19 +651,6 @@ function Show-OpeningAnimation {
         try { $host.UI.RawUI.CursorVisible = $false } catch {}
         try { $host.UI.RawUI.WindowPosition = New-Object System.Management.Automation.Host.Coordinates(0, 0) } catch {}
 
-        # Yukselen acilis akoru
-        try {
-            if ($IsAdmin) {
-                [Console]::Beep(1100, 30)
-                [Console]::Beep(1500, 40)
-                [Console]::Beep(1900, 50)
-            } else {
-                [Console]::Beep(900, 30)
-                [Console]::Beep(1300, 40)
-                [Console]::Beep(1700, 50)
-            }
-        } catch {}
-
         $themeColor   = if ($IsAdmin) { [ConsoleColor]::Magenta } else { [ConsoleColor]::Cyan }
         $accentColor  = if ($IsAdmin) { [ConsoleColor]::DarkMagenta } else { [ConsoleColor]::DarkCyan }
         $titleLine    = if ($IsAdmin) { "Y Ö N E T İ C İ   P A N E L İ" } else { "K U R U L U M   A S İ S T A N I" }
@@ -685,6 +658,11 @@ function Show-OpeningAnimation {
 
         $indent = " " * 21
         $boxIndent = " " * 14
+        $boxInnerW = 56
+        $tPadL = [int][Math]::Floor(($boxInnerW - $titleLine.Length) / 2)
+        $tPadR = [Math]::Max(0, ($boxInnerW - $titleLine.Length - $tPadL))
+        $pPadL = [int][Math]::Floor(($boxInnerW - $protocolLine.Length) / 2)
+        $pPadR = [Math]::Max(0, ($boxInnerW - $protocolLine.Length - $pPadL))
 
         $logoLines = @(
             "  █████╗        █████╗       ██╗   ██╗  ",
@@ -703,14 +681,14 @@ function Show-OpeningAnimation {
         }
 
         Write-Host ""
-        Write-Host "$boxIndent╔════════════════════════════════════════════════════════╗" -ForegroundColor $accentColor
+        Write-Host "$boxIndent╔$('═' * $boxInnerW)╗" -ForegroundColor $accentColor
         Write-Host "$boxIndent║" -ForegroundColor $accentColor -NoNewline
-        Write-Host "                $titleLine                " -ForegroundColor $themeColor -NoNewline
+        Write-Host ((' ' * $tPadL) + $titleLine + (' ' * $tPadR)) -ForegroundColor $themeColor -NoNewline
         Write-Host "║" -ForegroundColor $accentColor
         Write-Host "$boxIndent║" -ForegroundColor $accentColor -NoNewline
-        Write-Host "                   $protocolLine                   " -ForegroundColor DarkGray -NoNewline
+        Write-Host ((' ' * $pPadL) + $protocolLine + (' ' * $pPadR)) -ForegroundColor DarkGray -NoNewline
         Write-Host "║" -ForegroundColor $accentColor
-        Write-Host "$boxIndent╚════════════════════════════════════════════════════════╝" -ForegroundColor $accentColor
+        Write-Host "$boxIndent╚$('═' * $boxInnerW)╝" -ForegroundColor $accentColor
         Write-Host ""
 
         # Dinamik Yukleme Animasyonu
@@ -757,25 +735,18 @@ function Show-ClosingAnimation {
         try { $host.UI.RawUI.CursorVisible = $false } catch {}
         try { $host.UI.RawUI.WindowPosition = New-Object System.Management.Automation.Host.Coordinates(0, 0) } catch {}
 
-        # Kapanis Sesi (Inen tonlar)
-        try {
-            if ($IsAdmin) {
-                [Console]::Beep(1800, 30)
-                [Console]::Beep(1300, 40)
-                [Console]::Beep(850, 50)
-            } else {
-                [Console]::Beep(1500, 30)
-                [Console]::Beep(1100, 40)
-                [Console]::Beep(700, 50)
-            }
-        } catch {}
-
         $themeColor   = if ($IsAdmin) { [ConsoleColor]::Magenta } else { [ConsoleColor]::Cyan }
         $accentColor  = if ($IsAdmin) { [ConsoleColor]::DarkMagenta } else { [ConsoleColor]::DarkCyan }
         $titleLine    = if ($IsAdmin) { "Y Ö N E T İ C İ   P A N E L İ" } else { "K U R U L U M   A S İ S T A N I" }
+        $closeLine    = "O T U R U M   K A P A N I Y O R"
+        $byeLine      = "Guvenlik protokolu saglandi. Gule gule!"
 
         $indent = " " * 21
         $boxIndent = " " * 14
+        $boxInnerW = 56
+        $c1L = [int][Math]::Floor(($boxInnerW - $titleLine.Length) / 2); $c1R = [Math]::Max(0, ($boxInnerW - $titleLine.Length - $c1L))
+        $c2L = [int][Math]::Floor(($boxInnerW - $closeLine.Length) / 2); $c2R = [Math]::Max(0, ($boxInnerW - $closeLine.Length - $c2L))
+        $c3L = [int][Math]::Floor(($boxInnerW - $byeLine.Length) / 2);   $c3R = [Math]::Max(0, ($boxInnerW - $byeLine.Length - $c3L))
 
         $logoLines = @(
             "  █████╗        █████╗       ██╗   ██╗  ",
@@ -793,17 +764,17 @@ function Show-ClosingAnimation {
         }
 
         Write-Host ""
-        Write-Host "$boxIndent╔════════════════════════════════════════════════════════╗" -ForegroundColor $accentColor
+        Write-Host "$boxIndent╔$('═' * $boxInnerW)╗" -ForegroundColor $accentColor
         Write-Host "$boxIndent║" -ForegroundColor $accentColor -NoNewline
-        Write-Host "                $titleLine                " -ForegroundColor $themeColor -NoNewline
+        Write-Host ((' ' * $c1L) + $titleLine + (' ' * $c1R)) -ForegroundColor $themeColor -NoNewline
         Write-Host "║" -ForegroundColor $accentColor
         Write-Host "$boxIndent║" -ForegroundColor $accentColor -NoNewline
-        Write-Host "               O T U R U M   K A P A N I Y O R                " -ForegroundColor Yellow -NoNewline
+        Write-Host ((' ' * $c2L) + $closeLine + (' ' * $c2R)) -ForegroundColor Yellow -NoNewline
         Write-Host "║" -ForegroundColor $accentColor
         Write-Host "$boxIndent║" -ForegroundColor $accentColor -NoNewline
-        Write-Host "            Guvenlik protokolu saglandi. Gule gule!           " -ForegroundColor White -NoNewline
+        Write-Host ((' ' * $c3L) + $byeLine + (' ' * $c3R)) -ForegroundColor White -NoNewline
         Write-Host "║" -ForegroundColor $accentColor
-        Write-Host "$boxIndent╚════════════════════════════════════════════════════════╝" -ForegroundColor $accentColor
+        Write-Host "$boxIndent╚$('═' * $boxInnerW)╝" -ForegroundColor $accentColor
         Write-Host ""
 
         # Kapanis Cubugu (Geri Sayim / Supurme)
@@ -935,51 +906,51 @@ function Show-MainMenu {
 
     # 3 Sutun Basliklari
     Write-Host "  " -NoNewline
-    Write-Host ("KURULUM & SISTEM".PadRight(27)) -ForegroundColor Green -NoNewline
+    Write-Host ("KURULUM & SISTEM".PadRight(29)) -ForegroundColor Green -NoNewline
     Write-Host "  " -NoNewline
     Write-Host ("ARACLAR & AG".PadRight(27)) -ForegroundColor Cyan -NoNewline
     Write-Host "  " -NoNewline
     Write-Host "ONARIM & AYARLAR" -ForegroundColor Magenta
-    Write-Host ("  " + ("-"*25) + "  " + ("-"*25) + "  " + ("-"*26)) -ForegroundColor DarkCyan
+    Write-Host ("  " + ("-"*27) + "  " + ("-"*25) + "  " + ("-"*24)) -ForegroundColor DarkCyan
 
     # Satir 1
     Write-Host "  " -NoNewline
-    Write-Host ("[ 1] | Uygulama Kurulum".PadRight(27)) -ForegroundColor Green -NoNewline
+    Write-Host ("[ 1] | Uygulama Kurulum".PadRight(29)) -ForegroundColor Green -NoNewline
     Write-Host "  " -NoNewline
     Write-Host ("[ 7] | Hizli Araclar".PadRight(27)) -ForegroundColor Cyan -NoNewline
     Write-Host "  " -NoNewline
     Write-Host "[13] | Kullanici Yonetimi" -ForegroundColor Magenta
     # Satir 2
     Write-Host "  " -NoNewline
-    Write-Host ("[ 2] | Program Yonetimi".PadRight(27)) -ForegroundColor Green -NoNewline
+    Write-Host ("[ 2] | Program Yonetimi".PadRight(29)) -ForegroundColor Green -NoNewline
     Write-Host "  " -NoNewline
     Write-Host ("[ 8] | Ag Araclari".PadRight(27)) -ForegroundColor Cyan -NoNewline
     Write-Host "  " -NoNewline
     Write-Host "[14] | Tani ve Onarim" -ForegroundColor Magenta
     # Satir 3
     Write-Host "  " -NoNewline
-    Write-Host ("[ 3] | Windows Yonetimi".PadRight(27)) -ForegroundColor Green -NoNewline
+    Write-Host ("[ 3] | Windows Yonetimi".PadRight(29)) -ForegroundColor Green -NoNewline
     Write-Host "  " -NoNewline
     Write-Host ("[ 9] | Surucu Yonetimi".PadRight(27)) -ForegroundColor Cyan -NoNewline
     Write-Host "  " -NoNewline
     Write-Host "[15] | Depolama Yonetimi" -ForegroundColor Magenta
     # Satir 4
     Write-Host "  " -NoNewline
-    Write-Host ("[ 4] | Donanim & Sistem".PadRight(27)) -ForegroundColor Green -NoNewline
+    Write-Host ("[ 4] | Donanim & Sistem".PadRight(29)) -ForegroundColor Green -NoNewline
     Write-Host "  " -NoNewline
     Write-Host ("[10] | Yedekleme & Kurtarma".PadRight(27)) -ForegroundColor Cyan -NoNewline
     Write-Host "  " -NoNewline
-    Write-Host "[16] | Sistem Guncellemeleri" -ForegroundColor Magenta
+    Write-Host "[16] | Kisisellestirme" -ForegroundColor Magenta
     # Satir 5
     Write-Host "  " -NoNewline
-    Write-Host ("[ 5] | Sistem Temizligi".PadRight(27)) -ForegroundColor Green -NoNewline
+    Write-Host ("[ 5] | Sistem Temizligi".PadRight(29)) -ForegroundColor Green -NoNewline
     Write-Host "  " -NoNewline
     Write-Host ("[11] | Guvenlik Merkezi".PadRight(27)) -ForegroundColor Cyan -NoNewline
     Write-Host "  " -NoNewline
     Write-Host "[17] | Islem Gecmisi" -ForegroundColor Magenta
     # Satir 6
     Write-Host "  " -NoNewline
-    Write-Host ("[ 6] | Kisisellestirme".PadRight(27)) -ForegroundColor Green -NoNewline
+    Write-Host ("[ 6] | Sistem Guncellemeleri".PadRight(29)) -ForegroundColor Green -NoNewline
     Write-Host "  " -NoNewline
     Write-Host ("[12] | Performans Optimiz.".PadRight(27)) -ForegroundColor Cyan -NoNewline
     Write-Host "  " -NoNewline
@@ -988,7 +959,13 @@ function Show-MainMenu {
     Draw-HorizontalLine -Width 86 -Color DarkCyan -Char "-"
 
     Write-Host "  " -NoNewline
-    Write-Host ("[20] | Hakkinda".PadRight(56)) -ForegroundColor Yellow -NoNewline
+    Write-Host ("[19] | Windows & Office Lisanslama".PadRight(56)) -ForegroundColor Green -NoNewline
+    Write-Host "[20] | Hakkinda" -ForegroundColor Yellow
+    Write-Host "  " -NoNewline
+    Write-Host ("[21] | Format Sonrasi Sihirbazi".PadRight(56)) -ForegroundColor Cyan -NoNewline
+    Write-Host "[22] | Debloat & Gizlilik" -ForegroundColor Yellow
+    Write-Host "  " -NoNewline
+    Write-Host ("".PadRight(56)) -NoNewline
     Write-Host "[ 0] | Cikis  [ESC]" -ForegroundColor Red
     Draw-HorizontalLine -Width 86 -Color DarkCyan -Char "-"
 }
@@ -1264,18 +1241,18 @@ function Invoke-Category05 {
 }
 function Invoke-Category06 {
     $cat06Items = @(
-        "Masaustu Duvar Kagidi Ayari",
-        "Tema Yonetimi",
         "Karanlik Mod / Acik Mod Gecisi (Aninda)",
-        "Gorev Cubugu Ayarlari",
-        "Baslat Menusu Duzeni",
-        "Renkler ve Saydamlik Efekti",
-        "Kilit Ekrani Ayarlari",
+        "Dosya Uzantilarini Goster / Gizle (Aninda)",
+        "Gizli Dosya ve Klasorleri Goster / Gizle (Aninda)",
+        "Gorev Cubugu Hizalama: Sol / Orta (Win11)",
+        "Klasik Sag Tik Menusu: Ac / Kapat (Win11)",
+        "Masaustu Duvar Kagidi ve Tema Ayarlari",
+        "Gorev Cubugu ve Baslat Menusu Ayarlari",
         "Ekran Cozunurlugu ve Olcek",
         "Ses Ayarlari ve Aygitlar",
-        "Fare ve Isaretci Ozellestirme",
-        "Yazi Tipleri (Fonts)",
-        "Tarih, Saat ve Bolge Ayarlari"
+        "Tarih, Saat ve Bolge Ayarlari",
+        "Masaustu Sistem Ikonlari (Bu Bilgisayar vb.)",
+        "Dosya Gezgini Acilisi: Bu Bilgisayar / Hizli Erisim"
     )
     $exitCat06 = $false
     while (-not $exitCat06) {
@@ -1307,9 +1284,7 @@ function Invoke-Category06 {
                 Write-Host "  [ 6] | Kisisellestirme Merkezi  >  [$ch] $sel" -ForegroundColor Green
                 Draw-HorizontalLine -Width 86 -Color DarkCyan -Char "-"
                 switch ($idx) {
-                    1  { Start-QuickToolApp -CommandName "ms-settings:personalization-background" -ToolTitle "Masaustu Duvar Kagidi Ayari" }
-                    2  { Start-QuickToolApp -CommandName "ms-settings:themes" -ToolTitle "Tema Yonetimi" }
-                    3  {
+                    1  {
                         Write-Host "`n  Karanlik Mod / Acik Mod Gecisi Yapiliyor..." -ForegroundColor Cyan
                         try {
                             $regPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize"
@@ -1324,15 +1299,56 @@ function Invoke-Category06 {
                             Write-Host "  [HATA] Tema degistirilemedi: $($_.Exception.Message)" -ForegroundColor Red
                         }
                     }
-                    4  { Start-QuickToolApp -CommandName "ms-settings:taskbar" -ToolTitle "Gorev Cubugu Ayarlari" }
-                    5  { Start-QuickToolApp -CommandName "ms-settings:personalization-start" -ToolTitle "Baslat Menusu Duzeni" }
-                    6  { Start-QuickToolApp -CommandName "ms-settings:colors" -ToolTitle "Renkler ve Saydamlik Efekti" }
-                    7  { Start-QuickToolApp -CommandName "ms-settings:lockscreen" -ToolTitle "Kilit Ekrani Ayarlari" }
+                    2  {
+                        try {
+                            $expPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"
+                            $cur = (Get-ItemProperty -Path $expPath -Name "HideFileExt" -ErrorAction SilentlyContinue).HideFileExt
+                            $newVal = if ($cur -eq 0) { 1 } else { 0 }
+                            Set-ItemProperty -Path $expPath -Name "HideFileExt" -Value $newVal -Type DWord -Force
+                            $st = if ($newVal -eq 0) { "GOSTERILIYOR" } else { "GIZLI" }
+                            Write-Host "`n  [BASARILI] Bilinen dosya uzantilari artik: $st" -ForegroundColor Green
+                        } catch { Write-Host "`n  [HATA] $($_.Exception.Message)" -ForegroundColor Red }
+                    }
+                    3  {
+                        try {
+                            $expPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"
+                            $cur = (Get-ItemProperty -Path $expPath -Name "Hidden" -ErrorAction SilentlyContinue).Hidden
+                            $newVal = if ($cur -eq 1) { 2 } else { 1 }
+                            Set-ItemProperty -Path $expPath -Name "Hidden" -Value $newVal -Type DWord -Force
+                            $st = if ($newVal -eq 1) { "GOSTERILIYOR" } else { "GIZLI" }
+                            Write-Host "`n  [BASARILI] Gizli dosya ve klasorler artik: $st" -ForegroundColor Green
+                        } catch { Write-Host "`n  [HATA] $($_.Exception.Message)" -ForegroundColor Red }
+                    }
+                    4  {
+                        try {
+                            $expPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"
+                            $cur = (Get-ItemProperty -Path $expPath -Name "TaskbarAl" -ErrorAction SilentlyContinue).TaskbarAl
+                            $newVal = if ($cur -eq 0) { 1 } else { 0 }
+                            Set-ItemProperty -Path $expPath -Name "TaskbarAl" -Value $newVal -Type DWord -Force
+                            $st = if ($newVal -eq 0) { "SOLA HIZALI" } else { "ORTALI" }
+                            Write-Host "`n  [BASARILI] Gorev cubugu hizalamasi: $st" -ForegroundColor Green
+                        } catch { Write-Host "`n  [HATA] $($_.Exception.Message)" -ForegroundColor Red }
+                    }
+                    5  {
+                        try {
+                            $clsidPath = "HKCU:\Software\Classes\CLSID\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}\InprocServer32"
+                            if (Test-Path $clsidPath) {
+                                Remove-Item -Path "HKCU:\Software\Classes\CLSID\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}" -Recurse -Force
+                                Write-Host "`n  [BASARILI] Modern Windows 11 sag tik menusu geri yuklendi (Explorer yeniden baslatilmali)." -ForegroundColor Green
+                            } else {
+                                New-Item -Path $clsidPath -Force | Out-Null
+                                Set-ItemProperty -Path $clsidPath -Name "(Default)" -Value "" -Force
+                                Write-Host "`n  [BASARILI] Klasik Windows 10 sag tik menusu aktif edildi (Explorer yeniden baslatilmali)." -ForegroundColor Green
+                            }
+                        } catch { Write-Host "`n  [HATA] $($_.Exception.Message)" -ForegroundColor Red }
+                    }
+                    6  { Start-QuickToolApp -CommandName "ms-settings:personalization-background" -ToolTitle "Masaustu Duvar Kagidi ve Tema" }
+                    7  { Start-QuickToolApp -CommandName "ms-settings:taskbar" -ToolTitle "Gorev Cubugu ve Baslat" }
                     8  { Start-QuickToolApp -CommandName "ms-settings:display" -ToolTitle "Ekran Cozunurlugu ve Olcek" }
                     9  { Start-QuickToolApp -CommandName "ms-settings:sound" -ToolTitle "Ses Ayarlari ve Aygitlar" }
-                    10 { Start-QuickToolApp -CommandName "ms-settings:mousetouchpad" -ToolTitle "Fare ve Isaretci Ozellestirme" }
-                    11 { Start-QuickToolApp -CommandName "ms-settings:fonts" -ToolTitle "Yazi Tipleri (Fonts)" }
-                    12 { Start-QuickToolApp -CommandName "ms-settings:dateandtime" -ToolTitle "Tarih, Saat ve Bolge Ayarlari" }
+                    10 { Start-QuickToolApp -CommandName "ms-settings:dateandtime" -ToolTitle "Tarih, Saat ve Bolge Ayarlari" }
+                    11 { Toggle-DesktopSystemIcons }
+                    12 { Toggle-ExplorerLaunchToThisPC }
                 }
                 Write-Host ""; Draw-HorizontalLine -Width 86 -Color DarkCyan -Char "-"
                 Wait-UserKeyPress -PromptMessage "Kisisellestirme menusune donmek icin bir tusa basin..."
@@ -1420,7 +1436,10 @@ function Invoke-Category08 {
         "Cloudflare DNS Ayarla (1.1.1.1 / 1.0.0.1)",
         "Google DNS Ayarla (8.8.8.8 / 8.8.4.4)",
         "Otomatik DNS'e (DHCP) Geri Don",
-        "Ag Bagdastiricisini Yeniden Baslat / Sifirla"
+        "Ag Bagdastiricisini Yeniden Baslat / Sifirla",
+        "Winsock Sifirla ve IP Yenile (release/renew)",
+        "Aktif Dinlenen TCP Portlari (netstat)",
+        "Hosts Dosyasini Goruntule / Duzenle"
     )
     $exitCat08 = $false
     while (-not $exitCat08) {
@@ -1459,6 +1478,39 @@ function Invoke-Category08 {
                     5 { Set-QuickDnsProvider -ProviderName "Google DNS" -DnsServers @("8.8.8.8", "8.8.4.4") }
                     6 { Reset-DnsToDhcp }
                     7 { Invoke-NetworkAdapterRestart }
+                    8 {
+                        Write-Host "`n  [WINSOCK & IP YENILEME]" -ForegroundColor Cyan
+                        if (-not $script:IsAdmin) {
+                            Write-Host "  [UYARI] Winsock sifirlama icin yonetici yetkisi gerekir." -ForegroundColor Yellow
+                        } else {
+                            & netsh winsock reset
+                            & ipconfig /release | Out-Null
+                            & ipconfig /renew | Out-Null
+                            Write-Host "  [BASARILI] Winsock sifirlandi ve IP adresi yenilendi." -ForegroundColor Green
+                        }
+                    }
+                    9 {
+                        Write-Host "`n  [AKTIF DINLENEN TCP PORTLARI]" -ForegroundColor Cyan; Write-Host ""
+                        try {
+                            Get-NetTCPConnection -State Listen -ErrorAction Stop |
+                                Sort-Object LocalPort | Select-Object -First 25 LocalAddress, LocalPort, OwningProcess |
+                                Format-Table -AutoSize | Out-String | Write-Host -ForegroundColor White
+                        } catch {
+                            & netstat -ano | Select-String "LISTENING" | Select-Object -First 25 | ForEach-Object { Write-Host "  $_" -ForegroundColor White }
+                        }
+                    }
+                    10 {
+                        $hostsPath = "$env:SystemRoot\System32\drivers\etc\hosts"
+                        Write-Host "`n  [HOSTS DOSYASI] $hostsPath" -ForegroundColor Cyan
+                        Get-Content $hostsPath -ErrorAction SilentlyContinue | Where-Object { $_ -and -not $_.Trim().StartsWith('#') } | ForEach-Object {
+                            Write-Host "  $_" -ForegroundColor White
+                        }
+                        Write-Host ""
+                        $openNote = Read-Host "  Not Defteri ile acilsin mi? (E/H)"
+                        if ($openNote -and $openNote.Trim().ToUpper() -eq "E") {
+                            Start-Process "notepad.exe" -ArgumentList $hostsPath
+                        }
+                    }
                 }
                 Write-Host ""; Draw-HorizontalLine -Width 86 -Color DarkCyan -Char "-"
                 Wait-UserKeyPress -PromptMessage "Alt menuye donmek icin bir tusa basin..."
@@ -1595,7 +1647,8 @@ function Invoke-Category09 {
         "INF Dosyasindan Surucu Ekle / Kur",
         "Surucu Imza Dogrulama Araci (sigverif)",
         "Yazici ve Tarayici Suruculeri (printmanagement)",
-        "DirectX Teshis Araci (dxdiag)"
+        "DirectX Teshis Araci (dxdiag)",
+        "Ekran Karti Otomatik Tespiti ve Surucu Sayfasi"
     )
     $exitCat09 = $false
     while (-not $exitCat09) {
@@ -1653,6 +1706,7 @@ function Invoke-Category09 {
                     9  { Start-QuickToolApp -CommandName "sigverif.exe" -ToolTitle "Surucu Imza Dogrulama" }
                     10 { Start-QuickToolApp -CommandName "printmanagement.msc" -ToolTitle "Yazici Yonetimi" }
                     11 { Start-QuickToolApp -CommandName "dxdiag.exe" -ToolTitle "DirectX Teshis Araci" }
+                    12 { Invoke-GpuAutoDetectDriver }
                 }
                 Write-Host ""; Draw-HorizontalLine -Width 86 -Color DarkCyan -Char "-"
                 Wait-UserKeyPress -PromptMessage "Surucu menusune donmek icin bir tusa basin..."
@@ -1677,7 +1731,8 @@ function Invoke-Category10 {
         "Dosya Gecmisi (File History)",
         "Kurtarma Secenekleri (Sifirlama / Gelismis Baslangic)",
         "OneDrive / Bulut Yedekleme Durumu",
-        "Onemli Klasorlerin Yedegini Al"
+        "Onemli Klasorlerin Yedegini Al",
+        "Wi-Fi Aglari ve Sifrelerini Yedekle / Geri Yukle"
     )
     $exitCat10 = $false
     while (-not $exitCat10) {
@@ -2036,6 +2091,7 @@ function Invoke-Category10 {
                             Write-LogInfo "Klasor yedekleme tamamlandi: $totalCopied dosya kopyalandi ($totalErrors hata) -> $backupRoot"
                         }
                     }
+                    13 { Invoke-WifiProfileBackupRestore }
                 }
                 Write-Host ""; Draw-HorizontalLine -Width 86 -Color DarkCyan -Char "-"
                 Wait-UserKeyPress -PromptMessage "Yedekleme menusune donmek icin bir tusa basin..."
@@ -2053,7 +2109,8 @@ function Invoke-Category11 {
         "Hizli Guvenlik Taramasi Baslat",
         "Defender Tanimlama ve Imza Guncelleme",
         "Windows Guvenlik Duvari (Firewall) Durumu",
-        "Kullanici Hesabi Denetimi (UAC) Ayarlari"
+        "Kullanici Hesabi Denetimi (UAC) Ayarlari",
+        "Defender Klasor Dislama (Exclusion) Yonetimi"
     )
     $exitCat11 = $false
     while (-not $exitCat11) {
@@ -2090,6 +2147,7 @@ function Invoke-Category11 {
                     3 { Invoke-DefenderSignatureUpdateTool }
                     4 { Show-FirewallStatusCard }
                     5 { Invoke-OpenUacSettingsTool }
+                    6 { Invoke-DefenderExclusionManager }
                 }
                 Write-Host ""; Draw-HorizontalLine -Width 86 -Color DarkCyan -Char "-"
                 Wait-UserKeyPress -PromptMessage "Alt menuye donmek icin bir tusa basin..."
@@ -2108,7 +2166,9 @@ function Invoke-Category12 {
         "Oyun Modu Ayarlari","Disk Birlestiricisi","SSD TRIM Komutu",
         "Sayfalama Dosyasi (Pagefile) Ayari","CPU Guc Plani Optimizasyonu",
         "RAM Kullanim Raporu","Gereksiz Hizmetleri Devre Disi Birakma",
-        "Windows Arama Hizmetini Yonetme","Superfetch (SysMain) Yonetimi","Ag Performansi Optimizasyonu"
+        "Windows Arama Hizmetini Yonetme","Superfetch (SysMain) Yonetimi","Ag Performansi Optimizasyonu",
+        "Nihai Performans (Ultimate) Guc Plani","Hazirda Bekletme (Hibernation) Ac/Kapat",
+        "Oyun Ince Ayarlari (GameDVR / HAGS / Fare)"
     )
     $exitCat12 = $false
     while (-not $exitCat12) {
@@ -2179,15 +2239,22 @@ function Invoke-Category12 {
                         try {
                             $regPath = "HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\Power"
                             $val = Get-ItemProperty -Path $regPath -Name "HiberbootEnabled" -ErrorAction Stop
-                            $status = if ($val.HiberbootEnabled -eq 1) { "ACIK" } else { "KAPALI" }
-                            $statusColor = if ($val.HiberbootEnabled -eq 1) { "Green" } else { "Yellow" }
-                            Write-Host "  Hizli Baslangic durumu: " -ForegroundColor DarkCyan -NoNewline
-                            Write-Host "[$status]" -ForegroundColor $statusColor
+                            $isOn = ($val.HiberbootEnabled -eq 1)
+                            Write-Host "  Mevcut durum: " -ForegroundColor DarkCyan -NoNewline
+                            Write-Host $(if ($isOn) { "[ACIK]" } else { "[KAPALI]" }) -ForegroundColor $(if ($isOn) { "Green" } else { "Yellow" })
+                            if ($script:IsAdmin) {
+                                $ans = Read-Host "  Durumu degistirmek ister misiniz? (E/H)"
+                                if ($ans -and $ans.Trim().ToUpper() -eq "E") {
+                                    $newVal = if ($isOn) { 0 } else { 1 }
+                                    Set-ItemProperty -Path $regPath -Name "HiberbootEnabled" -Value $newVal -Type DWord -Force
+                                    Write-Host "  [BASARILI] Hizli Baslangic $(if ($newVal -eq 1) { 'ACIK' } else { 'KAPALI' }) yapildi." -ForegroundColor Green
+                                }
+                            } else {
+                                Write-Host "  [UYARI] Degisiklik icin yonetici yetkisi gerekir." -ForegroundColor Yellow
+                            }
                         } catch {
                             Write-Host "  [BILGI] Hizli Baslangic durumu okunamadi." -ForegroundColor Yellow
                         }
-                        Write-Host "  Guc secenekleri aciliyor..." -ForegroundColor DarkCyan
-                        try { Start-Process "control" -ArgumentList "powercfg.cpl" -ErrorAction Stop } catch {}
                     }
                     4  { # Uyku ve Hazirda Bekletme
                         Write-Host ""; Write-Host "  [UYKU VE HAZIRDA BEKLETME]" -ForegroundColor Cyan
@@ -2255,9 +2322,13 @@ function Invoke-Category12 {
                                     Write-Host "  $line" -ForegroundColor White
                                 }
                             }
+                            Write-Host ""
+                            $hpAns = Read-Host "  Yuksek Performans (High Performance) planini aktiflestir? (E/H)"
+                            if ($hpAns -and $hpAns.Trim().ToUpper() -eq "E") {
+                                & powercfg /setactive 8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c 2>$null
+                                Write-Host "  [BASARILI] Yuksek Performans guc plani uygulandi!" -ForegroundColor Green
+                            }
                         } catch { Write-Host "  [HATA] Guc planlari alinamadi." -ForegroundColor Red }
-                        Write-Host ""; Write-Host "  Guc Secenekleri aciliyor..." -ForegroundColor DarkCyan
-                        try { Start-Process "control" -ArgumentList "powercfg.cpl" -ErrorAction Stop } catch {}
                     }
                     10 { # RAM Kullanim Raporu
                         Write-Host ""; Write-Host "  [RAM KULLANIM RAPORU]" -ForegroundColor Cyan
@@ -2287,26 +2358,36 @@ function Invoke-Category12 {
                         } catch { Write-Host "  [HATA] $($_.Exception.Message)" -ForegroundColor Red }
                     }
                     12 { # Windows Arama Hizmeti
-                        Write-Host ""; Write-Host "  [WINDOWS ARAMA HIZMETI]" -ForegroundColor Cyan
+                        Write-Host ""; Write-Host "  [WINDOWS ARAMA HIZMETI (WSearch)]" -ForegroundColor Cyan
                         try {
                             $svc = Get-Service -Name "WSearch" -ErrorAction Stop
-                            $statusColor = if ($svc.Status -eq 'Running') { "Green" } else { "Yellow" }
-                            Write-Host "  Durum: " -ForegroundColor DarkCyan -NoNewline
-                            Write-Host "[$($svc.Status)] ($($svc.StartType))" -ForegroundColor $statusColor
+                            $isRun = ($svc.Status -eq 'Running')
+                            Write-Host "  Durum: [$($svc.Status)] ($($svc.StartType))" -ForegroundColor $(if ($isRun) { "Green" } else { "Yellow" })
+                            if ($script:IsAdmin) {
+                                $ans = Read-Host "  Hizmeti $(if ($isRun) { 'durdurup devre disi birak' } else { 'otomatik yapip baslat' })? (E/H)"
+                                if ($ans -and $ans.Trim().ToUpper() -eq "E") {
+                                    if ($isRun) { Stop-Service "WSearch" -Force -ErrorAction SilentlyContinue; Set-Service "WSearch" -StartupType Disabled }
+                                    else { Set-Service "WSearch" -StartupType Automatic; Start-Service "WSearch" }
+                                    Write-Host "  [BASARILI] WSearch guncellendi." -ForegroundColor Green
+                                }
+                            }
                         } catch { Write-Host "  [BILGI] WSearch hizmeti bulunamadi." -ForegroundColor Yellow }
-                        Write-Host "  Hizmetler penceresi aciliyor..." -ForegroundColor DarkCyan
-                        try { Start-Process "services.msc" -ErrorAction Stop } catch {}
                     }
                     13 { # Superfetch / SysMain
                         Write-Host ""; Write-Host "  [SUPERFETCH / SYSMAIN]" -ForegroundColor Cyan
                         try {
                             $svc = Get-Service -Name "SysMain" -ErrorAction Stop
-                            $statusColor = if ($svc.Status -eq 'Running') { "Green" } else { "Yellow" }
-                            Write-Host "  Durum: " -ForegroundColor DarkCyan -NoNewline
-                            Write-Host "[$($svc.Status)] ($($svc.StartType))" -ForegroundColor $statusColor
+                            $isRun = ($svc.Status -eq 'Running')
+                            Write-Host "  Durum: [$($svc.Status)] ($($svc.StartType))" -ForegroundColor $(if ($isRun) { "Green" } else { "Yellow" })
+                            if ($script:IsAdmin) {
+                                $ans = Read-Host "  Hizmeti $(if ($isRun) { 'durdurup devre disi birak' } else { 'otomatik yapip baslat' })? (E/H)"
+                                if ($ans -and $ans.Trim().ToUpper() -eq "E") {
+                                    if ($isRun) { Stop-Service "SysMain" -Force -ErrorAction SilentlyContinue; Set-Service "SysMain" -StartupType Disabled }
+                                    else { Set-Service "SysMain" -StartupType Automatic; Start-Service "SysMain" }
+                                    Write-Host "  [BASARILI] SysMain guncellendi." -ForegroundColor Green
+                                }
+                            }
                         } catch { Write-Host "  [BILGI] SysMain hizmeti bulunamadi." -ForegroundColor Yellow }
-                        Write-Host "  Hizmetler penceresi aciliyor..." -ForegroundColor DarkCyan
-                        try { Start-Process "services.msc" -ErrorAction Stop } catch {}
                     }
                     14 { # Ag Performansi
                         Write-Host ""; Write-Host "  [AG PERFORMANSI]" -ForegroundColor Cyan
@@ -2316,6 +2397,9 @@ function Invoke-Category12 {
                             Write-Host $tcp -ForegroundColor White
                         } catch { Write-Host "  [HATA] TCP bilgisi alinamadi." -ForegroundColor Red }
                     }
+                    15 { Invoke-UltimatePerformancePlan }
+                    16 { Toggle-HibernationMode }
+                    17 { Invoke-GamingPerformanceTweaks }
                 }
                 Write-Host ""; Draw-HorizontalLine -Width 86 -Color DarkCyan -Char "-"
                 Wait-UserKeyPress -PromptMessage "Alt menuye donmek icin bir tusa basin..."
@@ -2452,24 +2536,41 @@ function Invoke-Category13 {
                         } catch { Write-Host "  [HATA] $($_.Exception.Message)" -ForegroundColor Red }
                     }
                     7  { # Yeni Kullanici Olusturma
-                        Write-Host ""; Write-Host "  [YENI KULLANICI]" -ForegroundColor Magenta
+                        Write-Host ""; Write-Host "  [YENI KULLANICI OLUSTURMA]" -ForegroundColor Magenta
                         if (-not $script:IsAdmin) {
                             Write-Host "  [UYARI] Bu islem icin yonetici yetkisi gereklidir." -ForegroundColor Yellow
                         } else {
-                            Write-Host "  Hesap yonetimi aciliyor..." -ForegroundColor DarkCyan
-                            try { Start-Process "ms-settings:otherusers" -ErrorAction Stop
-                                Write-Host "  [BASARILI] Hesap ayarlari acildi." -ForegroundColor Green
-                            } catch { Write-Host "  [HATA] $($_.Exception.Message)" -ForegroundColor Red }
+                            $uName = Read-Host "  Yeni kullanici adi (bos=Iptal)"
+                            if (-not [string]::IsNullOrWhiteSpace($uName)) {
+                                $uPass = Read-Host "  Sifre (bos birakilabilir)" -AsSecureString
+                                try {
+                                    if ($uPass.Length -gt 0) {
+                                        $null = New-LocalUser -Name $uName.Trim() -Password $uPass -PasswordNeverExpires -ErrorAction Stop
+                                    } else {
+                                        $null = New-LocalUser -Name $uName.Trim() -NoPassword -ErrorAction Stop
+                                    }
+                                    $usersGrp = (Get-LocalGroup -SID "S-1-5-32-545" -ErrorAction SilentlyContinue).Name
+                                    if ($usersGrp) { Add-LocalGroupMember -Group $usersGrp -Member $uName.Trim() -ErrorAction SilentlyContinue }
+                                    Write-Host "  [BASARILI] '$($uName.Trim())' kullanicisi olusturuldu!" -ForegroundColor Green
+                                } catch { Write-Host "  [HATA] $($_.Exception.Message)" -ForegroundColor Red }
+                            }
                         }
                     }
                     8  { # Sifre Degistirme
-                        Write-Host ""; Write-Host "  [SIFRE DEGISTIRME]" -ForegroundColor Magenta
+                        Write-Host ""; Write-Host "  [KULLANICI SIFRESI DEGISTIRME]" -ForegroundColor Magenta
                         if (-not $script:IsAdmin) {
                             Write-Host "  [UYARI] Bu islem icin yonetici yetkisi gereklidir." -ForegroundColor Yellow
                         } else {
-                            Write-Host "  Hesap yonetimi aciliyor..." -ForegroundColor DarkCyan
-                            try { Start-Process "lusrmgr.msc" -ErrorAction Stop
-                                Write-Host "  [BASARILI] Kullanici yonetimi acildi." -ForegroundColor Green
+                            try {
+                                $users = @(Get-LocalUser -ErrorAction Stop)
+                                for ($ui = 0; $ui -lt $users.Count; $ui++) { Write-Host "  [$($ui+1)] $($users[$ui].Name)" -ForegroundColor White }
+                                $pick = Read-Host "  Kullanici numarasi (0=Iptal)"
+                                if ($pick -match '^\d+$' -and [int]$pick -ge 1 -and [int]$pick -le $users.Count) {
+                                    $target = $users[[int]$pick - 1]
+                                    $newPass = Read-Host "  '$($target.Name)' icin yeni sifre" -AsSecureString
+                                    Set-LocalUser -Name $target.Name -Password $newPass -ErrorAction Stop
+                                    Write-Host "  [BASARILI] '$($target.Name)' sifresi guncellendi." -ForegroundColor Green
+                                }
                             } catch { Write-Host "  [HATA] $($_.Exception.Message)" -ForegroundColor Red }
                         }
                     }
@@ -2478,26 +2579,61 @@ function Invoke-Category13 {
                         if (-not $script:IsAdmin) {
                             Write-Host "  [UYARI] Bu islem icin yonetici yetkisi gereklidir." -ForegroundColor Yellow
                         } else {
-                            Write-Host "  Hesap yonetimi aciliyor..." -ForegroundColor DarkCyan
-                            try { Start-Process "ms-settings:otherusers" -ErrorAction Stop } catch {}
+                            try {
+                                $users = @(Get-LocalUser -ErrorAction Stop | Where-Object { $_.Name -ne $env:USERNAME -and $_.Name -notin @('Administrator','Guest','DefaultAccount','WDAGUtilityAccount') })
+                                if ($users.Count -eq 0) {
+                                    Write-Host "  [BILGI] Silinebilir baska yerel kullanici bulunamadi." -ForegroundColor Yellow
+                                } else {
+                                    for ($ui = 0; $ui -lt $users.Count; $ui++) { Write-Host "  [$($ui+1)] $($users[$ui].Name)" -ForegroundColor White }
+                                    $pick = Read-Host "  Silinecek kullanici numarasi (0=Iptal)"
+                                    if ($pick -match '^\d+$' -and [int]$pick -ge 1 -and [int]$pick -le $users.Count) {
+                                        $target = $users[[int]$pick - 1]
+                                        $conf = Read-Host "  '$($target.Name)' silinecek! Onayliyor musunuz? (E/H)"
+                                        if ($conf -and $conf.Trim().ToUpper() -eq "E") {
+                                            Remove-LocalUser -Name $target.Name -ErrorAction Stop
+                                            Write-Host "  [BASARILI] '$($target.Name)' silindi." -ForegroundColor Green
+                                        }
+                                    }
+                                }
+                            } catch { Write-Host "  [HATA] $($_.Exception.Message)" -ForegroundColor Red }
                         }
                     }
                     10 { # Grup Atama
-                        Write-Host ""; Write-Host "  [GRUP ATAMA]" -ForegroundColor Magenta
-                        if (-not $script:IsAdmin) {
-                            Write-Host "  [UYARI] Bu islem icin yonetici yetkisi gereklidir." -ForegroundColor Yellow
-                        } else {
-                            Write-Host "  Yerel Kullanicilar ve Gruplar aciliyor..." -ForegroundColor DarkCyan
-                            try { Start-Process "lusrmgr.msc" -ErrorAction Stop } catch {}
-                        }
+                        Write-Host ""; Write-Host "  [YEREL GRUPLAR]" -ForegroundColor Magenta
+                        try {
+                            Get-LocalGroup -ErrorAction Stop | ForEach-Object {
+                                $members = @(Get-LocalGroupMember -Group $_.Name -ErrorAction SilentlyContinue | ForEach-Object { $_.Name }) -join ", "
+                                Write-Host "  - $($_.Name): " -ForegroundColor Cyan -NoNewline
+                                Write-Host $(if ($members) { $members } else { "(bos)" }) -ForegroundColor White
+                            }
+                        } catch { Write-Host "  [HATA] $($_.Exception.Message)" -ForegroundColor Red }
                     }
                     11 { # Yonetici Yetkisi
-                        Write-Host ""; Write-Host "  [YONETICI YETKISI]" -ForegroundColor Magenta
+                        Write-Host ""; Write-Host "  [YONETICI YETKISI VERME / ALMA]" -ForegroundColor Magenta
                         if (-not $script:IsAdmin) {
                             Write-Host "  [UYARI] Bu islem icin yonetici yetkisi gereklidir." -ForegroundColor Yellow
                         } else {
-                            Write-Host "  Yerel Kullanicilar ve Gruplar aciliyor..." -ForegroundColor DarkCyan
-                            try { Start-Process "lusrmgr.msc" -ErrorAction Stop } catch {}
+                            try {
+                                $adminGrp = (Get-LocalGroup -SID "S-1-5-32-544" -ErrorAction Stop).Name
+                                $adminMembers = @(Get-LocalGroupMember -Group $adminGrp -ErrorAction SilentlyContinue | ForEach-Object { ($_.Name -split '\\')[-1] })
+                                $users = @(Get-LocalUser -ErrorAction Stop | Where-Object { $_.Name -ne $env:USERNAME })
+                                for ($ui = 0; $ui -lt $users.Count; $ui++) {
+                                    $isAdm = $users[$ui].Name -in $adminMembers
+                                    Write-Host "  [$($ui+1)] $($users[$ui].Name) " -ForegroundColor White -NoNewline
+                                    Write-Host $(if ($isAdm) { "[Yonetici]" } else { "[Standart]" }) -ForegroundColor $(if ($isAdm) { "Green" } else { "DarkGray" })
+                                }
+                                $pick = Read-Host "  Yetkisi degistirilecek kullanici numarasi (0=Iptal)"
+                                if ($pick -match '^\d+$' -and [int]$pick -ge 1 -and [int]$pick -le $users.Count) {
+                                    $target = $users[[int]$pick - 1]
+                                    if ($target.Name -in $adminMembers) {
+                                        Remove-LocalGroupMember -Group $adminGrp -Member $target.Name -ErrorAction Stop
+                                        Write-Host "  [BASARILI] $($target.Name) yonetici grubundan cikarildi." -ForegroundColor Yellow
+                                    } else {
+                                        Add-LocalGroupMember -Group $adminGrp -Member $target.Name -ErrorAction Stop
+                                        Write-Host "  [BASARILI] $($target.Name) yonetici yapildi." -ForegroundColor Green
+                                    }
+                                }
+                            } catch { Write-Host "  [HATA] $($_.Exception.Message)" -ForegroundColor Red }
                         }
                     }
                 }
@@ -2517,7 +2653,8 @@ function Invoke-Category14 {
         "DISM Saglik Kontrolu (CheckHealth)",
         "DISM Sistem Onarimi (RestoreHealth)",
         "Disk Hata Kontrolu (chkdsk /scan)",
-        "Windows Bellek Tani Araci (mdsched)"
+        "Windows Bellek Tani Araci (mdsched)",
+        "Windows Update Onbellegini Sifirla"
     )
     $exitCat14 = $false
     while (-not $exitCat14) {
@@ -2554,6 +2691,23 @@ function Invoke-Category14 {
                     3 { Invoke-DismRepairTool }
                     4 { Invoke-ChkdskScanTool }
                     5 { Invoke-MemoryDiagnosticTool }
+                    6 {
+                        Write-Host "`n  [WINDOWS UPDATE ONBELLEK SIFIRLAMA]" -ForegroundColor Cyan
+                        if (-not $script:IsAdmin) {
+                            Write-Host "  [UYARI] Bu islem icin yonetici yetkisi gerekir." -ForegroundColor Yellow
+                        } else {
+                            try {
+                                Stop-Service -Name wuauserv, bits -Force -ErrorAction SilentlyContinue
+                                $dlPath = "$env:SystemRoot\SoftwareDistribution\Download"
+                                if (Test-Path $dlPath) {
+                                    Remove-Item -Path "$dlPath\*" -Recurse -Force -ErrorAction SilentlyContinue
+                                }
+                                Start-Service -Name bits, wuauserv -ErrorAction SilentlyContinue
+                                Write-Host "  [BASARILI] Windows Update indirme onbellegi temizlendi." -ForegroundColor Green
+                                Write-LogSuccess "Windows Update onbellegi sifirlandi."
+                            } catch { Write-Host "  [HATA] $($_.Exception.Message)" -ForegroundColor Red }
+                        }
+                    }
                 }
                 Write-Host ""; Draw-HorizontalLine -Width 86 -Color DarkCyan -Char "-"
                 Wait-UserKeyPress -PromptMessage "Alt menuye donmek icin bir tusa basin..."
@@ -2852,13 +3006,8 @@ function Invoke-Category18 {
     if (Get-Command "Invoke-SettingsManagement" -ErrorAction SilentlyContinue) {
         Invoke-SettingsManagement
     } else {
-        Show-SubMenu -CategoryNumber "18" -CategoryTitle "Ayarlar" -TitleColor Magenta -MenuItems @(
-            "Varsayilan Log Seviyesi","Dil Secimi (TR/EN)","Renk Semasi Tercihi",
-            "Otomatik Guncelleme Denetimi","WinGet Yolu Ayari",
-            "Varsayilan Kurulum Kapsamı (User/Machine)","Sessiz Kurulum Modu",
-            "Kurulum Sonrasi Dogrulama","Yedekleme Hedef Dizini",
-            "Log Dosyasi Saklama Suresi","Admin Paneli PIN Ayari","Fabrika Ayarlarina Sifirla"
-        )
+        Write-Host "`n  [HATA] Ayarlar modulu (admin_profiles.psm1) yuklenemedi." -ForegroundColor Red
+        Wait-UserKeyPress
     }
 }
 
@@ -2941,7 +3090,11 @@ function Show-AdminMenu {
     Write-Host ""
     Draw-HorizontalLine -Width 86 -Color DarkCyan -Char "-"
     Write-Host "  " -NoNewline
-    Write-Host ("[20] | Hakkinda".PadRight(38)) -ForegroundColor Yellow -NoNewline
+    Write-Host ("[13] | Kullanici Paneline Gec".PadRight(38)) -ForegroundColor Cyan -NoNewline
+    Write-Host "    " -NoNewline
+    Write-Host "[20] | Hakkinda" -ForegroundColor Yellow
+    Write-Host "  " -NoNewline
+    Write-Host ("".PadRight(38)) -NoNewline
     Write-Host "    " -NoNewline
     Write-Host "[ 0] | Cikis  [ESC]" -ForegroundColor Red
     Draw-HorizontalLine -Width 86 -Color DarkCyan -Char "-"
@@ -3454,7 +3607,6 @@ function Invoke-AdminOption11 {
             Draw-HorizontalLine -Width 86 -Color DarkCyan -Char "-"; Write-Host ""
             $dataFiles = @(
                 (Join-Path $script:DataDir "apps\apps.json"),
-                (Join-Path $script:DataDir "apps\catalog.json"),
                 (Join-Path $script:DataDir "profiles\profiles.json"),
                 (Join-Path $script:ConfigDir "settings.json")
             )
@@ -3592,6 +3744,11 @@ function Start-AdminPanelLoop {
             "10" { Invoke-AdminOption10 }
             "11" { Invoke-AdminOption11 }
             "12" { Invoke-AdminOption12 }
+            "13" {
+                $script:AdminMode = $false
+                Start-StandardUserLoop
+                $script:AdminMode = $true
+            }
             "20" { Show-AboutScreen }
             { $_ -eq "ESC" -or $_ -eq "0" -or $_ -eq "00" } {
                 $exitAdmin = $true
@@ -3610,11 +3767,47 @@ function Start-AdminPanelLoop {
 }
 
 function Invoke-Category19 {
+    Write-LogInfo "Kategori secimi: [19] Windows & Office Lisanslama"
+    Show-ScreenTransition -Scrollable
+    Show-AppHeader -Scrollable; Write-Host ""
+    Write-Host "  [19] | Windows & Office Lisanslama (MAS - Microsoft Activation Scripts)" -ForegroundColor Green
+    Draw-HorizontalLine -Width 86 -Color DarkCyan -Char "-"; Write-Host ""
+    Write-Host "  Bu sekme asagidaki PowerShell aktivasyon aracini calistirir:" -ForegroundColor White
+    Write-Host "    irm https://get.activated.win | iex" -ForegroundColor Cyan
     Write-Host ""
-    Write-Host "  [BILGI] Normal kullanici panelinden Yonetici Paneline erisilemez." -ForegroundColor Red
-    Write-Host "  Yonetici Paneli icin 'AAU_Admin.cmd' baslaticisini kullanin." -ForegroundColor Yellow
-    Write-LogWarn "Normal kullanici panelinden Yonetici Paneline erisim engellendi."
-    Start-Sleep -Seconds 2
+
+    if (-not (Test-IsAdmin)) {
+        Write-Host "  [UYARI] Lisanslama islemi Yonetici (Administrator) yetkisi gerektirir." -ForegroundColor Yellow
+        Write-Host ""
+        $ans = Read-Host "  Yonetici olarak calistirilsin mi? (E=Evet / H=Iptal)"
+        if ($ans -and $ans.Trim().ToUpper() -in @("E","EVET","Y","YES")) {
+            Write-LogInfo "Lisanslama araci yonetici yetkisiyle baslatiliyor..."
+            try {
+                Start-Process "powershell.exe" -ArgumentList '-NoProfile -ExecutionPolicy Bypass -Command "irm https://get.activated.win | iex"' -Verb RunAs -ErrorAction Stop
+                Write-Host "  [BILGI] Yonetici penceresi acildi." -ForegroundColor Green
+            } catch {
+                Write-Host "  [HATA] Yonetici penceresi acilamadi: $($_.Exception.Message)" -ForegroundColor Red
+                Write-LogError "Lisanslama yonetici baslatma hatasi: $($_.Exception.Message)"
+            }
+        } else {
+            Write-Host "  [BILGI] Islem iptal edildi." -ForegroundColor Yellow
+        }
+        Write-Host ""; Draw-HorizontalLine -Width 86 -Color DarkCyan -Char "-"
+        Wait-UserKeyPress
+        return
+    }
+
+    Write-Host "  [BILGI] Aktivasyon araci baslatiliyor..." -ForegroundColor Green
+    Write-Host ""
+    try {
+        Invoke-Expression (Invoke-RestMethod -Uri "https://get.activated.win")
+        Write-LogSuccess "Lisanslama komutu tamamlandi."
+    } catch {
+        Write-Host "  [HATA] Aktivasyon komutu calistirilamadi: $($_.Exception.Message)" -ForegroundColor Red
+        Write-LogError "Lisanslama komutu hatasi: $($_.Exception.Message)"
+    }
+    Write-Host ""; Draw-HorizontalLine -Width 86 -Color DarkCyan -Char "-"
+    Wait-UserKeyPress
 }
 
 # ============================================================================
@@ -3672,7 +3865,7 @@ function Start-StandardUserLoop {
     while (-not $exitRequested) {
         Show-MainMenu
 
-        $inputChoice = Read-MenuInput -Prompt "  Seciminiz [1-18 | 20=Hakkinda | 0=Cikis]: "
+        $inputChoice = Read-MenuInput -Prompt "  Seciminiz [1-22 | 0=Cikis]: "
         $choice = if ($null -ne $inputChoice) { $inputChoice.Trim() } else { "" }
 
         switch ($choice) {
@@ -3681,7 +3874,7 @@ function Start-StandardUserLoop {
             { $_ -eq "3"  -or $_ -eq "03" } { Invoke-Category03 }
             { $_ -eq "4"  -or $_ -eq "04" } { Invoke-Category04 }
             { $_ -eq "5"  -or $_ -eq "05" } { Invoke-Category05 }
-            { $_ -eq "6"  -or $_ -eq "06" } { Invoke-Category06 }
+            { $_ -eq "6"  -or $_ -eq "06" } { Invoke-Category16 }
             { $_ -eq "7"  -or $_ -eq "07" } { Invoke-Category07 }
             { $_ -eq "8"  -or $_ -eq "08" } { Invoke-Category08 }
             { $_ -eq "9"  -or $_ -eq "09" } { Invoke-Category09 }
@@ -3691,11 +3884,13 @@ function Start-StandardUserLoop {
             "13"  { Invoke-Category13 }
             "14"  { Invoke-Category14 }
             "15"  { Invoke-Category15 }
-            "16"  { Invoke-Category16 }
+            "16"  { Invoke-Category06 }
             "17"  { Invoke-Category17 }
             "18"  { Invoke-Category18 }
             { $_ -eq "19" -or $_ -eq "019" } { Invoke-Category19 }
             "20"  { Show-AboutScreen }
+            "21"  { Invoke-PostFormatWizard }
+            "22"  { Show-DebloatPrivacyMenu }
             { $_ -eq "ESC" -or $_ -eq "0" -or $_ -eq "00" } {
                 $exitRequested = $true
                 Write-LogInfo "Kullanici cikis yapti."

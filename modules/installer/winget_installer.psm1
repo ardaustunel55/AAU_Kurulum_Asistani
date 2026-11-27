@@ -141,6 +141,7 @@ try {
 
 $script:WinGetExitCodes = @{
     0             = 'Basarili'
+    3010          = 'Basarili (Yeniden baslatma gerekli)'
     (-1978335231) = 'Paket katalogda bulunamadi'
     (-1978335230) = 'Paket kaynagi bulunamadi'
     (-1978335215) = 'Baska bir kurulum zaten devam ediyor'
@@ -529,8 +530,7 @@ function Build-WinGetCommand {
 
     $installArgs += @(
         '--accept-source-agreements',
-        '--accept-package-agreements',
-        '--disable-interactivity'
+        '--accept-package-agreements'
     )
 
     if ($Action -eq 'reinstall') {
@@ -617,9 +617,6 @@ function Build-WinGetCommand {
         $installArgs += '--custom'
         $installArgs += $customArgs
     }
-
-    # Etkilesimi devre disi birak (VT100 progress yerine duz metin ciktisi)
-    $installArgs += '--disable-interactivity'
 
     Write-LogInfo "WinGet komutu hazirlandi: winget $($installArgs -join ' ')"
     return $installArgs
@@ -820,53 +817,21 @@ function Show-InstallScreen {
     Write-Host "    Kaynak         : " -ForegroundColor DarkCyan -NoNewline
     Write-Host "$Source" -ForegroundColor White
 
-    Write-Host "    Asama          : " -ForegroundColor DarkCyan -NoNewline
-    $script:ProgressPositions = @{}
-    $script:ProgressPositions.StatusY = Get-SafeCursorTop
-    Write-Host "Hazirlaniyor...                              " -ForegroundColor Yellow
+    $script:ProgressPositions = @{
+        StatusY     = -1
+        OverallBarY = -1
+        ProgramBarY = -1
+        CountersY   = -1
+        LiveStreamY = -1
+        MessageY    = -1
+    }
 
-    Write-Host ""
-
-    # Genel ilerleme (toplu kurulumda)
     if ($TotalCount -gt 1) {
-        Write-Host "    GENEL ILERLEME" -ForegroundColor Green
-        $script:ProgressPositions.OverallBarY = Get-SafeCursorTop
         $overallPct = if ($TotalCount -gt 0) { [Math]::Round(($CompletedCount / $TotalCount) * 100) } else { 0 }
         $bar = Format-ProgressBar -Percent $overallPct -BarWidth 30
-        Write-Host "    $bar" -ForegroundColor Green
-        Write-Host ""
+        Write-Host "    Genel Ilerleme : " -ForegroundColor Green -NoNewline
+        Write-Host "$bar ($CompletedCount/$TotalCount | Basarili: $SuccessCount | Basarisiz: $FailCount)" -ForegroundColor White
     }
-
-    # Program ilerleme cubugu (Yuzde veya Marquee)
-    Write-Host "    PROGRAM ILERLEMESI" -ForegroundColor Yellow
-    $script:ProgressPositions.ProgramBarY = Get-SafeCursorTop
-    $marquee = Format-MarqueeBar -Frame 0 -BarWidth 30
-    Write-Host "    $marquee Baslatiliyor...                  " -ForegroundColor Yellow
-    Write-Host ""
-
-    # Sayaclar (toplu kurulumda)
-    if ($TotalCount -gt 1) {
-        $script:ProgressPositions.CountersY = Get-SafeCursorTop
-        $pending = $TotalCount - $CompletedCount - 1
-        if ($pending -lt 0) { $pending = 0 }
-        Write-Host "    Tamamlanan : $CompletedCount / $TotalCount" -ForegroundColor DarkCyan
-        Write-Host "    Basarili   : $SuccessCount" -ForegroundColor Green
-        Write-Host "    Basarisiz  : $FailCount" -ForegroundColor Red
-        Write-Host "    Bekleyen   : $pending" -ForegroundColor White
-        Write-Host ""
-    }
-
-    # Canli WinGet Ciktisi (Live Stream)
-    Write-Host "    CANLI WINGET AKISI" -ForegroundColor DarkCyan
-    $script:ProgressPositions.LiveStreamY = Get-SafeCursorTop
-    Write-Host "    >> Baglanti kuruluyor...                                            " -ForegroundColor Cyan
-    Write-Host ""
-
-    # Durum mesaji ve Iptal Bilgisi
-    Write-Host "    DURUM VE KONTROL" -ForegroundColor DarkCyan
-    $script:ProgressPositions.MessageY = Get-SafeCursorTop
-    Write-Host "    $ProgramName hazirlaniyor... | [ESC / Q] Islemi Iptal Et            " -ForegroundColor White
-    Write-Host ""
     Write-Host ("  " + ("-" * 60)) -ForegroundColor DarkCyan
 }
 
@@ -892,6 +857,15 @@ function Update-InstallProgress {
     )
 
     try {
+        if ($script:ProgressPositions.StatusY -lt 0) {
+            if ($MessageText) {
+                $clr = if ($StatusText -match 'BASARISIZ|HATA|IPTAL') { 'Red' }
+                       elseif ($StatusText -match 'BASARILI|ZATEN KURULU') { 'Green' }
+                       else { 'Cyan' }
+                Write-Host "  [$StatusText] $MessageText" -ForegroundColor $clr
+            }
+            return
+        }
         # 1. Asama Durumu
         if ($StatusText -and $script:ProgressPositions.StatusY -ge 0) {
             if (Set-SafeCursorPosition 21 $script:ProgressPositions.StatusY) {
@@ -982,228 +956,149 @@ function Invoke-SingleWinGetProcess {
         Cancelled = $false
     }
 
-    $proc = $null
-    $itemRef = $null
-
     try {
-        $psi = New-Object System.Diagnostics.ProcessStartInfo
-        $psi.FileName = $WingetExe
-        $psi.Arguments = ($Arguments | ForEach-Object {
+        Write-LogInfo "WinGet baslatiliyor: $WingetExe $($Arguments -join ' ')"
+        Write-Host ""
+        Write-Host "  --- WinGet Canli Kurulum & Ilerleme Cubugu ---" -ForegroundColor DarkCyan
+        Write-Host ""
+
+        $argStr = ($Arguments | ForEach-Object {
             if ($_ -match '\s') { "`"$_`"" } else { $_ }
         }) -join ' '
-        $psi.RedirectStandardOutput = $true
-        $psi.RedirectStandardError  = $true
-        $psi.UseShellExecute  = $false
-        $psi.CreateNoWindow   = $true
-        $psi.StandardOutputEncoding = [System.Text.Encoding]::UTF8
-        $psi.StandardErrorEncoding  = [System.Text.Encoding]::UTF8
-        # VT100 islemini devre disi birakarak duz metin ciktisi almak icin
-        $psi.EnvironmentVariables["WT_SESSION"] = ""
-        $psi.EnvironmentVariables["TERM"] = "dumb"
 
-        $proc = New-Object System.Diagnostics.Process
-        $proc.StartInfo = $psi
+        $proc = Start-Process -FilePath $WingetExe -ArgumentList $argStr -NoNewWindow -Wait -PassThru -ErrorAction Stop
+        $result.ExitCode = if ($null -ne $proc -and $null -ne $proc.ExitCode) { [int]$proc.ExitCode } else { 0 }
+        $result.StdOut = "WinGet canli konsol ciktisi (Kod: $($result.ExitCode))"
 
-        Write-LogInfo "WinGet baslatiliyor: $($psi.FileName) $($psi.Arguments)"
-
-        $null = $proc.Start()
-
-        # Sureci ve alt cocuk islemleri takip listesine kaydet
-        $itemRef = [PSCustomObject]@{ Process = $proc; Id = $proc.Id; AppName = $AppName }
-        $global:AauActiveInstallers.Add($itemRef)
-
-        $stdoutBuilder = New-Object System.Text.StringBuilder
-        $stderrBuilder = New-Object System.Text.StringBuilder
-
-        # PS 5.1 uyumlu Runspace tabanli async reader (Peek() bloklanmasini engeller)
-        $stdoutQueue = [System.Collections.Concurrent.ConcurrentQueue[string]]::new()
-        $stderrQueue = [System.Collections.Concurrent.ConcurrentQueue[string]]::new()
-
-        $stdoutReader = $proc.StandardOutput
-        $stderrReader = $proc.StandardError
-
-        $asyncReaderScript = {
-            param($rdr, $queue)
-            $buf = New-Object char[] 512
-            try {
-                while ($true) {
-                    $n = $rdr.Read($buf, 0, $buf.Length)
-                    if ($n -le 0) { break }
-                    $chunk = New-Object string ($buf, 0, $n)
-                    $queue.Enqueue($chunk)
-                }
-            } catch {}
-        }
-
-        $rsOut = [runspacefactory]::CreateRunspace()
-        $rsOut.Open()
-        $psOut = [powershell]::Create()
-        $psOut.Runspace = $rsOut
-        $null = $psOut.AddScript($asyncReaderScript).AddArgument($stdoutReader).AddArgument($stdoutQueue)
-        $hOut = $psOut.BeginInvoke()
-
-        $rsErr = [runspacefactory]::CreateRunspace()
-        $rsErr.Open()
-        $psErr = [powershell]::Create()
-        $psErr.Runspace = $rsErr
-        $null = $psErr.AddScript($asyncReaderScript).AddArgument($stderrReader).AddArgument($stderrQueue)
-        $hErr = $psErr.BeginInvoke()
-
-        $currentPercent = -1
-        $currentPhase = if ($Action -eq 'upgrade') { "Guncelleme paketi aliniyor..." } else { "Paket indiriliyor..." }
-        $liveOutputLine = "WinGet baglantisi kuruldu..."
-        $frame = 0
-
-        while (-not $proc.HasExited) {
-            # 1. KULLANICI IPTAL GIRISI KONTROLU (Donmayi engelleme ve aninda tepki)
-            $isKeyAvail = $false
-            try {
-                if ([Environment]::UserInteractive -and -not [Console]::IsInputRedirected) {
-                    $isKeyAvail = [Console]::KeyAvailable
-                }
-            } catch { $isKeyAvail = $false }
-
-            if ($isKeyAvail) {
-                try {
-                    $key = [Console]::ReadKey($true)
-                    if ($key.Key -eq [ConsoleKey]::Escape -or $key.Key -eq [ConsoleKey]::Q) {
-                        Write-LogWarn "$AppName kurulumu kullanici tarafindan durduruldu."
-                        $result.Cancelled = $true
-                        $result.ExitCode = -1978335212 # WinGet kullanici iptal kodu
-
-                        Update-InstallProgress -StatusText "IPTAL EDILIYOR..." `
-                            -SpinnerFrame $frame `
-                            -ProgramPercent $currentPercent `
-                            -LiveOutput "Kullanici istegiyle durduruluyor, cocuk islemler sonlandiriliyor..." `
-                            -MessageText "$AppName kurulumu iptal edildi!" `
-                            -Completed $BulkCompleted -Total $BulkTotal `
-                            -SuccessCount $BulkSuccess -FailCount $BulkFail
-
-                        Stop-ProcessTree -ProcessId $proc.Id -ProcessName $AppName
-                        break
-                    }
-                } catch {}
-            }
-
-            # 2. STDOUT CANLI AKIS OKUMA VE YUZDE ANALIZI (Async Queue)
-            $chunk = $null
-            while ($stdoutQueue.TryDequeue([ref]$chunk)) {
-                $null = $stdoutBuilder.Append($chunk)
-
-                    # ANSI escape ve kontrol karakterlerini temizle
-                    $cleanChunk = $chunk -replace '\x1b\[[0-9;]*[a-zA-Z]', '' -replace '[\x00-\x08\x0B\x0C\x0E-\x1F]', ''
-
-                    # Satirlara ve \r parcalarina ayir
-                    $lines = $cleanChunk -split '[\r\n]+' | Where-Object { -not [string]::IsNullOrWhiteSpace($_) }
-
-                    foreach ($line in $lines) {
-                        $trimLine = $line.Trim()
-                        if ($trimLine.Length -ge 3 -and $trimLine -notmatch '^[-=]+$') {
-                            $liveOutputLine = $trimLine
-                        }
-
-                        # Yuzde Yakalama Mantigi (1: Dogrudan yuzde — WinGet block bar veya metin)
-                        if ($trimLine -match '(\d{1,3})\s*%' -or $trimLine -match '(\d{1,3})\.\d+\s*%') {
-                            $p = [int]$matches[1]
-                            if ($p -ge 0 -and $p -le 100) { $currentPercent = $p }
-                        }
-                        # Yuzde Yakalama Mantigi (2: Boyut orani, orn: 12.5 MB / 50.0 MB)
-                        elseif ($trimLine -match '(\d+(?:\.\d+)?)\s*(MB|KB|GB)\s*/\s*(\d+(?:\.\d+)?)\s*(MB|KB|GB)') {
-                            try {
-                                $currVal = [double]$matches[1]
-                                $currUnit = $matches[2].ToUpper()
-                                $totalVal = [double]$matches[3]
-                                $totalUnit = $matches[4].ToUpper()
-
-                                $currBytes = switch ($currUnit) { "KB" { $currVal * 1KB } "MB" { $currVal * 1MB } "GB" { $currVal * 1GB } default { $currVal } }
-                                $totalBytes = switch ($totalUnit) { "KB" { $totalVal * 1KB } "MB" { $totalVal * 1MB } "GB" { $totalVal * 1GB } default { $totalVal } }
-
-                                if ($totalBytes -gt 0) {
-                                    $calcPct = [int][Math]::Round(($currBytes / $totalBytes) * 100)
-                                    if ($calcPct -ge 0 -and $calcPct -le 100) { $currentPercent = $calcPct }
-                                }
-                            } catch {}
-                        }
-                        # Yuzde Yakalama Mantigi (3: Block bar karakter sayisi)
-                        elseif ($trimLine -match '^[\x{2588}\x{2591}\x{2592}\x{2593}\s]+$') {
-                            $fullBlocks = ($trimLine.ToCharArray() | Where-Object { $_ -eq [char]0x2588 }).Count
-                            $totalBlocks = ($trimLine.ToCharArray() | Where-Object { $_ -eq [char]0x2588 -or $_ -eq [char]0x2591 -or $_ -eq [char]0x2592 -or $_ -eq [char]0x2593 }).Count
-                            if ($totalBlocks -gt 0) {
-                                $blockPct = [int][Math]::Round(($fullBlocks / $totalBlocks) * 100)
-                                if ($blockPct -ge 0 -and $blockPct -le 100) { $currentPercent = $blockPct }
-                            }
-                        }
-
-                        # Asama Yakalama Mantigi
-                        if ($trimLine -match 'Indiriliyor|Downloading|Download|Baglaniliyor|Connecting') {
-                            $currentPhase = "Paket indiriliyor..."
-                        } elseif ($trimLine -match 'Dogrulaniyor|Verifying|Hash|Karma|Checksum') {
-                            $currentPhase = "Paket dogrulaniyor (Karma kontrolu)..."
-                        } elseif ($trimLine -match 'Yukleniyor|Installing|Starting package install|Kuruluyor') {
-                            $currentPhase = "Kurulum gerceklestiriliyor..."
-                        } elseif ($trimLine -match 'Basariyla yuklendi|Successfully installed') {
-                            $currentPhase = "Kurulum tamamlandi!"
-                            $currentPercent = 100
-                        }
-                    }
-            }
-
-            # 3. STDERR OKUMA (Async Queue)
-            $errChunk = $null
-            while ($stderrQueue.TryDequeue([ref]$errChunk)) {
-                $null = $stderrBuilder.Append($errChunk)
-            }
-
-            $overallPct = if ($IsBulkMode -and $BulkTotal -gt 0) { [Math]::Round(($BulkCompleted / $BulkTotal) * 100) } else { -1 }
-
-            Update-InstallProgress -StatusText $currentPhase `
-                -SpinnerFrame $frame `
-                -ProgramPercent $currentPercent `
-                -OverallPercent $overallPct `
-                -LiveOutput $liveOutputLine `
-                -MessageText "$($AppName): $currentPhase | [ESC / Q] Islemi Iptal Et" `
-                -Completed $BulkCompleted -Total $BulkTotal `
-                -SuccessCount $BulkSuccess -FailCount $BulkFail
-
-            $frame++
-            Start-Sleep -Milliseconds 60
-        }
-
-        # Kalan tamponu guvenle bosalt (eger iptal edilmediyse)
-        if (-not $result.Cancelled) {
-            try { $proc.WaitForExit() } catch {}
-            # Async Runspace reader'larin bitmesini bekle
-            try { $psOut.EndInvoke($hOut) | Out-Null } catch {}
-            try { $psErr.EndInvoke($hErr) | Out-Null } catch {}
-            # Kalan kuyruk icerigini bosalt
-            $leftover = $null
-            while ($stdoutQueue.TryDequeue([ref]$leftover)) { $null = $stdoutBuilder.Append($leftover) }
-            while ($stderrQueue.TryDequeue([ref]$leftover)) { $null = $stderrBuilder.Append($leftover) }
-            $result.ExitCode = $proc.ExitCode
-        }
-
-        $result.StdOut = $stdoutBuilder.ToString()
-        $result.StdErr = $stderrBuilder.ToString()
-
+        Write-Host ""
+        Write-LogInfo "WinGet tamamlandi: $AppName (ExitCode: $($result.ExitCode))"
     } catch {
         $result.StdErr   = "Islem hatasi: $($_.Exception.Message)"
         $result.ExitCode = -99
         Write-LogError "WinGet calistirma istisnasi: $($_.Exception.Message)"
-    } finally {
-        # Runspace async reader'lari temizle
-        try { $psOut.Dispose() } catch {}
-        try { $rsOut.Dispose() } catch {}
-        try { $psErr.Dispose() } catch {}
-        try { $rsErr.Dispose() } catch {}
-        if ($itemRef -and $global:AauActiveInstallers) {
-            $global:AauActiveInstallers.Remove($itemRef) | Out-Null
-        }
-        if ($proc) {
-            try { $proc.Dispose() } catch {}
-        }
     }
 
     return $result
+}
+
+# ============================================================================
+# INVOKE-DIRECTURLINSTALL (Dogrudan URL'den Indirip Kurma Motoru - Office vb.)
+# ============================================================================
+function Invoke-DirectUrlInstall {
+    param(
+        [Parameter(Mandatory)][PSCustomObject]$App,
+        [datetime]$StartTime = (Get-Date),
+        [switch]$IsBulkMode,
+        [int]$BulkTotal = 1,
+        [int]$BulkCompleted = 0,
+        [int]$BulkSuccess = 0,
+        [int]$BulkFail = 0
+    )
+
+    $installResult = @{
+        Success         = $false
+        ExitCode        = -1
+        StdOut          = ""
+        StdErr          = ""
+        Duration        = 0
+        Skipped         = $false
+        SkipReason      = ""
+        Verified        = $false
+        VerifiedVersion = ""
+        Action          = 'install'
+    }
+
+    $dispName = if ($App.Name) { "$($App.Name)".Trim() } else { "Uygulama" }
+    $dispId   = if ($App.Id) { "$($App.Id)".Trim() } elseif ($App.id) { "$($App.id)".Trim() } else { "direct_url" }
+    $url      = if ($App.DownloadUrl) { "$($App.DownloadUrl)".Trim() } elseif ($App.download_url) { "$($App.download_url)".Trim() } else { "" }
+
+    if (-not $url -or $url -notmatch '^https?://') {
+        $installResult.StdErr = "Gecersiz veya bos indirme baglantisi."
+        Update-InstallProgress -StatusText "HATA: Gecersiz indirme URL'si" -SpinnerFrame 0 -MessageText $installResult.StdErr
+        Write-InstallLog -App $App -StartTime $StartTime -EndTime (Get-Date) -ExitCode -1 -StdErr $installResult.StdErr -Success $false
+        Start-Sleep -Seconds 2
+        return $installResult
+    }
+
+    $fileName = if ($App.InstallerFileName) {
+        "$($App.InstallerFileName)".Trim()
+    } else {
+        ($dispId -replace '[^a-zA-Z0-9._-]', '_') + ".exe"
+    }
+    $destPath = Join-Path $env:TEMP $fileName
+
+    try {
+        Update-InstallProgress -StatusText "Yukleyici indiriliyor..." -SpinnerFrame 1 `
+            -ProgramPercent 15 -MessageText "$dispName kurulum dosyasi indiriliyor..."
+        Write-LogInfo "Dogrudan URL'den indiriliyor: $url -> $destPath"
+
+        [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+        $prevProg = $ProgressPreference
+        $ProgressPreference = 'SilentlyContinue'
+        try {
+            Invoke-WebRequest -Uri $url -OutFile $destPath -UseBasicParsing -ErrorAction Stop
+        } finally {
+            $ProgressPreference = $prevProg
+        }
+
+        if (-not (Test-Path $destPath) -or ((Get-Item $destPath).Length -le 0)) {
+            throw "Indirilen kurulum dosyasi bos veya olusturulamadi: $destPath"
+        }
+
+        Update-InstallProgress -StatusText "Kurulum penceresi aciliyor..." -SpinnerFrame 2 `
+            -ProgramPercent 60 -MessageText "$fileName ekranda acildi! Kurulum penceresinden islemi takip edebilirsiniz."
+        Write-LogInfo "Dogrudan kurulum dosyasi gorunur pencerede baslatiliyor: $destPath"
+        Write-Host ""
+        Write-Host "  [BILGI] $dispName kurulum penceresi acildi. Lutfen acilan pencere uzerinden kurulumu tamamlayin..." -ForegroundColor Green
+
+        $spParams = @{
+            FilePath    = $destPath
+            WindowStyle = 'Normal'
+            Wait        = $true
+            PassThru    = $true
+            ErrorAction = 'Stop'
+        }
+        $customArgs = if ($App.CustomArguments) { "$($App.CustomArguments)".Trim() } elseif ($App.custom_params) { "$($App.custom_params)".Trim() } else { "" }
+        if ($customArgs) {
+            $spParams['ArgumentList'] = $customArgs
+        }
+
+        $proc = Start-Process @spParams
+        $exitCode = if ($null -ne $proc -and $null -ne $proc.ExitCode) { [int]$proc.ExitCode } else { 0 }
+
+        $installResult.ExitCode = $exitCode
+        $installResult.Success  = ($exitCode -eq 0 -or $exitCode -eq 3010)
+        $installResult.Verified = $installResult.Success
+        $installResult.StdOut   = "Direct URL kurulumu tamamlandi: $destPath (Kod: $exitCode)"
+
+        if ($installResult.Success) {
+            Update-InstallProgress -StatusText "BASARILI" -SpinnerFrame 0 -ProgramPercent 100 `
+                -MessageText "$dispName kurulumu tamamlandi! (Kod: $exitCode)"
+            Write-LogSuccess "$dispName dogrudan URL uzerinden basariyla kuruldu (ExitCode: $exitCode)."
+        } else {
+            $installResult.StdErr = "Kurulum dosyasi hata kodu ile kapandi: $exitCode"
+            Update-InstallProgress -StatusText "BASARISIZ - Kod: $exitCode" -SpinnerFrame 0 `
+                -MessageText "$dispName kurulumu tamamlanamadi (Kod: $exitCode)."
+            Write-LogError "$dispName dogrudan URL kurulum hatasi (ExitCode: $exitCode)."
+        }
+    } catch {
+        $installResult.ExitCode = -99
+        $installResult.Success  = $false
+        $installResult.StdErr   = $_.Exception.Message
+        Update-InstallProgress -StatusText "HATA: Indirme/Kurulum basarisiz" -SpinnerFrame 0 `
+            -MessageText "$dispName hatasi: $($_.Exception.Message)"
+        Write-LogError "$dispName direct_url hatasi: $($_.Exception.Message)"
+    }
+
+    $endTime = Get-Date
+    $installResult.Duration = [int]($endTime - $StartTime).TotalSeconds
+    Write-InstallLog -App $App -StartTime $StartTime -EndTime $endTime `
+        -ExitCode $installResult.ExitCode -StdOut $installResult.StdOut `
+        -StdErr $installResult.StdErr -Success $installResult.Success `
+        -Verified $installResult.Verified -VerifiedVersion $installResult.VerifiedVersion
+
+    if (-not $IsBulkMode) { Start-Sleep -Seconds 2 } else { Start-Sleep -Milliseconds 600 }
+    return $installResult
 }
 
 # ============================================================================
@@ -1267,6 +1162,13 @@ function Invoke-WinGetInstall {
         -CompletedCount $BulkCompleted `
         -SuccessCount $BulkSuccess `
         -FailCount $BulkFail
+
+    # Dogrudan URL'den kurulum (or. Microsoft Office C2R)
+    $instType = if ($App.InstallType) { "$($App.InstallType)".Trim().ToLower() } elseif ($App.install_type) { "$($App.install_type)".Trim().ToLower() } else { "" }
+    if ($instType -eq 'direct_url' -or $dispSrc.ToLower() -eq 'direct_url') {
+        return (Invoke-DirectUrlInstall -App $App -StartTime $startTime -IsBulkMode:$IsBulkMode `
+            -BulkTotal $BulkTotal -BulkCompleted $BulkCompleted -BulkSuccess $BulkSuccess -BulkFail $BulkFail)
+    }
 
     # Asama 1: Kurulum ve Surum Durumu Kontrolu
     Update-InstallProgress -StatusText "Kurulum durumu kontrol ediliyor..." -SpinnerFrame 0 `
@@ -1450,7 +1352,7 @@ function Invoke-WinGetInstall {
 
     $endTime = Get-Date
     $installResult.Duration = [int]($endTime - $startTime).TotalSeconds
-    $installResult.Success  = ($installResult.ExitCode -eq 0)
+    $installResult.Success  = ($installResult.ExitCode -eq 0 -or $installResult.ExitCode -eq 3010)
 
     # Asama 4: Kurulum Sonrasi Dogrulama
     if ($installResult.Success) {
@@ -2038,19 +1940,8 @@ function Invoke-UnifiedInstallAction {
             return
         }
 
-        # Ortak Kurulum Motorunu Calistir
+        # Ortak Kurulum Motorunu Calistir (Kisayol kontrolu Invoke-WinGetInstall icinde yapilir)
         $res = Invoke-WinGetInstall -App $singleApp -IsBulkMode:$false
-
-        # Kurulum Sonrasi Baslat Menusu Kisayol ve Dosya Kontrolu
-        if ($res.Success) {
-            if (Get-Command "Show-PostInstallShortcutCheck" -ErrorAction SilentlyContinue) {
-                $appId = if ($singleApp.winget_id) { $singleApp.winget_id }
-                         elseif ($singleApp.Id) { $singleApp.Id }
-                         elseif ($singleApp.packageId) { $singleApp.packageId }
-                         else { "" }
-                $null = Show-PostInstallShortcutCheck -AppName $singleApp.Name -PackageId $appId
-            }
-        }
 
         # Secim listesini temizle
         $SelectedApps.Clear()

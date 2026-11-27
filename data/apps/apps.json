@@ -1,6 +1,6 @@
 ﻿{
     "version":  "1.0.0",
-    "last_updated":  "2026-11-15",
+    "last_updated":  "2026-11-27",
     "description":  "AAU Kurulum Asistani - Uygulama Katalogu",
     "categories":  [
                        {
@@ -148,91 +148,6 @@
                              "Source":  "winget"
                          },
                          {
-                             "Id":  "LibreWolf.LibreWolf",
-                             "Name":  "LibreWolf",
-                             "Publisher":  "LibreWolf Community",
-                             "Description":  "Telemetri ve veri toplama özellikleri tamamen kaldırılmış, gizlilik ve güvenlik odaklı Firefox türevi.",
-                             "Category":  "browsers",
-                             "Website":  "https://librewolf.net/",
-                             "InstallType":  "standard",
-                             "Architecture":  "x64",
-                             "Scope":  "machine",
-                             "SilentInstall":  true,
-                             "CustomArguments":  "",
-                             "Version":  "latest",
-                             "Enabled":  true,
-                             "InstallOrder":  7,
-                             "Source":  "winget"
-                         },
-                         {
-                             "Id":  "Waterfox.Waterfox",
-                             "Name":  "Waterfox",
-                             "Publisher":  "Waterfox Limited",
-                             "Description":  "Kullanıcı gizliliğine saygı duyan, özelleştirilebilir ve 64-bit optimize edilmiş bağımsız web tarayıcısı.",
-                             "Category":  "browsers",
-                             "Website":  "https://www.waterfox.net/",
-                             "InstallType":  "standard",
-                             "Architecture":  "x64",
-                             "Scope":  "machine",
-                             "SilentInstall":  true,
-                             "CustomArguments":  "",
-                             "Version":  "latest",
-                             "Enabled":  true,
-                             "InstallOrder":  8,
-                             "Source":  "winget"
-                         },
-                         {
-                             "Id":  "MullvadVPN.MullvadBrowser",
-                             "Name":  "Mullvad Browser",
-                             "Publisher":  "Mullvad VPN AB",
-                             "Description":  "Tor Projesi ile işbirliği içinde geliştirilen, dijital parmak izi bırakmayan gizlilik odaklı tarayıcı.",
-                             "Category":  "browsers",
-                             "Website":  "https://mullvad.net/browser",
-                             "InstallType":  "standard",
-                             "Architecture":  "x64",
-                             "Scope":  "machine",
-                             "SilentInstall":  true,
-                             "CustomArguments":  "",
-                             "Version":  "latest",
-                             "Enabled":  true,
-                             "InstallOrder":  9,
-                             "Source":  "winget"
-                         },
-                         {
-                             "Id":  "Hibbiki.Chromium",
-                             "Name":  "Chromium",
-                             "Publisher":  "Hibbiki",
-                             "Description":  "Google hizmetlerinden ve tescilli bileşenlerden arındırılmış saf açık kaynaklı Chromium web tarayıcısı.",
-                             "Category":  "browsers",
-                             "Website":  "https://github.com/Hibbiki/chromium-win64",
-                             "InstallType":  "standard",
-                             "Architecture":  "x64",
-                             "Scope":  "machine",
-                             "SilentInstall":  true,
-                             "CustomArguments":  "",
-                             "Version":  "latest",
-                             "Enabled":  true,
-                             "InstallOrder":  10,
-                             "Source":  "winget"
-                         },
-                         {
-                             "Id":  "Mozilla.SeaMonkey",
-                             "Name":  "SeaMonkey",
-                             "Publisher":  "SeaMonkey Council",
-                             "Description":  "İnternet tarayıcısı, e-posta istemcisi ve HTML düzenleyicisini bir araya getiren klasik hepsi-bir-arada internet paketi.",
-                             "Category":  "browsers",
-                             "Website":  "https://www.seamonkey-project.org/",
-                             "InstallType":  "standard",
-                             "Architecture":  "x64",
-                             "Scope":  "machine",
-                             "SilentInstall":  true,
-                             "CustomArguments":  "",
-                             "Version":  "latest",
-                             "Enabled":  true,
-                             "InstallOrder":  11,
-                             "Source":  "winget"
-                         },
-                         {
                              "Id":  "Yandex.Browser",
                              "Name":  "Yandex Browser",
                              "Publisher":  "Yandex LLC",
@@ -246,24 +161,7 @@
                              "CustomArguments":  "",
                              "Version":  "latest",
                              "Enabled":  true,
-                             "InstallOrder":  12,
-                             "Source":  "winget"
-                         },
-                         {
-                             "Id":  "MoonchildProductions.PaleMoon",
-                             "Name":  "Pale Moon",
-                             "Publisher":  "Moonchild Productions",
-                             "Description":  "Klasik arayüzü koruyan, verimlilik ve kullanıcı kontrolü odaklı bağımsız açık kaynaklı Goanna motorlu tarayıcı.",
-                             "Category":  "browsers",
-                             "Website":  "https://www.palemoon.org/",
-                             "InstallType":  "standard",
-                             "Architecture":  "x64",
-                             "Scope":  "machine",
-                             "SilentInstall":  true,
-                             "CustomArguments":  "",
-                             "Version":  "latest",
-                             "Enabled":  true,
-                             "InstallOrder":  13,
+                             "InstallOrder":  7,
                              "Source":  "winget"
                          },
                          {
@@ -280,7 +178,7 @@
                              "CustomArguments":  "",
                              "Version":  "latest",
                              "Enabled":  true,
-                             "InstallOrder":  14,
+                             "InstallOrder":  8,
                              "Source":  "winget"
                          },
                          {
@@ -297,7 +195,7 @@
                              "CustomArguments":  "",
                              "Version":  "latest",
                              "Enabled":  true,
-                             "InstallOrder":  15,
+                             "InstallOrder":  9,
                              "Source":  "winget"
                          },
                          {
@@ -314,7 +212,7 @@
                              "CustomArguments":  "",
                              "Version":  "latest",
                              "Enabled":  true,
-                             "InstallOrder":  16,
+                             "InstallOrder":  10,
                              "Source":  "winget"
                          },
                          {
@@ -331,7 +229,7 @@
                              "CustomArguments":  "",
                              "Version":  "latest",
                              "Enabled":  true,
-                             "InstallOrder":  17,
+                             "InstallOrder":  11,
                              "Source":  "winget"
                          },
                          {
@@ -348,7 +246,7 @@
                              "CustomArguments":  "",
                              "Version":  "latest",
                              "Enabled":  true,
-                             "InstallOrder":  18,
+                             "InstallOrder":  12,
                              "Source":  "winget"
                          },
                          {
@@ -365,7 +263,7 @@
                              "CustomArguments":  "",
                              "Version":  "latest",
                              "Enabled":  true,
-                             "InstallOrder":  19,
+                             "InstallOrder":  13,
                              "Source":  "winget"
                          },
                          {
@@ -382,58 +280,7 @@
                              "CustomArguments":  "",
                              "Version":  "latest",
                              "Enabled":  true,
-                             "InstallOrder":  20,
-                             "Source":  "winget"
-                         },
-                         {
-                             "Id":  "M2Team.NanaZip",
-                             "Name":  "NanaZip",
-                             "Publisher":  "M2-Team",
-                             "Description":  "Windows 11 modern sağ tık bağlam menüsüyle tam uyumlu 7-Zip türevi arşiv yöneticisi.",
-                             "Category":  "utilities",
-                             "Website":  "https://github.com/M2Team/NanaZip",
-                             "InstallType":  "standard",
-                             "Architecture":  "x64",
-                             "Scope":  "user",
-                             "SilentInstall":  true,
-                             "CustomArguments":  "",
-                             "Version":  "latest",
-                             "Enabled":  true,
-                             "InstallOrder":  21,
-                             "Source":  "winget"
-                         },
-                         {
-                             "Id":  "Giorgiotani.Peazip",
-                             "Name":  "PeaZip",
-                             "Publisher":  "Giorgio Tani",
-                             "Description":  "200\u0027den fazla arşiv biçimini destekleyen güçlü ve modern açık kaynaklı arşiv aracı.",
-                             "Category":  "utilities",
-                             "Website":  "https://peazip.github.io/",
-                             "InstallType":  "standard",
-                             "Architecture":  "x64",
-                             "Scope":  "machine",
-                             "SilentInstall":  true,
-                             "CustomArguments":  "",
-                             "Version":  "latest",
-                             "Enabled":  true,
-                             "InstallOrder":  22,
-                             "Source":  "winget"
-                         },
-                         {
-                             "Id":  "Bandisoft.Bandizip",
-                             "Name":  "Bandizip",
-                             "Publisher":  "Bandisoft",
-                             "Description":  "Çok çekirdekli hızlı arşivleme ve çıkarma desteği sunan popüler sıkıştırma yazılımı.",
-                             "Category":  "utilities",
-                             "Website":  "https://www.bandisoft.com/bandizip/",
-                             "InstallType":  "standard",
-                             "Architecture":  "x64",
-                             "Scope":  "machine",
-                             "SilentInstall":  true,
-                             "CustomArguments":  "",
-                             "Version":  "latest",
-                             "Enabled":  true,
-                             "InstallOrder":  23,
+                             "InstallOrder":  14,
                              "Source":  "winget"
                          },
                          {
@@ -450,24 +297,7 @@
                              "CustomArguments":  "",
                              "Version":  "latest",
                              "Enabled":  true,
-                             "InstallOrder":  24,
-                             "Source":  "winget"
-                         },
-                         {
-                             "Id":  "JAMSoftware.TreeSize.Free",
-                             "Name":  "TreeSize Free",
-                             "Publisher":  "JAM Software",
-                             "Description":  "Sürücü ve klasörlerin kapladığı disk alanını hiyerarşik ağaç biçiminde tarayan popüler disk alanı analizörü.",
-                             "Category":  "utilities",
-                             "Website":  "https://www.jam-software.com/treesize_free",
-                             "InstallType":  "standard",
-                             "Architecture":  "x64",
-                             "Scope":  "machine",
-                             "SilentInstall":  true,
-                             "CustomArguments":  "",
-                             "Version":  "latest",
-                             "Enabled":  true,
-                             "InstallOrder":  25,
+                             "InstallOrder":  15,
                              "Source":  "winget"
                          },
                          {
@@ -484,7 +314,7 @@
                              "CustomArguments":  "",
                              "Version":  "latest",
                              "Enabled":  true,
-                             "InstallOrder":  26,
+                             "InstallOrder":  16,
                              "Source":  "winget"
                          },
                          {
@@ -501,24 +331,7 @@
                              "CustomArguments":  "",
                              "Version":  "latest",
                              "Enabled":  true,
-                             "InstallOrder":  27,
-                             "Source":  "winget"
-                         },
-                         {
-                             "Id":  "Syncthing.Syncthing",
-                             "Name":  "Syncthing",
-                             "Publisher":  "The Syncthing Authors",
-                             "Description":  "Merkezi bir sunucuya ihtiyaç duymadan cihazlar arası güvenli ve şifreli dosya senkronizasyonu.",
-                             "Category":  "utilities",
-                             "Website":  "https://syncthing.net/",
-                             "InstallType":  "standard",
-                             "Architecture":  "x64",
-                             "Scope":  "machine",
-                             "SilentInstall":  true,
-                             "CustomArguments":  "",
-                             "Version":  "latest",
-                             "Enabled":  true,
-                             "InstallOrder":  28,
+                             "InstallOrder":  17,
                              "Source":  "winget"
                          },
                          {
@@ -535,7 +348,7 @@
                              "CustomArguments":  "",
                              "Version":  "latest",
                              "Enabled":  true,
-                             "InstallOrder":  29,
+                             "InstallOrder":  18,
                              "Source":  "winget"
                          },
                          {
@@ -552,24 +365,7 @@
                              "CustomArguments":  "",
                              "Version":  "latest",
                              "Enabled":  true,
-                             "InstallOrder":  30,
-                             "Source":  "winget"
-                         },
-                         {
-                             "Id":  "KeePassXCTeam.KeePassXC",
-                             "Name":  "KeePassXC",
-                             "Publisher":  "KeePassXC Team",
-                             "Description":  "Parolalarınızı tamamen yerel ve şifreli bir veritabanında saklayan modern açık kaynaklı kasa yöneticisi.",
-                             "Category":  "utilities",
-                             "Website":  "https://keepassxc.org/",
-                             "InstallType":  "standard",
-                             "Architecture":  "x64",
-                             "Scope":  "machine",
-                             "SilentInstall":  true,
-                             "CustomArguments":  "",
-                             "Version":  "latest",
-                             "Enabled":  true,
-                             "InstallOrder":  31,
+                             "InstallOrder":  19,
                              "Source":  "winget"
                          },
                          {
@@ -586,7 +382,7 @@
                              "CustomArguments":  "",
                              "Version":  "latest",
                              "Enabled":  true,
-                             "InstallOrder":  32,
+                             "InstallOrder":  20,
                              "Source":  "winget"
                          },
                          {
@@ -603,24 +399,7 @@
                              "CustomArguments":  "",
                              "Version":  "latest",
                              "Enabled":  true,
-                             "InstallOrder":  33,
-                             "Source":  "winget"
-                         },
-                         {
-                             "Id":  "Windscribe.Windscribe",
-                             "Name":  "Windscribe",
-                             "Publisher":  "Windscribe Limited",
-                             "Description":  "Güçlü güvenlik duvarı ve reklam/izleyici engelleme özellikli masaüstü VPN uygulaması.",
-                             "Category":  "utilities",
-                             "Website":  "https://windscribe.com/",
-                             "InstallType":  "standard",
-                             "Architecture":  "x64",
-                             "Scope":  "machine",
-                             "SilentInstall":  true,
-                             "CustomArguments":  "",
-                             "Version":  "latest",
-                             "Enabled":  true,
-                             "InstallOrder":  34,
+                             "InstallOrder":  21,
                              "Source":  "winget"
                          },
                          {
@@ -637,24 +416,7 @@
                              "CustomArguments":  "",
                              "Version":  "latest",
                              "Enabled":  true,
-                             "InstallOrder":  35,
-                             "Source":  "winget"
-                         },
-                         {
-                             "Id":  "GlassWire.GlassWire",
-                             "Name":  "GlassWire",
-                             "Publisher":  "GlassWire",
-                             "Description":  "Ağ etkinliğinizi grafiklerle görselleştiren, anlık veri kullanımını izleyen ve şüpheli bağlantıları uyaran güvenlik duvarı.",
-                             "Category":  "utilities",
-                             "Website":  "https://www.glasswire.com/",
-                             "InstallType":  "standard",
-                             "Architecture":  "x64",
-                             "Scope":  "machine",
-                             "SilentInstall":  true,
-                             "CustomArguments":  "",
-                             "Version":  "latest",
-                             "Enabled":  true,
-                             "InstallOrder":  36,
+                             "InstallOrder":  22,
                              "Source":  "winget"
                          },
                          {
@@ -671,7 +433,7 @@
                              "CustomArguments":  "",
                              "Version":  "latest",
                              "Enabled":  true,
-                             "InstallOrder":  37,
+                             "InstallOrder":  23,
                              "Source":  "winget"
                          },
                          {
@@ -688,7 +450,7 @@
                              "CustomArguments":  "",
                              "Version":  "latest",
                              "Enabled":  true,
-                             "InstallOrder":  38,
+                             "InstallOrder":  24,
                              "Source":  "winget"
                          },
                          {
@@ -705,7 +467,7 @@
                              "CustomArguments":  "",
                              "Version":  "latest",
                              "Enabled":  true,
-                             "InstallOrder":  39,
+                             "InstallOrder":  25,
                              "Source":  "winget"
                          },
                          {
@@ -722,211 +484,7 @@
                              "CustomArguments":  "",
                              "Version":  "latest",
                              "Enabled":  true,
-                             "InstallOrder":  40,
-                             "Source":  "winget"
-                         },
-                         {
-                             "Id":  "xanderfrangos.twinkletray",
-                             "Name":  "Twinkle Tray",
-                             "Publisher":  "Alexander Frangos",
-                             "Description":  "Birden fazla harici DDC/CI monitörün parlaklık ve kontrastını sistem tepsisinden kolayca ayarlayan araç.",
-                             "Category":  "utilities",
-                             "Website":  "https://twinkletray.com/",
-                             "InstallType":  "standard",
-                             "Architecture":  "x64",
-                             "Scope":  "machine",
-                             "SilentInstall":  true,
-                             "CustomArguments":  "",
-                             "Version":  "latest",
-                             "Enabled":  true,
-                             "InstallOrder":  41,
-                             "Source":  "winget"
-                         },
-                         {
-                             "Id":  "File-New-Project.EarTrumpet",
-                             "Name":  "EarTrumpet",
-                             "Publisher":  "File-New-Project",
-                             "Description":  "Her uygulama için ayrı ses seviyesi kontrolü sunan modern ve pratik Windows ses mikseri eklentisi.",
-                             "Category":  "utilities",
-                             "Website":  "https://eartrumpet.app/",
-                             "InstallType":  "standard",
-                             "Architecture":  "x64",
-                             "Scope":  "user",
-                             "SilentInstall":  true,
-                             "CustomArguments":  "",
-                             "Version":  "latest",
-                             "Enabled":  true,
-                             "InstallOrder":  42,
-                             "Source":  "winget"
-                         },
-                         {
-                             "Id":  "AntibodySoftware.WizFile",
-                             "Name":  "WizFile",
-                             "Publisher":  "Antibody Software",
-                             "Description":  "NTFS MFT indeksini kullanarak bilgisayarınızdaki tüm dosyaları anında arayan son derece hızlı dosya arama motoru.",
-                             "Category":  "utilities",
-                             "Website":  "https://wizfile.com/",
-                             "InstallType":  "standard",
-                             "Architecture":  "x64",
-                             "Scope":  "machine",
-                             "SilentInstall":  true,
-                             "CustomArguments":  "",
-                             "Version":  "latest",
-                             "Enabled":  true,
-                             "InstallOrder":  43,
-                             "Source":  "winget"
-                         },
-                         {
-                             "Id":  "flux.flux",
-                             "Name":  "f.lux",
-                             "Publisher":  "f.lux Software LLC",
-                             "Description":  "Günün saatine göre ekran renk sıcaklığını otomatik ayarlayarak göz yorgunluğunu azaltan mavi ışık filtresi.",
-                             "Category":  "utilities",
-                             "Website":  "https://justgetflux.com/",
-                             "InstallType":  "standard",
-                             "Architecture":  "x64",
-                             "Scope":  "user",
-                             "SilentInstall":  true,
-                             "CustomArguments":  "",
-                             "Version":  "latest",
-                             "Enabled":  true,
-                             "InstallOrder":  44,
-                             "Source":  "winget"
-                         },
-                         {
-                             "Id":  "Piriform.Speccy",
-                             "Name":  "Speccy",
-                             "Publisher":  "Piriform",
-                             "Description":  "İşlemci, anakart, RAM, ekran kartı ve diskler hakkında özet ve detaylı teknik bilgi veren donanım aracı.",
-                             "Category":  "utilities",
-                             "Website":  "https://www.ccleaner.com/speccy",
-                             "InstallType":  "standard",
-                             "Architecture":  "x64",
-                             "Scope":  "machine",
-                             "SilentInstall":  true,
-                             "CustomArguments":  "",
-                             "Version":  "latest",
-                             "Enabled":  true,
-                             "InstallOrder":  45,
-                             "Source":  "winget"
-                         },
-                         {
-                             "Id":  "9NBLGGH5R558",
-                             "Name":  "Microsoft To Do",
-                             "Publisher":  "Microsoft Corporation",
-                             "Description":  "Günlük planlama, görev takibi ve anımsatıcılar sağlayan bulut senkronizasyonlu yapılacaklar listesi.",
-                             "Category":  "utilities",
-                             "Website":  "https://to-do.microsoft.com/",
-                             "InstallType":  "standard",
-                             "Architecture":  "x64",
-                             "Scope":  "user",
-                             "SilentInstall":  true,
-                             "CustomArguments":  "",
-                             "Version":  "latest",
-                             "Enabled":  true,
-                             "InstallOrder":  46,
-                             "Source":  "msstore"
-                         },
-                         {
-                             "Id":  "Joplin.Joplin",
-                             "Name":  "Joplin",
-                             "Publisher":  "Laurent Cozic",
-                             "Description":  "Uçtan uca şifreleme ve Markdown desteğine sahip güvenli açık kaynaklı not alma ve to-do uygulaması.",
-                             "Category":  "utilities",
-                             "Website":  "https://joplinapp.org/",
-                             "InstallType":  "standard",
-                             "Architecture":  "x64",
-                             "Scope":  "user",
-                             "SilentInstall":  true,
-                             "CustomArguments":  "",
-                             "Version":  "latest",
-                             "Enabled":  true,
-                             "InstallOrder":  47,
-                             "Source":  "winget"
-                         },
-                         {
-                             "Id":  "Mozilla.Thunderbird",
-                             "Name":  "Mozilla Thunderbird",
-                             "Publisher":  "Mozilla Foundation",
-                             "Description":  "E-posta, takvim, adres defteri ve sohbeti birleştiren açık kaynaklı profesyonel masaüstü e-posta istemcisi.",
-                             "Category":  "utilities",
-                             "Website":  "https://www.thunderbird.net/",
-                             "InstallType":  "standard",
-                             "Architecture":  "x64",
-                             "Scope":  "machine",
-                             "SilentInstall":  true,
-                             "CustomArguments":  "",
-                             "Version":  "latest",
-                             "Enabled":  true,
-                             "InstallOrder":  48,
-                             "Source":  "winget"
-                         },
-                         {
-                             "Id":  "Ditto.Ditto",
-                             "Name":  "Ditto",
-                             "Publisher":  "Scott Brogden",
-                             "Description":  "Kopyaladığınız tüm metin ve görselleri kaydederek daha sonra tekrar erişmenizi sağlayan gelişmiş pano yöneticisi.",
-                             "Category":  "utilities",
-                             "Website":  "https://ditto-cp.sourceforge.io/",
-                             "InstallType":  "standard",
-                             "Architecture":  "x64",
-                             "Scope":  "machine",
-                             "SilentInstall":  true,
-                             "CustomArguments":  "",
-                             "Version":  "latest",
-                             "Enabled":  true,
-                             "InstallOrder":  49,
-                             "Source":  "winget"
-                         },
-                         {
-                             "Id":  "Flow-Launcher.Flow-Launcher",
-                             "Name":  "Flow Launcher",
-                             "Publisher":  "Flow Launcher",
-                             "Description":  "Dosyaları, uygulamaları, yer imlerini ve web aramalarını klavyeden ışık hızında başlatan modern arama çubuğu.",
-                             "Category":  "utilities",
-                             "Website":  "https://www.flowlauncher.com/",
-                             "InstallType":  "standard",
-                             "Architecture":  "x64",
-                             "Scope":  "user",
-                             "SilentInstall":  true,
-                             "CustomArguments":  "",
-                             "Version":  "latest",
-                             "Enabled":  true,
-                             "InstallOrder":  50,
-                             "Source":  "winget"
-                         },
-                         {
-                             "Id":  "AutoHotkey.AutoHotkey",
-                             "Name":  "AutoHotkey",
-                             "Publisher":  "Lexikos",
-                             "Description":  "Klavye kısayolları, makrolar ve masaüstü otomasyonları oluşturmanızı sağlayan güçlü betik dili.",
-                             "Category":  "utilities",
-                             "Website":  "https://www.autohotkey.com/",
-                             "InstallType":  "standard",
-                             "Architecture":  "x64",
-                             "Scope":  "machine",
-                             "SilentInstall":  true,
-                             "CustomArguments":  "",
-                             "Version":  "latest",
-                             "Enabled":  true,
-                             "InstallOrder":  51,
-                             "Source":  "winget"
-                         },
-                         {
-                             "Id":  "srwi.EverythingToolbar.Deskband",
-                             "Name":  "EverythingToolbar",
-                             "Publisher":  "Stephan Rumswinkel",
-                             "Description":  "Windows görev çubuğuna doğrudan Everything arama kutusu ekleyerek anında dosya araması sunan eklenti.",
-                             "Category":  "utilities",
-                             "Website":  "https://github.com/srwi/EverythingToolbar",
-                             "InstallType":  "standard",
-                             "Architecture":  "x64",
-                             "Scope":  "machine",
-                             "SilentInstall":  true,
-                             "CustomArguments":  "",
-                             "Version":  "latest",
-                             "Enabled":  true,
-                             "InstallOrder":  52,
+                             "InstallOrder":  26,
                              "Source":  "winget"
                          },
                          {
@@ -943,7 +501,7 @@
                              "CustomArguments":  "",
                              "Version":  "latest",
                              "Enabled":  true,
-                             "InstallOrder":  53,
+                             "InstallOrder":  27,
                              "Source":  "winget"
                          },
                          {
@@ -960,7 +518,7 @@
                              "CustomArguments":  "",
                              "Version":  "latest",
                              "Enabled":  true,
-                             "InstallOrder":  54,
+                             "InstallOrder":  28,
                              "Source":  "winget"
                          },
                          {
@@ -977,7 +535,7 @@
                              "CustomArguments":  "",
                              "Version":  "latest",
                              "Enabled":  true,
-                             "InstallOrder":  55,
+                             "InstallOrder":  29,
                              "Source":  "winget"
                          },
                          {
@@ -994,7 +552,7 @@
                              "CustomArguments":  "",
                              "Version":  "latest",
                              "Enabled":  true,
-                             "InstallOrder":  56,
+                             "InstallOrder":  30,
                              "Source":  "winget"
                          },
                          {
@@ -1011,7 +569,7 @@
                              "CustomArguments":  "",
                              "Version":  "latest",
                              "Enabled":  true,
-                             "InstallOrder":  57,
+                             "InstallOrder":  31,
                              "Source":  "winget"
                          },
                          {
@@ -1028,7 +586,7 @@
                              "CustomArguments":  "",
                              "Version":  "latest",
                              "Enabled":  true,
-                             "InstallOrder":  58,
+                             "InstallOrder":  32,
                              "Source":  "winget"
                          },
                          {
@@ -1045,7 +603,7 @@
                              "CustomArguments":  "",
                              "Version":  "latest",
                              "Enabled":  true,
-                             "InstallOrder":  59,
+                             "InstallOrder":  33,
                              "Source":  "winget"
                          },
                          {
@@ -1062,41 +620,7 @@
                              "CustomArguments":  "",
                              "Version":  "latest",
                              "Enabled":  true,
-                             "InstallOrder":  60,
-                             "Source":  "winget"
-                         },
-                         {
-                             "Id":  "KDE.Krita",
-                             "Name":  "Krita",
-                             "Publisher":  "Krita Foundation",
-                             "Description":  "Konsept sanatçıları, illüstratörler ve çizgi roman yaratıcıları için tasarlanmış profesyonel dijital çizim stüdyosu.",
-                             "Category":  "media",
-                             "Website":  "https://krita.org/",
-                             "InstallType":  "standard",
-                             "Architecture":  "x64",
-                             "Scope":  "machine",
-                             "SilentInstall":  true,
-                             "CustomArguments":  "",
-                             "Version":  "latest",
-                             "Enabled":  true,
-                             "InstallOrder":  61,
-                             "Source":  "winget"
-                         },
-                         {
-                             "Id":  "Inkscape.Inkscape",
-                             "Name":  "Inkscape",
-                             "Publisher":  "Inkscape Community",
-                             "Description":  "Vektörel grafik tasarımı ve SVG düzenleme için endüstri standardı açık kaynaklı çizim aracı.",
-                             "Category":  "media",
-                             "Website":  "https://inkscape.org/",
-                             "InstallType":  "standard",
-                             "Architecture":  "x64",
-                             "Scope":  "machine",
-                             "SilentInstall":  true,
-                             "CustomArguments":  "",
-                             "Version":  "latest",
-                             "Enabled":  true,
-                             "InstallOrder":  62,
+                             "InstallOrder":  34,
                              "Source":  "winget"
                          },
                          {
@@ -1113,7 +637,7 @@
                              "CustomArguments":  "",
                              "Version":  "latest",
                              "Enabled":  true,
-                             "InstallOrder":  63,
+                             "InstallOrder":  35,
                              "Source":  "winget"
                          },
                          {
@@ -1130,7 +654,7 @@
                              "CustomArguments":  "",
                              "Version":  "latest",
                              "Enabled":  true,
-                             "InstallOrder":  64,
+                             "InstallOrder":  36,
                              "Source":  "winget"
                          },
                          {
@@ -1147,7 +671,7 @@
                              "CustomArguments":  "",
                              "Version":  "latest",
                              "Enabled":  true,
-                             "InstallOrder":  65,
+                             "InstallOrder":  37,
                              "Source":  "winget"
                          },
                          {
@@ -1164,177 +688,7 @@
                              "CustomArguments":  "",
                              "Version":  "latest",
                              "Enabled":  true,
-                             "InstallOrder":  66,
-                             "Source":  "winget"
-                         },
-                         {
-                             "Id":  "Flameshot.Flameshot",
-                             "Name":  "Flameshot",
-                             "Publisher":  "Flameshot Team",
-                             "Description":  "Sezgisel arayüze ve anında çizim/ok işaretleme araçlarına sahip açık kaynaklı ekran görüntüsü alma yazılımı.",
-                             "Category":  "media",
-                             "Website":  "https://flameshot.org/",
-                             "InstallType":  "standard",
-                             "Architecture":  "x64",
-                             "Scope":  "machine",
-                             "SilentInstall":  true,
-                             "CustomArguments":  "",
-                             "Version":  "latest",
-                             "Enabled":  true,
-                             "InstallOrder":  67,
-                             "Source":  "winget"
-                         },
-                         {
-                             "Id":  "9NBLGGH4TWWG",
-                             "Name":  "PhotoScape X",
-                             "Publisher":  "Mooii Tech",
-                             "Description":  "Filtreler, kırpma, kolaj ve toplu düzenleme araçları sunan pratik hepsi-bir-arada fotoğraf editörü.",
-                             "Category":  "media",
-                             "Website":  "http://x.photoscape.org/",
-                             "InstallType":  "standard",
-                             "Architecture":  "x64",
-                             "Scope":  "user",
-                             "SilentInstall":  true,
-                             "CustomArguments":  "",
-                             "Version":  "latest",
-                             "Enabled":  true,
-                             "InstallOrder":  68,
-                             "Source":  "msstore"
-                         },
-                         {
-                             "Id":  "darktable.darktable",
-                             "Name":  "Darktable",
-                             "Publisher":  "darktable",
-                             "Description":  "Profesyonel RAW fotoğraf işleme ve dijital karanlık oda iş akışı yazılımı.",
-                             "Category":  "media",
-                             "Website":  "https://www.darktable.org/",
-                             "InstallType":  "standard",
-                             "Architecture":  "x64",
-                             "Scope":  "machine",
-                             "SilentInstall":  true,
-                             "CustomArguments":  "",
-                             "Version":  "latest",
-                             "Enabled":  true,
-                             "InstallOrder":  69,
-                             "Source":  "winget"
-                         },
-                         {
-                             "Id":  "9P4CLT2RJ1RS",
-                             "Name":  "MusicBee",
-                             "Publisher":  "Steven Mayall",
-                             "Description":  "Kapsamlı etiketleme, akıllı çalma listeleri ve ses optimizasyonu sunan profesyonel müzik yöneticisi ve çalar.",
-                             "Category":  "media",
-                             "Website":  "https://getmusicbee.com/",
-                             "InstallType":  "standard",
-                             "Architecture":  "x64",
-                             "Scope":  "user",
-                             "SilentInstall":  true,
-                             "CustomArguments":  "",
-                             "Version":  "latest",
-                             "Enabled":  true,
-                             "InstallOrder":  70,
-                             "Source":  "msstore"
-                         },
-                         {
-                             "Id":  "AIMP.AIMP",
-                             "Name":  "AIMP",
-                             "Publisher":  "Artem Izmaylov",
-                             "Description":  "32-bit ses işleme motoru, çoklu ekolayzır ve ses dönüştürücü özelliklerine sahip kristal sesli müzik çalar.",
-                             "Category":  "media",
-                             "Website":  "https://www.aimp.ru/",
-                             "InstallType":  "standard",
-                             "Architecture":  "x64",
-                             "Scope":  "machine",
-                             "SilentInstall":  true,
-                             "CustomArguments":  "",
-                             "Version":  "latest",
-                             "Enabled":  true,
-                             "InstallOrder":  71,
-                             "Source":  "winget"
-                         },
-                         {
-                             "Id":  "PeterPawlowski.foobar2000",
-                             "Name":  "foobar2000",
-                             "Publisher":  "Peter Pawlowski",
-                             "Description":  "Aşırı düşük kaynak kullanımı, yüksek özelleştirilebilirlik ve odyofil kalitesinde ses sunan hafif müzik çalar.",
-                             "Category":  "media",
-                             "Website":  "https://www.foobar2000.org/",
-                             "InstallType":  "standard",
-                             "Architecture":  "x64",
-                             "Scope":  "machine",
-                             "SilentInstall":  true,
-                             "CustomArguments":  "",
-                             "Version":  "latest",
-                             "Enabled":  true,
-                             "InstallOrder":  72,
-                             "Source":  "winget"
-                         },
-                         {
-                             "Id":  "mpv.net",
-                             "Name":  "mpv",
-                             "Publisher":  "mpv.net Community",
-                             "Description":  "Gelişmiş GPU video işleme motoruna sahip, minimalist ve modern multimedya oynatıcı.",
-                             "Category":  "media",
-                             "Website":  "https://mpv.io/",
-                             "InstallType":  "standard",
-                             "Architecture":  "x64",
-                             "Scope":  "machine",
-                             "SilentInstall":  true,
-                             "CustomArguments":  "",
-                             "Version":  "latest",
-                             "Enabled":  true,
-                             "InstallOrder":  73,
-                             "Source":  "winget"
-                         },
-                         {
-                             "Id":  "XBMCFoundation.Kodi",
-                             "Name":  "Kodi",
-                             "Publisher":  "XBMC Foundation",
-                             "Description":  "Filmler, diziler, müzikler ve canlı yayınlar için ev sineması ve açık kaynaklı medya merkezi.",
-                             "Category":  "media",
-                             "Website":  "https://kodi.tv/",
-                             "InstallType":  "standard",
-                             "Architecture":  "x64",
-                             "Scope":  "machine",
-                             "SilentInstall":  true,
-                             "CustomArguments":  "",
-                             "Version":  "latest",
-                             "Enabled":  true,
-                             "InstallOrder":  74,
-                             "Source":  "winget"
-                         },
-                         {
-                             "Id":  "Plex.Plex",
-                             "Name":  "Plex",
-                             "Publisher":  "Plex, Inc.",
-                             "Description":  "Tüm kişisel video ve müzik arşivinizi her cihazdan kolayca izlemenizi sağlayan masaüstü medya oynatıcı.",
-                             "Category":  "media",
-                             "Website":  "https://www.plex.tv/",
-                             "InstallType":  "standard",
-                             "Architecture":  "x64",
-                             "Scope":  "machine",
-                             "SilentInstall":  true,
-                             "CustomArguments":  "",
-                             "Version":  "latest",
-                             "Enabled":  true,
-                             "InstallOrder":  75,
-                             "Source":  "winget"
-                         },
-                         {
-                             "Id":  "Jellyfin.JellyfinMediaPlayer",
-                             "Name":  "Jellyfin Media Player",
-                             "Publisher":  "Jellyfin",
-                             "Description":  "Kişisel Jellyfin medya sunucunuza bağlanıp videolarınızı doğrudan donanım hızlandırmasıyla izleyen açık kaynaklı istemci.",
-                             "Category":  "media",
-                             "Website":  "https://jellyfin.org/",
-                             "InstallType":  "standard",
-                             "Architecture":  "x64",
-                             "Scope":  "machine",
-                             "SilentInstall":  true,
-                             "CustomArguments":  "",
-                             "Version":  "latest",
-                             "Enabled":  true,
-                             "InstallOrder":  76,
+                             "InstallOrder":  38,
                              "Source":  "winget"
                          },
                          {
@@ -1351,24 +705,7 @@
                              "CustomArguments":  "",
                              "Version":  "latest",
                              "Enabled":  true,
-                             "InstallOrder":  77,
-                             "Source":  "winget"
-                         },
-                         {
-                             "Id":  "VentisMedia.MediaMonkey.2024",
-                             "Name":  "MediaMonkey",
-                             "Publisher":  "Ventis Media, Inc.",
-                             "Description":  "Büyük video ve müzik koleksiyonlarını yönetmek, etiketlemek, dönüştürmek ve senkronize etmek için güçlü medya yöneticisi.",
-                             "Category":  "media",
-                             "Website":  "https://www.mediamonkey.com/",
-                             "InstallType":  "standard",
-                             "Architecture":  "x64",
-                             "Scope":  "machine",
-                             "SilentInstall":  true,
-                             "CustomArguments":  "",
-                             "Version":  "latest",
-                             "Enabled":  true,
-                             "InstallOrder":  78,
+                             "InstallOrder":  39,
                              "Source":  "winget"
                          },
                          {
@@ -1385,8 +722,27 @@
                              "CustomArguments":  "",
                              "Version":  "latest",
                              "Enabled":  true,
-                             "InstallOrder":  79,
+                             "InstallOrder":  40,
                              "Source":  "winget"
+                         },
+                         {
+                             "Id":  "Microsoft.Office365ProPlus",
+                             "Name":  "Microsoft Office 365 ProPlus (TR x64)",
+                             "Publisher":  "Microsoft Corporation",
+                             "Description":  "Microsoft 365 / Office ProPlus Turkce 64-bit Click-to-Run kurulumu.",
+                             "Category":  "office",
+                             "Website":  "https://www.office.com/",
+                             "InstallType":  "direct_url",
+                             "DownloadUrl":  "https://c2rsetup.officeapps.live.com/c2r/download.aspx?ProductreleaseID=O365ProPlusRetail\u0026platform=x64\u0026language=tr-tr\u0026version=O16GA",
+                             "InstallerFileName":  "OfficeSetup_O365ProPlusRetail_tr-tr_x64.exe",
+                             "Architecture":  "x64",
+                             "Scope":  "machine",
+                             "SilentInstall":  false,
+                             "CustomArguments":  "",
+                             "Version":  "latest",
+                             "Enabled":  true,
+                             "InstallOrder":  41,
+                             "Source":  "direct_url"
                          },
                          {
                              "Id":  "Adobe.Acrobat.Reader.64-bit",
@@ -1402,41 +758,7 @@
                              "CustomArguments":  "",
                              "Version":  "latest",
                              "Enabled":  true,
-                             "InstallOrder":  80,
-                             "Source":  "winget"
-                         },
-                         {
-                             "Id":  "Notion.Notion",
-                             "Name":  "Notion",
-                             "Publisher":  "Notion Labs Inc.",
-                             "Description":  "Not alma, proje yonetimi ve is birlikci calisma alani.",
-                             "Category":  "office",
-                             "Website":  "https://www.notion.so/",
-                             "InstallType":  "standard",
-                             "Architecture":  "x64",
-                             "Scope":  "user",
-                             "SilentInstall":  true,
-                             "CustomArguments":  "",
-                             "Version":  "latest",
-                             "Enabled":  true,
-                             "InstallOrder":  81,
-                             "Source":  "winget"
-                         },
-                         {
-                             "Id":  "Obsidian.Obsidian",
-                             "Name":  "Obsidian",
-                             "Publisher":  "Dynalist Inc.",
-                             "Description":  "Baglantili not alma ve kisisel bilgi yonetim araci.",
-                             "Category":  "office",
-                             "Website":  "https://obsidian.md/",
-                             "InstallType":  "standard",
-                             "Architecture":  "x64",
-                             "Scope":  "user",
-                             "SilentInstall":  true,
-                             "CustomArguments":  "",
-                             "Version":  "latest",
-                             "Enabled":  true,
-                             "InstallOrder":  82,
+                             "InstallOrder":  42,
                              "Source":  "winget"
                          },
                          {
@@ -1453,7 +775,7 @@
                              "CustomArguments":  "",
                              "Version":  "latest",
                              "Enabled":  true,
-                             "InstallOrder":  83,
+                             "InstallOrder":  43,
                              "Source":  "winget"
                          },
                          {
@@ -1470,24 +792,7 @@
                              "CustomArguments":  "",
                              "Version":  "latest",
                              "Enabled":  true,
-                             "InstallOrder":  84,
-                             "Source":  "winget"
-                         },
-                         {
-                             "Id":  "ONLYOFFICE.DesktopEditors",
-                             "Name":  "ONLYOFFICE Desktop Editors",
-                             "Publisher":  "Ascensio System SIA",
-                             "Description":  "MS Office biçimleriyle yüksek uyumluluğa sahip modern ve açık kaynaklı ofis paketi.",
-                             "Category":  "office",
-                             "Website":  "https://www.onlyoffice.com/",
-                             "InstallType":  "standard",
-                             "Architecture":  "x64",
-                             "Scope":  "machine",
-                             "SilentInstall":  true,
-                             "CustomArguments":  "",
-                             "Version":  "latest",
-                             "Enabled":  true,
-                             "InstallOrder":  85,
+                             "InstallOrder":  44,
                              "Source":  "winget"
                          },
                          {
@@ -1504,7 +809,7 @@
                              "CustomArguments":  "",
                              "Version":  "latest",
                              "Enabled":  true,
-                             "InstallOrder":  86,
+                             "InstallOrder":  45,
                              "Source":  "winget"
                          },
                          {
@@ -1521,92 +826,7 @@
                              "CustomArguments":  "",
                              "Version":  "latest",
                              "Enabled":  true,
-                             "InstallOrder":  87,
-                             "Source":  "winget"
-                         },
-                         {
-                             "Id":  "PDFsam.PDFsam",
-                             "Name":  "PDFsam Basic",
-                             "Publisher":  "Sober Lemur S.r.l.",
-                             "Description":  "PDF belgelerini bölmek, birleştirmek ve sayfalarını döndürmek için tasarlanmış açık kaynaklı araç.",
-                             "Category":  "office",
-                             "Website":  "https://pdfsam.org/",
-                             "InstallType":  "standard",
-                             "Architecture":  "x64",
-                             "Scope":  "machine",
-                             "SilentInstall":  true,
-                             "CustomArguments":  "",
-                             "Version":  "latest",
-                             "Enabled":  true,
-                             "InstallOrder":  88,
-                             "Source":  "winget"
-                         },
-                         {
-                             "Id":  "Foxit.FoxitReader",
-                             "Name":  "Foxit PDF Reader",
-                             "Publisher":  "Foxit Software Inc.",
-                             "Description":  "Gelişmiş açıklama, form doldurma ve imzalama yeteneklerine sahip popüler PDF okuyucu.",
-                             "Category":  "office",
-                             "Website":  "https://www.foxit.com/pdf-reader/",
-                             "InstallType":  "standard",
-                             "Architecture":  "x64",
-                             "Scope":  "machine",
-                             "SilentInstall":  true,
-                             "CustomArguments":  "",
-                             "Version":  "latest",
-                             "Enabled":  true,
-                             "InstallOrder":  89,
-                             "Source":  "winget"
-                         },
-                         {
-                             "Id":  "TrackerSoftware.PDF-XChangeEditor",
-                             "Name":  "PDF-XChange Editor",
-                             "Publisher":  "Tracker Software Products",
-                             "Description":  "Kapsamlı sayfa düzenleme, OCR ve not ekleme özelliklerine sahip zengin özellikli PDF düzenleyici.",
-                             "Category":  "office",
-                             "Website":  "https://www.tracker-software.com/",
-                             "InstallType":  "standard",
-                             "Architecture":  "x64",
-                             "Scope":  "machine",
-                             "SilentInstall":  true,
-                             "CustomArguments":  "",
-                             "Version":  "latest",
-                             "Enabled":  true,
-                             "InstallOrder":  90,
-                             "Source":  "winget"
-                         },
-                         {
-                             "Id":  "calibre.calibre",
-                             "Name":  "Calibre",
-                             "Publisher":  "Kovid Goyal",
-                             "Description":  "E-kitap koleksiyonu yönetimi, biçim dönüştürme ve okuma için standart kabul edilen açık kaynaklı araç.",
-                             "Category":  "office",
-                             "Website":  "https://calibre-ebook.com/",
-                             "InstallType":  "standard",
-                             "Architecture":  "x64",
-                             "Scope":  "machine",
-                             "SilentInstall":  true,
-                             "CustomArguments":  "",
-                             "Version":  "latest",
-                             "Enabled":  true,
-                             "InstallOrder":  91,
-                             "Source":  "winget"
-                         },
-                         {
-                             "Id":  "KDE.Okular",
-                             "Name":  "Okular",
-                             "Publisher":  "KDE",
-                             "Description":  "KDE tarafından geliştirilen çok formatlı (PDF, ePub, DjVu) evrensel belge ve kitap görüntüleyici.",
-                             "Category":  "office",
-                             "Website":  "https://okular.kde.org/",
-                             "InstallType":  "standard",
-                             "Architecture":  "x64",
-                             "Scope":  "machine",
-                             "SilentInstall":  true,
-                             "CustomArguments":  "",
-                             "Version":  "latest",
-                             "Enabled":  true,
-                             "InstallOrder":  92,
+                             "InstallOrder":  46,
                              "Source":  "winget"
                          },
                          {
@@ -1623,7 +843,7 @@
                              "CustomArguments":  "",
                              "Version":  "latest",
                              "Enabled":  true,
-                             "InstallOrder":  93,
+                             "InstallOrder":  47,
                              "Source":  "msstore"
                          },
                          {
@@ -1640,7 +860,7 @@
                              "CustomArguments":  "",
                              "Version":  "latest",
                              "Enabled":  true,
-                             "InstallOrder":  94,
+                             "InstallOrder":  48,
                              "Source":  "winget"
                          },
                          {
@@ -1657,7 +877,7 @@
                              "CustomArguments":  "",
                              "Version":  "latest",
                              "Enabled":  true,
-                             "InstallOrder":  95,
+                             "InstallOrder":  49,
                              "Source":  "winget"
                          },
                          {
@@ -1674,7 +894,7 @@
                              "CustomArguments":  "",
                              "Version":  "latest",
                              "Enabled":  true,
-                             "InstallOrder":  96,
+                             "InstallOrder":  50,
                              "Source":  "winget"
                          },
                          {
@@ -1691,7 +911,7 @@
                              "CustomArguments":  "",
                              "Version":  "latest",
                              "Enabled":  true,
-                             "InstallOrder":  97,
+                             "InstallOrder":  51,
                              "Source":  "winget"
                          },
                          {
@@ -1708,24 +928,7 @@
                              "CustomArguments":  "",
                              "Version":  "latest",
                              "Enabled":  true,
-                             "InstallOrder":  98,
-                             "Source":  "winget"
-                         },
-                         {
-                             "Id":  "Dropbox.Dropbox",
-                             "Name":  "Dropbox",
-                             "Publisher":  "Dropbox, Inc.",
-                             "Description":  "Bulut depolama, dosya senkronizasyonu ve ekip içi işbirliği istemcisi.",
-                             "Category":  "communication",
-                             "Website":  "https://www.dropbox.com/",
-                             "InstallType":  "standard",
-                             "Architecture":  "x64",
-                             "Scope":  "machine",
-                             "SilentInstall":  true,
-                             "CustomArguments":  "",
-                             "Version":  "latest",
-                             "Enabled":  true,
-                             "InstallOrder":  99,
+                             "InstallOrder":  52,
                              "Source":  "winget"
                          },
                          {
@@ -1742,7 +945,7 @@
                              "CustomArguments":  "",
                              "Version":  "latest",
                              "Enabled":  true,
-                             "InstallOrder":  100,
+                             "InstallOrder":  53,
                              "Source":  "winget"
                          },
                          {
@@ -1759,7 +962,7 @@
                              "CustomArguments":  "",
                              "Version":  "latest",
                              "Enabled":  true,
-                             "InstallOrder":  101,
+                             "InstallOrder":  54,
                              "Source":  "winget"
                          },
                          {
@@ -1776,58 +979,7 @@
                              "CustomArguments":  "",
                              "Version":  "latest",
                              "Enabled":  true,
-                             "InstallOrder":  102,
-                             "Source":  "winget"
-                         },
-                         {
-                             "Id":  "OpenWhisperSystems.Signal",
-                             "Name":  "Signal",
-                             "Publisher":  "Signal Messenger LLC",
-                             "Description":  "Gizlilik odaklı, uçtan uca şifreli güvenli anlık mesajlaşma ve sesli/görüntülü görüşme istemcisi.",
-                             "Category":  "communication",
-                             "Website":  "https://signal.org/",
-                             "InstallType":  "standard",
-                             "Architecture":  "x64",
-                             "Scope":  "user",
-                             "SilentInstall":  true,
-                             "CustomArguments":  "",
-                             "Version":  "latest",
-                             "Enabled":  true,
-                             "InstallOrder":  103,
-                             "Source":  "winget"
-                         },
-                         {
-                             "Id":  "XPFM5P5KDWF0JP",
-                             "Name":  "Viber",
-                             "Publisher":  "Viber Media S.A R.L.",
-                             "Description":  "Grup sohbetleri, sesli ve görüntülü arama desteği sunan popüler mesajlaşma uygulaması.",
-                             "Category":  "communication",
-                             "Website":  "https://www.viber.com/",
-                             "InstallType":  "standard",
-                             "Architecture":  "x64",
-                             "Scope":  "machine",
-                             "SilentInstall":  true,
-                             "CustomArguments":  "",
-                             "Version":  "latest",
-                             "Enabled":  true,
-                             "InstallOrder":  104,
-                             "Source":  "msstore"
-                         },
-                         {
-                             "Id":  "Element.Element",
-                             "Name":  "Element",
-                             "Publisher":  "Element",
-                             "Description":  "Matrix protokolü üzerinde çalışan, merkeziyetsiz ve uçtan uca şifreli güvenli iletişim platformu.",
-                             "Category":  "communication",
-                             "Website":  "https://element.io/",
-                             "InstallType":  "standard",
-                             "Architecture":  "x64",
-                             "Scope":  "user",
-                             "SilentInstall":  true,
-                             "CustomArguments":  "",
-                             "Version":  "latest",
-                             "Enabled":  true,
-                             "InstallOrder":  105,
+                             "InstallOrder":  55,
                              "Source":  "winget"
                          },
                          {
@@ -1844,7 +996,7 @@
                              "CustomArguments":  "",
                              "Version":  "latest",
                              "Enabled":  true,
-                             "InstallOrder":  106,
+                             "InstallOrder":  56,
                              "Source":  "winget"
                          },
                          {
@@ -1861,7 +1013,7 @@
                              "CustomArguments":  "",
                              "Version":  "latest",
                              "Enabled":  true,
-                             "InstallOrder":  107,
+                             "InstallOrder":  57,
                              "Source":  "winget"
                          },
                          {
@@ -1878,7 +1030,7 @@
                              "CustomArguments":  "",
                              "Version":  "latest",
                              "Enabled":  true,
-                             "InstallOrder":  108,
+                             "InstallOrder":  58,
                              "Source":  "winget"
                          },
                          {
@@ -1895,7 +1047,7 @@
                              "CustomArguments":  "",
                              "Version":  "latest",
                              "Enabled":  true,
-                             "InstallOrder":  109,
+                             "InstallOrder":  59,
                              "Source":  "winget"
                          },
                          {
@@ -1912,7 +1064,7 @@
                              "CustomArguments":  "",
                              "Version":  "latest",
                              "Enabled":  true,
-                             "InstallOrder":  110,
+                             "InstallOrder":  60,
                              "Source":  "winget"
                          },
                          {
@@ -1929,7 +1081,7 @@
                              "CustomArguments":  "",
                              "Version":  "latest",
                              "Enabled":  true,
-                             "InstallOrder":  111,
+                             "InstallOrder":  61,
                              "Source":  "winget"
                          },
                          {
@@ -1946,7 +1098,7 @@
                              "CustomArguments":  "",
                              "Version":  "latest",
                              "Enabled":  true,
-                             "InstallOrder":  112,
+                             "InstallOrder":  62,
                              "Source":  "winget"
                          },
                          {
@@ -1963,7 +1115,7 @@
                              "CustomArguments":  "",
                              "Version":  "latest",
                              "Enabled":  true,
-                             "InstallOrder":  113,
+                             "InstallOrder":  63,
                              "Source":  "winget"
                          },
                          {
@@ -1980,7 +1132,7 @@
                              "CustomArguments":  "",
                              "Version":  "latest",
                              "Enabled":  true,
-                             "InstallOrder":  114,
+                             "InstallOrder":  64,
                              "Source":  "winget"
                          },
                          {
@@ -1997,7 +1149,7 @@
                              "CustomArguments":  "",
                              "Version":  "latest",
                              "Enabled":  true,
-                             "InstallOrder":  115,
+                             "InstallOrder":  65,
                              "Source":  "winget"
                          },
                          {
@@ -2014,7 +1166,7 @@
                              "CustomArguments":  "",
                              "Version":  "latest",
                              "Enabled":  true,
-                             "InstallOrder":  116,
+                             "InstallOrder":  66,
                              "Source":  "winget"
                          },
                          {
@@ -2031,24 +1183,7 @@
                              "CustomArguments":  "",
                              "Version":  "latest",
                              "Enabled":  true,
-                             "InstallOrder":  117,
-                             "Source":  "winget"
-                         },
-                         {
-                             "Id":  "Insomnia.Insomnia",
-                             "Name":  "Insomnia",
-                             "Publisher":  "Kong Inc.",
-                             "Description":  "Hızlı, sezgisel ve modern REST, GraphQL ve gRPC API istemcisi ve geliştirici aracı.",
-                             "Category":  "developer",
-                             "Website":  "https://insomnia.rest/",
-                             "InstallType":  "standard",
-                             "Architecture":  "x64",
-                             "Scope":  "user",
-                             "SilentInstall":  true,
-                             "CustomArguments":  "",
-                             "Version":  "latest",
-                             "Enabled":  true,
-                             "InstallOrder":  118,
+                             "InstallOrder":  67,
                              "Source":  "winget"
                          },
                          {
@@ -2065,24 +1200,7 @@
                              "CustomArguments":  "",
                              "Version":  "latest",
                              "Enabled":  true,
-                             "InstallOrder":  119,
-                             "Source":  "winget"
-                         },
-                         {
-                             "Id":  "DBBrowserForSQLite.DBBrowserForSQLite",
-                             "Name":  "DB Browser for SQLite",
-                             "Publisher":  "DB Browser for SQLite Team",
-                             "Description":  "SQLite veritabanı dosyalarını oluşturmak, tasarlamak ve düzenlemek için yüksek kaliteli açık kaynaklı araç.",
-                             "Category":  "developer",
-                             "Website":  "https://sqlitebrowser.org/",
-                             "InstallType":  "standard",
-                             "Architecture":  "x64",
-                             "Scope":  "machine",
-                             "SilentInstall":  true,
-                             "CustomArguments":  "",
-                             "Version":  "latest",
-                             "Enabled":  true,
-                             "InstallOrder":  120,
+                             "InstallOrder":  68,
                              "Source":  "winget"
                          },
                          {
@@ -2099,24 +1217,7 @@
                              "CustomArguments":  "",
                              "Version":  "latest",
                              "Enabled":  true,
-                             "InstallOrder":  121,
-                             "Source":  "winget"
-                         },
-                         {
-                             "Id":  "PuTTY.PuTTY",
-                             "Name":  "PuTTY",
-                             "Publisher":  "Simon Tatham",
-                             "Description":  "SSH, Telnet ve seri bağlantı noktaları için klasik, son derece hafif ve güvenilir terminal istemcisi.",
-                             "Category":  "developer",
-                             "Website":  "https://www.chiark.greenend.org.uk/~sgtatham/putty/",
-                             "InstallType":  "standard",
-                             "Architecture":  "x64",
-                             "Scope":  "machine",
-                             "SilentInstall":  true,
-                             "CustomArguments":  "",
-                             "Version":  "latest",
-                             "Enabled":  true,
-                             "InstallOrder":  122,
+                             "InstallOrder":  69,
                              "Source":  "winget"
                          },
                          {
@@ -2133,24 +1234,7 @@
                              "CustomArguments":  "",
                              "Version":  "latest",
                              "Enabled":  true,
-                             "InstallOrder":  123,
-                             "Source":  "winget"
-                         },
-                         {
-                             "Id":  "Klocman.BulkCrapUninstaller",
-                             "Name":  "Bulk Crap Uninstaller",
-                             "Publisher":  "Marcin Szeniak",
-                             "Description":  "Yüzlerce programı ve Windows mağaza uygulamasını sessizce ve toplu şekilde kaldıran açık kaynaklı temizleme canavarı.",
-                             "Category":  "developer",
-                             "Website":  "https://www.bcuninstaller.com/",
-                             "InstallType":  "standard",
-                             "Architecture":  "x64",
-                             "Scope":  "machine",
-                             "SilentInstall":  true,
-                             "CustomArguments":  "",
-                             "Version":  "latest",
-                             "Enabled":  true,
-                             "InstallOrder":  124,
+                             "InstallOrder":  70,
                              "Source":  "winget"
                          },
                          {
@@ -2167,7 +1251,7 @@
                              "CustomArguments":  "",
                              "Version":  "latest",
                              "Enabled":  true,
-                             "InstallOrder":  125,
+                             "InstallOrder":  71,
                              "Source":  "winget"
                          },
                          {
@@ -2184,7 +1268,7 @@
                              "CustomArguments":  "",
                              "Version":  "latest",
                              "Enabled":  true,
-                             "InstallOrder":  126,
+                             "InstallOrder":  72,
                              "Source":  "winget"
                          },
                          {
@@ -2201,7 +1285,7 @@
                              "CustomArguments":  "",
                              "Version":  "latest",
                              "Enabled":  true,
-                             "InstallOrder":  127,
+                             "InstallOrder":  73,
                              "Source":  "winget"
                          },
                          {
@@ -2218,7 +1302,7 @@
                              "CustomArguments":  "",
                              "Version":  "latest",
                              "Enabled":  true,
-                             "InstallOrder":  128,
+                             "InstallOrder":  74,
                              "Source":  "winget"
                          }
                      ]

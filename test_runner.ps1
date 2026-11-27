@@ -629,16 +629,17 @@ $mainElevationOk = ($mainPs1Content -match "function Ensure-AdminPrivileges") -a
 Assert-Test -Name "60. main.ps1 icinde Ensure-AdminPrivileges ve Test-IsAdmin guvenlik kontrolu" -Condition $mainElevationOk
 
 # Test 61: Normal kullanici panelinden Yonetici Paneline erisimin engellenmesi
-$noCrossAccess = ($mainPs1Content -match "Normal kullanici panelinden Yonetici Paneline erisilemez") -and
-                 (-not ($mainPs1Content -match "\[19\] \| Yonetici Paneli"))
-Assert-Test -Name "61. Normal kullanici panelinden Yonetici Paneline gecisin engellenmesi" -Condition $noCrossAccess -Details "Kullanici menusunden secenek 19 kaldirildi ve gecis engellendi."
+$noCrossAccess = (-not ($mainPs1Content -match "\[19\] \| Yonetici Paneli")) -and
+                 ($mainPs1Content -match "Start-StandardUserLoop") -and
+                 ($mainPs1Content -match "Start-AdminPanelLoop")
+Assert-Test -Name "61. Normal kullanici panelinden Yonetici Paneline gecisin engellenmesi" -Condition $noCrossAccess -Details "Kullanici ve Yonetici panelleri ayrik dongulerde calisiyor."
 
 # Test 62: Kullanici Paneli ile Yonetici Paneli sekmelerinin tam ayrismasi
 $userMenuOk = ($mainPs1Content -match "KULLANICI PANELI - KATEGORI VE ARAC SECIMI") -and
               ($mainPs1Content -match "\[ 1\] \| Uygulama Kurulum") -and
               ($mainPs1Content -match "\[ 7\] \| Hizli Araclar") -and
               ($mainPs1Content -match "\[14\] \| Tani ve Onarim") -and
-              ($mainPs1Content -match "Seciminiz \[1-18 \| 20=Hakkinda \| 0=Cikis\]")
+              ($mainPs1Content -match "Seciminiz \[1-22 \| 0=Cikis\]")
 $adminMenuOk = ($mainPs1Content -match "AAU YONETICI PANELI - IDARI SISTEM VE VERITABANI") -and
                ($mainPs1Content -match "\[ 1\] \| Uygulama Katalogu Goruntule") -and
                ($mainPs1Content -match "\[ 2\] \| Yeni Uygulama Ekle") -and

@@ -550,6 +550,14 @@ function Invoke-UninstallSingleApp {
 
     if ($recordRemoved) {
         Write-Host "  [✓] Program kaydi artik bulunmuyor." -ForegroundColor Green
+        $cleanedReg = @(Remove-ProgramLeftoverRegistryKeys -App $App)
+        if ($cleanedReg.Count -gt 0) {
+            Write-Host "  [✓] $($cleanedReg.Count) adet kalinti Regedit kaydi temizlendi:" -ForegroundColor Green
+            foreach ($rk in $cleanedReg) {
+                Write-Host "      - $rk" -ForegroundColor DarkGray
+                Write-LogInfo "Regedit kalintisi silindi: $rk"
+            }
+        }
         Write-Host ""
         Write-Host "  Durum: Basariyla kaldirildi." -ForegroundColor Green
         Write-LogSuccess "$dispName basariyla kaldirildi (Sure: ${duration}s, Yontem: $methodUsed)"
@@ -576,6 +584,55 @@ function Invoke-UninstallSingleApp {
         Duration      = $duration
         ErrorMessage  = $errorMsg
     }
+}
+
+function Remove-ProgramLeftoverRegistryKeys {
+<#
+.SYNOPSIS
+    Program kaldirildiktan sonra arta kalan kayit defteri (Regedit) kalintilarini temizler.
+#>
+    param(
+        [Parameter(Mandatory)][PSCustomObject]$App
+    )
+
+    $removedKeys = [System.Collections.Generic.List[string]]::new()
+    $dispName = if ($App.Name) { "$($App.Name)".Trim() } else { "" }
+    $pubName  = if ($App.Publisher) { "$($App.Publisher)".Trim() } else { "" }
+
+    # 1. Kaldirma (Uninstall) kaydi hala duruyorsa temizle
+    if ($App.RegistryPath -and (Test-Path -LiteralPath $App.RegistryPath -ErrorAction SilentlyContinue)) {
+        try {
+            Remove-Item -LiteralPath $App.RegistryPath -Recurse -Force -ErrorAction Stop
+            $removedKeys.Add($App.RegistryPath)
+        } catch {}
+    }
+
+    # 2. HKCU / HKLM Software altindaki birebir program adi anahtarlarini temizle
+    if ($dispName -and $dispName.Length -ge 3) {
+        $safeName = $dispName -replace '[\\/:*?"<>|]', ''
+        $candidatePaths = @(
+            "HKCU:\Software\$safeName",
+            "HKLM:\SOFTWARE\$safeName",
+            "HKLM:\SOFTWARE\WOW6432Node\$safeName"
+        )
+        if ($pubName -and $pubName.Length -ge 2) {
+            $safePub = $pubName -replace '[\\/:*?"<>|]', ''
+            $candidatePaths += "HKCU:\Software\$safePub\$safeName"
+            $candidatePaths += "HKLM:\SOFTWARE\$safePub\$safeName"
+            $candidatePaths += "HKLM:\SOFTWARE\WOW6432Node\$safePub\$safeName"
+        }
+
+        foreach ($cp in ($candidatePaths | Select-Object -Unique)) {
+            if (Test-Path -LiteralPath $cp -ErrorAction SilentlyContinue) {
+                try {
+                    Remove-Item -LiteralPath $cp -Recurse -Force -ErrorAction Stop
+                    $removedKeys.Add($cp)
+                } catch {}
+            }
+        }
+    }
+
+    return $removedKeys.ToArray()
 }
 
 # ============================================================================
@@ -885,6 +942,9 @@ function Show-ProgramManagementCenter {
     sayfa degistirme karmaşasi olmadan tekli ve coklu kaldirma imkani veren
     merkezi program yonetim ekrani.
 #>
+    # Sekmeye her giriste listeyi otomatik yenile
+    $script:CachedInstalledPrograms = $null
+    $script:CachedWinGetMap = $null
     $searchFilter = ""
 
     $exitCenter = $false
@@ -896,8 +956,8 @@ function Show-ProgramManagementCenter {
         Draw-HorizontalLine -Width 86 -Color DarkCyan -Char "-"
         Write-Host ""
 
-        $allPrograms = if ($searchFilter) { Search-InstalledPrograms -Query $searchFilter }
-                       else { Get-InstalledPrograms }
+        $allPrograms = @(if ($searchFilter) { Search-InstalledPrograms -Query $searchFilter }
+                         else { Get-InstalledPrograms })
 
         $totalProgs = $allPrograms.Count
 

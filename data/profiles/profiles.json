@@ -1,21 +1,23 @@
 ﻿{
-    "version": "1.1.0",
-    "last_updated": "2026-11-15",
+    "version": "1.2.0",
+    "last_updated": "2026-11-27",
     "profiles": [
         {
             "id": "basic",
             "name": "Temel Kurulum",
-            "description": "Günlük kullanım için gerekli web tarayıcı, arşiv, medya ve sistem kütüphaneleri.",
+            "description": "Günlük kullanım için gerekli web tarayıcı, arşiv, medya, PDF ve sistem kütüphaneleri.",
             "applications": [
                 "Google.Chrome",
-                "VideoLAN.VLC",
+                "RARLab.WinRAR",
                 "7zip.7zip",
                 "voidtools.Everything",
+                "VideoLAN.VLC",
+                "Adobe.Acrobat.Reader.64-bit",
                 "Microsoft.VCRedist.2015+.x64",
                 "Microsoft.DirectX",
                 "Microsoft.DotNet.DesktopRuntime.8"
             ],
-            "created": "2026-11-14",
+            "created": "2026-11-27",
             "enabled": true
         },
         {
@@ -43,7 +45,26 @@
                 "Microsoft.DotNet.DesktopRuntime.8",
                 "Henry++.MemReduct"
             ],
-            "created": "2026-11-14",
+            "created": "2026-11-27",
+            "enabled": true
+        },
+        {
+            "id": "office_work",
+            "name": "Ofis & İş Verimliliği",
+            "description": "Microsoft Office 365, LibreOffice, PDF araçları, bulut depolama ve toplantı yazılımları.",
+            "applications": [
+                "Microsoft.Office365ProPlus",
+                "TheDocumentFoundation.LibreOffice",
+                "Adobe.Acrobat.Reader.64-bit",
+                "geeksoftwareGmbH.PDF24Creator",
+                "SumatraPDF.SumatraPDF",
+                "Zoom.Zoom",
+                "Google.GoogleDrive",
+                "Microsoft.OneDrive",
+                "LocalSend.LocalSend",
+                "7zip.7zip"
+            ],
+            "created": "2026-11-27",
             "enabled": true
         },
         {
@@ -56,40 +77,17 @@
                 "GitHub.GitHubDesktop",
                 "Python.Python.3.12",
                 "OpenJS.NodeJS.LTS",
+                "Notepad++.Notepad++",
                 "Docker.DockerDesktop",
                 "Postman.Postman",
                 "DBeaver.DBeaver.Community",
-                "DBBrowserForSQLite.DBBrowserForSQLite",
                 "WinSCP.WinSCP",
-                "PuTTY.PuTTY",
                 "Microsoft.WindowsTerminal",
                 "7zip.7zip",
                 "Microsoft.VCRedist.2015+.x64",
                 "Microsoft.DotNet.DesktopRuntime.8"
             ],
-            "created": "2026-11-14",
-            "enabled": true
-        },
-        {
-            "id": "office_work",
-            "name": "Ofis & Verimlilik",
-            "description": "Belge düzenleme, PDF araçları, bulut depolama, not alma ve toplantı yazılımları.",
-            "applications": [
-                "Kingsoft.WPSOffice",
-                "TheDocumentFoundation.LibreOffice",
-                "Adobe.Acrobat.Reader.64-bit",
-                "geeksoftwareGmbH.PDF24Creator",
-                "SumatraPDF.SumatraPDF",
-                "Notion.Notion",
-                "Obsidian.Obsidian",
-                "9NBLGGH5R558",
-                "Mozilla.Thunderbird",
-                "Zoom.Zoom",
-                "Google.GoogleDrive",
-                "Microsoft.OneDrive",
-                "7zip.7zip"
-            ],
-            "created": "2026-11-15",
+            "created": "2026-11-27",
             "enabled": true
         },
         {
@@ -111,35 +109,32 @@
                 "Microsoft.DirectX",
                 "Microsoft.VCRedist.2015+.x64"
             ],
-            "created": "2026-11-15",
+            "created": "2026-11-27",
             "enabled": true
         },
         {
             "id": "content_creator",
             "name": "Tasarım & Medya Üretimi",
-            "description": "Görsel düzenleme, vektörel çizim, ses düzenleme ve yayın/kayıt programları.",
+            "description": "Görsel düzenleme, ekran yakalama, ses düzenleme ve medya oynatıcıları.",
             "applications": [
                 "dotPDN.PaintDotNet",
-                "KDE.Krita",
-                "Inkscape.Inkscape",
                 "GIMP.GIMP",
                 "ShareX.ShareX",
+                "Greenshot.Greenshot",
                 "IrfanSkiljan.IrfanView",
                 "XnSoft.XnViewMP",
-                "9NBLGGH4TWWG",
                 "OBSProject.OBSStudio",
                 "Audacity.Audacity",
                 "VideoLAN.VLC",
-                "calibre.calibre",
-                "darktable.darktable"
+                "Daum.PotPlayer"
             ],
-            "created": "2026-11-15",
+            "created": "2026-11-27",
             "enabled": true
         },
         {
             "id": "system_admin",
             "name": "Sistem Uzmanı & Teknik Bakım",
-            "description": "Donanım testi, derin disk analizi, önyüklenebilir USB ve gelişmiş kaldırıcılar.",
+            "description": "Donanım testi, disk analizi, önyüklenebilir USB, güvenlik tarama ve gelişmiş kaldırıcılar.",
             "applications": [
                 "CPUID.CPU-Z",
                 "CPUID.HWMonitor",
@@ -147,59 +142,32 @@
                 "CrystalDewWorld.CrystalDiskInfo",
                 "CrystalDewWorld.CrystalDiskMark",
                 "AntibodySoftware.WizTree",
-                "JAMSoftware.TreeSize.Free",
                 "Rufus.Rufus",
                 "Ventoy.Ventoy",
                 "RevoUninstaller.RevoUninstaller",
-                "Klocman.BulkCrapUninstaller",
+                "Malwarebytes.Malwarebytes",
+                "Malwarebytes.AdwCleaner",
                 "Microsoft.WindowsTerminal",
                 "Henry++.MemReduct"
             ],
-            "created": "2026-11-15",
+            "created": "2026-11-27",
             "enabled": true
         },
         {
             "id": "privacy_security",
             "name": "Güvenlik & Gizlilik",
-            "description": "Gizlilik odaklı tarayıcılar, açık kaynaklı şifre yöneticileri, VPN ve zararlı yazılım temizleme.",
+            "description": "Gizlilik odaklı tarayıcılar, şifre yöneticisi, şifreleme, VPN ve zararlı yazılım temizleme.",
             "applications": [
                 "Brave.Brave",
-                "LibreWolf.LibreWolf",
                 "TorProject.TorBrowser",
-                "MullvadVPN.MullvadBrowser",
                 "Bitwarden.Bitwarden",
-                "KeePassXCTeam.KeePassXC",
                 "IDRIX.VeraCrypt",
                 "Proton.ProtonVPN",
-                "Windscribe.Windscribe",
                 "Malwarebytes.Malwarebytes",
                 "Malwarebytes.AdwCleaner",
-                "GlassWire.GlassWire",
-                "OpenWhisperSystems.Signal"
+                "LocalSend.LocalSend"
             ],
-            "created": "2026-11-15",
-            "enabled": true
-        },
-        {
-            "id": "media_entertainment",
-            "name": "Medya & Eğlence",
-            "description": "Kristal netliğinde ses çalar, çok formatlı video oynatıcılar, ev sineması ve müzik yönetimi.",
-            "applications": [
-                "VideoLAN.VLC",
-                "CodecGuide.K-LiteCodecPack.Standard",
-                "Spotify.Spotify",
-                "PeterPawlowski.foobar2000",
-                "AIMP.AIMP",
-                "9P4CLT2RJ1RS",
-                "mpv.net",
-                "Daum.PotPlayer",
-                "XBMCFoundation.Kodi",
-                "Plex.Plex",
-                "Jellyfin.JellyfinMediaPlayer",
-                "VentisMedia.MediaMonkey.2024",
-                "qBittorrent.qBittorrent"
-            ],
-            "created": "2026-11-15",
+            "created": "2026-11-27",
             "enabled": true
         },
         {
@@ -207,7 +175,7 @@
             "name": "Özel Kurulum",
             "description": "Kullanıcı veya yönetici tarafından serbestçe özelleştirilmiş uygulama sepeti.",
             "applications": [],
-            "created": "2026-11-14",
+            "created": "2026-11-27",
             "enabled": true
         }
     ]
